@@ -30,8 +30,8 @@ public class ActivoFijoDao {
     @Column(name = "fecha_registro")
     private Date fechaRegistro;
 
-    @Column(name = "Tipo_objeto_id")
-    private Integer tipoObjetoId;
+    @Column(name = "Tipo_Activo_id")
+    private Integer tipoActivoId;
 
     @Column(name = "Marca_id")
     private Integer marcaId;
@@ -50,6 +50,10 @@ public class ActivoFijoDao {
 
     @Column(name = "estado")
     private Boolean estado;
+
+    @ManyToOne
+    @JoinColumn(name = "Tipo_Activo_id", insertable = false, updatable = false)
+    private TipoActivoDao tipoActivo;
 
     // Getters y Setters
 
@@ -110,11 +114,11 @@ public class ActivoFijoDao {
     }
 
     public Integer getTipoObjetoId() {
-        return tipoObjetoId;
+        return tipoActivoId;
     }
 
-    public void setTipoObjetoId(Integer tipoObjetoId) {
-        this.tipoObjetoId = tipoObjetoId;
+    public void setTipoActivoId(Integer tipoObjetoId) {
+        this.tipoActivoId = tipoActivoId;
     }
 
     public Integer getMarcaId() {

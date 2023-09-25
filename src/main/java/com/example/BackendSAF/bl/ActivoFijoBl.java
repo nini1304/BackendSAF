@@ -24,10 +24,10 @@ public class ActivoFijoBl {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivoFijoBl.class);
 
-    @Value("${currency.url}")
+    @Value("jdbc:postgresql://localhost:5432/postgres")
     private String url;
 
-    @Value("${currency.key}")
+    @Value("pass123")
     private String key;
 
     @Autowired
@@ -43,7 +43,7 @@ public class ActivoFijoBl {
                                     String descripcion,
                                     Integer porcentajeDepreciacion,
                                     Date fechaRegistro,
-                                    Integer tipoObjetoId,
+                                    Integer tipoActivoId,
                                     Integer marcaId,
                                     Integer ubicacionId,
                                     Integer personalId,
@@ -56,7 +56,7 @@ public class ActivoFijoBl {
 
         OkHttpClient client = new OkHttpClient.Builder().build();
         Request req = new Request.Builder()
-                .url(url + "?nombre=" + nombre + "&valor=" + valor + "&fechaCompra=" + fechaCompra + "&descripcion=" + descripcion + "&porcentajeDepreciacion=" + porcentajeDepreciacion + "&fechaRegistro=" + fechaRegistro + "&tipoObjetoId=" + tipoObjetoId + "&marcaId=" + marcaId + "&ubicacionId=" + ubicacionId + "&personalId=" + personalId + "&estadoId=" + estadoId + "&condicionId=" + condicionId + "&estado=" + estado )
+                .url(url + "?nombre=" + nombre + "&valor=" + valor + "&fechaCompra=" + fechaCompra + "&descripcion=" + descripcion + "&porcentajeDepreciacion=" + porcentajeDepreciacion + "&fechaRegistro=" + fechaRegistro + "&tipoObjetoId=" + tipoActivoId + "&marcaId=" + marcaId + "&ubicacionId=" + ubicacionId + "&personalId=" + personalId + "&estadoId=" + estadoId + "&condicionId=" + condicionId + "&estado=" + estado )
                 .addHeader("apikey", key)
                 .build();
 
@@ -72,7 +72,7 @@ public class ActivoFijoBl {
             activo.setDescripcion(descripcion);
             activo.setPorcentajeDepreciacion(porcentajeDepreciacion);
             activo.setFechaRegistro(fechaRegistro);
-            activo.setTipoObjetoId(tipoObjetoId);
+            activo.setTipoActivoId(tipoActivoId);
             activo.setMarcaId(marcaId);
             activo.setUbicacionId(ubicacionId);
             activo.setPersonalId(personalId);
