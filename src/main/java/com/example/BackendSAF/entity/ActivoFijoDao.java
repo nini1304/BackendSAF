@@ -55,6 +55,27 @@ public class ActivoFijoDao {
     @JoinColumn(name = "Tipo_Activo_id", insertable = false, updatable = false)
     private TipoActivoDao tipoActivo;
 
+    @ManyToOne
+    @JoinColumn(name = "Marca_id", insertable = false, updatable = false)
+    private MarcaDao marca;
+
+    @ManyToOne
+    @JoinColumn(name = "Ubicacion_id", insertable = false, updatable = false)
+    private UbicacionDao ubicacion;
+
+    @ManyToOne
+    @JoinColumn(name = "Personal_id", insertable = false, updatable = false)
+    private PersonalDao personal;
+
+    @ManyToOne
+    @JoinColumn(name = "Estado_id", insertable = false, updatable = false)
+    private EstadoDao estadod;
+
+    @ManyToOne
+    @JoinColumn(name = "Condicion_id", insertable = false, updatable = false)
+    private CondicionDao condicion;
+
+
     // Getters y Setters
 
     public Long getId() {
