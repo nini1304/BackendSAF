@@ -134,12 +134,12 @@ public class ActivoFijoDao {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public Integer getTipoObjetoId() {
+    public Integer getTipoActivoId() {
         return tipoActivoId;
     }
 
     public void setTipoActivoId(Integer tipoObjetoId) {
-        this.tipoActivoId = tipoActivoId;
+        this.tipoActivoId = tipoObjetoId;
     }
 
     public Integer getMarcaId() {

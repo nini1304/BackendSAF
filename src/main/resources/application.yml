@@ -1,3 +1,5 @@
+server:
+  port: 1234
 accounting:
   url:${URL:jdbc:postgresql://localhost:5432/postgres}
   key:${PASSWORD:pass123}
