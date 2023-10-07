@@ -7,6 +7,7 @@ public class ActivoFijoDto {
 
     private String nombre;
     private BigDecimal valor;
+    private String fechaCompra;
     private String descripcion;
     private Integer porcentajeDepreciacion;
     private Integer tipoObjetoId;
@@ -17,7 +18,7 @@ public class ActivoFijoDto {
     private Integer condicionId;
     private Boolean estado;
 
-    public ActivoFijoDto(String nombre, BigDecimal valor, String descripcion, Integer porcentajeDepreciacion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) {
+    public ActivoFijoDto(String nombre, BigDecimal valor, String fechaCompra, String descripcion, Integer porcentajeDepreciacion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) {
     }
 
     // Constructores

@@ -1,22 +1,22 @@
 package com.example.BackendSAF.bl;
 
-import com.example.BackendSAF.dto.ActivoFijoDto;
-import com.example.BackendSAF.entity.ActivoFijoDao;
-import com.example.BackendSAF.entity.Repository.ActivoFijoRepository;
+import com.example.BackendSAF.dto.*;
+import com.example.BackendSAF.entity.*;
+import com.example.BackendSAF.entity.Repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import java.io.IOException;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -33,14 +33,26 @@ public class ActivoFijoBl {
 
     @Autowired
     private ActivoFijoRepository activofijorepository;
+    @Autowired
+    private CondicionRepository fijoRepository;
+    @Autowired
+    private EstadoRepository estadoRepository;
+    @Autowired
+    private MarcaRepository marcaRepository;
+    @Autowired
+    private PersonalRepository personalRepository;
+    @Autowired
+    private TipoActivoRepository tipoActivoRepository;
+    @Autowired
+    private UbicacionRepository ubicacionRepository;
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
     }
 
     public ActivoFijoDto registrar(String nombre,
-                                   BigDecimal valor,
-                                   //Date fechaCompra,
+                                   String valor,
+                                   String fechaCompra,
                                    String descripcion,
                                    Integer porcentajeDepreciacion,
                                    Integer tipoActivoId,
@@ -49,16 +61,18 @@ public class ActivoFijoBl {
                                    Integer personalId,
                                    Integer estadoId,
                                    Integer condicionId,
-                                   Boolean estado) {
+                                   Boolean estado) throws ParseException {
         // Si el rol ya existe, no se puede agregar
 
 
         ActivoFijoDao act = new ActivoFijoDao();
         act.setNombre(nombre);
-        act.setValor(valor);
-        //act.setFechaCompra(fechaCompra);
+        act.setValor(new BigDecimal(valor));
+        act.setFechaCompra(new Date());
+        //act.setFechaCompra(new Date());
         act.setDescripcion(descripcion);
         act.setPorcentajeDepreciacion(porcentajeDepreciacion);
+        act.setFechaRegistro(new Date());
         act.setTipoActivoId(tipoActivoId);
         act.setMarcaId(marcaId);
         act.setUbicacionId(ubicacionId);
@@ -68,62 +82,66 @@ public class ActivoFijoBl {
         act.setEstado(estado);
         activofijorepository.save(act);
 
-        return new ActivoFijoDto(act.getNombre(), act.getValor(), act.getDescripcion(), act.getPorcentajeDepreciacion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
+        return new ActivoFijoDto(act.getNombre(), act.getValor(), fechaCompra ,act.getDescripcion(), act.getPorcentajeDepreciacion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
     }
-    /*
-    public ActivoFijoDto registrr(String nombre,
-                                   BigDecimal valor,
-                                   //Date fechaCompra,
-                                   String descripcion,
-                                   Integer porcentajeDepreciacion,
-                                   Integer tipoActivoId,
-                                   Integer marcaId,
-                                   Integer ubicacionId,
-                                   Integer personalId,
-                                   Integer estadoId,
-                                   Integer condicionId,
-                                   Boolean estado) throws IOException {
-        if (valor.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Amount must be greater than or equal to 0");
-        }
-
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        Request req = new Request.Builder()
-                .url(url + "?nombre=" + nombre + "&valor=" + valor + "&descripcion=" + descripcion + "&porcentajeDepreciacion=" + porcentajeDepreciacion + "&tipoObjetoId=" + tipoActivoId + "&marcaId=" + marcaId + "&ubicacionId=" + ubicacionId + "&personalId=" + personalId + "&estadoId=" + estadoId + "&condicionId=" + condicionId + "&estado=" + estado )
-                .addHeader("apikey", key)
-                .build();
-        System.out.println(req);
-        Response response = client.newCall(req).execute();
-        String json = response.body().string();
-
-        if (response.isSuccessful()) {
-            ActivoFijoDto activoDto = objectMapper.readValue(json, ActivoFijoDto.class);
-            ActivoFijoDao activo = new ActivoFijoDao();
-            activo.setNombre(nombre);
-            activo.setValor(valor);
-            //activo.setFechaCompra(fechaCompra);
-            activo.setDescripcion(descripcion);
-            activo.setPorcentajeDepreciacion(porcentajeDepreciacion);
-            activo.setTipoActivoId(tipoActivoId);
-            activo.setMarcaId(marcaId);
-            activo.setUbicacionId(ubicacionId);
-            activo.setPersonalId(personalId);
-            activo.setEstadoId(estadoId);
-            activo.setCondicionId(condicionId);
-            activo.setEstado(estado);
-
-            // Configura la fecha de registro automáticamente
-            activo.setFechaRegistro(new Date());
-
-            activofijorepository.save(activo);
-            LOGGER.info("Conversion result: " + json);
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, ActivoFijoDto.class);
+    public Date convertirStringADate(String fechaString) throws ParseException {
+        DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        return formatoFecha.parse(fechaString);
     }
+    public List<CondicionDto> getCond() {
+        List<CondicionDao> condicion = fijoRepository.findAll();
 
-      */
+        List<CondicionDto> listConds = condicion.stream()
+                .map(con -> new CondicionDto(con.getId(), con.getNombre()))
+                .collect(Collectors.toList());
+
+        return listConds;
+    }
+    public List<EstadoDto> getEst() {
+        List<EstadoDao> estado = estadoRepository.findAll();
+
+        List<EstadoDto> listEst = estado.stream()
+                .map(est -> new EstadoDto(est.getId(), est.getNombre()))
+                .collect(Collectors.toList());
+
+        return listEst;
+    }
+    public List<MarcaDto> getMar() {
+        List<MarcaDao> marca = marcaRepository.findAll();
+
+        List<MarcaDto> listMar = marca.stream()
+                .map(mar -> new MarcaDto(mar.getId(), mar.getNombre()))
+                .collect(Collectors.toList());
+
+        return listMar;
+    }
+    public List<PersonalDto> getPer() {
+        List<PersonalDao> personal = personalRepository.findAll();
+
+        List<PersonalDto> listPer = personal.stream()
+                .map(per -> new PersonalDto(per.getId(), per.getNombre()))
+                .collect(Collectors.toList());
+
+        return listPer;
+    }
+    public List<TipoActivoDto> getTip() {
+        List<TipoActivoDao> tipoActivo = tipoActivoRepository.findAll();
+
+        List<TipoActivoDto> listTip = tipoActivo.stream()
+                .map(tip -> new TipoActivoDto(tip.getId(), tip.getNombre()))
+                .collect(Collectors.toList());
+
+        return listTip;
+    }
+    public List<UbicacionDto> getUbi() {
+        List<UbicacionDao> ubicacion = ubicacionRepository.findAll();
+
+        List<UbicacionDto> listUbi = ubicacion.stream()
+                .map(ubi -> new UbicacionDto(ubi.getId(), ubi.getNombre()))
+                .collect(Collectors.toList());
+
+        return listUbi;
+    }
 
 }
 

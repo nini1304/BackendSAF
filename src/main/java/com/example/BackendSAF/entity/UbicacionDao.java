@@ -23,6 +23,13 @@ public class UbicacionDao {
 
     @OneToMany(mappedBy = "ubicacion")
     private List<ActivoFijoDao> activosFijos;
+    //Getters
+    public Long getId() {
+        return id;
+    }
+    public String getNombre() {
+        return nombre;
+    }
 
 
 }

@@ -17,4 +17,11 @@ public class MarcaDao {
 
     @OneToMany(mappedBy = "marca")
     private List<ActivoFijoDao> activosFijos;
+    //Getters
+    public Long getId() {
+        return id;
+    }
+    public String getNombre() {
+        return nombre;
+    }
 }

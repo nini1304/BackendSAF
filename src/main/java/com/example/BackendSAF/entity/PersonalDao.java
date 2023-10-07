@@ -24,4 +24,11 @@ public class PersonalDao {
 
     @OneToMany(mappedBy = "personal")
     private List<ActivoFijoDao> activosFijos;
+    //Getters
+    public Long getId() {
+        return id;
+    }
+    public String getNombre() {
+        return nombre;
+    }
 }

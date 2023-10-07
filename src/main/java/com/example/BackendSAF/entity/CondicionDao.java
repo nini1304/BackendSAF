@@ -17,4 +17,12 @@ public class CondicionDao {
 
     @OneToMany(mappedBy = "condicion")
     private List<ActivoFijoDao> activosFijos;
+
+    //Getters y setters
+    public Long getId() {
+        return id;
+    }
+    public String getNombre() {
+        return nombre;
+    }
 }
