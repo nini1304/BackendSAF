@@ -78,6 +78,7 @@ public class ActivoFijoDao {
 
     // Getters y Setters
 
+
     public Long getId() {
         return id;
     }

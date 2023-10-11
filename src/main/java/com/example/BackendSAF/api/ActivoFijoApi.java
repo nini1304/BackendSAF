@@ -21,6 +21,7 @@ public class ActivoFijoApi {
 
     private final ActivoFijoBl activoFijoBl;
 
+
     @Autowired
 
     public ActivoFijoApi(ActivoFijoBl activoFijoBl) {
@@ -40,7 +41,7 @@ public class ActivoFijoApi {
     public ResponseEntity<ActivoFijoDto> registrarActivoFijo(
             @RequestParam(name = "nombre") String nombre,
             @RequestParam(name = "valor") String valor,
-            @RequestParam(name = "fechaCompra") String fechaCompra,
+            @RequestParam(name = "fechaCompra") Date fechaCompra,
             @RequestParam(name = "descripcion") String descripcion,
             @RequestParam(name = "porcentajeDepreciacion") Integer porcentajeDepreciacion,
             @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
@@ -54,6 +55,10 @@ public class ActivoFijoApi {
         LOGGER.info("Ejecutando registrarActivosFijos...");
         ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, porcentajeDepreciacion, tipoActivoId, marcaId, ubicacionId, personalId, estadoId, condicionId, estado);
         return ResponseEntity.ok(activoFijoDto);
+    }
+    @GetMapping("/actF")
+    public List<ActivoFijoDto> obtenerListaActivosFijos(){
+        return  activoFijoBl.getAct();
     }
     @GetMapping("/cond")
     public List<CondicionDto> obtenerListaDeCondicionDto() {

@@ -52,7 +52,7 @@ public class ActivoFijoBl {
 
     public ActivoFijoDto registrar(String nombre,
                                    String valor,
-                                   String fechaCompra,
+                                   Date fechaCompra,
                                    String descripcion,
                                    Integer porcentajeDepreciacion,
                                    Integer tipoActivoId,
@@ -87,6 +87,20 @@ public class ActivoFijoBl {
     public Date convertirStringADate(String fechaString) throws ParseException {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         return formatoFecha.parse(fechaString);
+    }
+    // Esto son los get para todas las listas de componentes
+    //getACt te envia la lista de todos los activos fijos
+    public List<ActivoFijoDto> getAct() {
+        List<ActivoFijoDao> activofijo=activofijorepository.findAll();
+
+        List<ActivoFijoDto> listAct=activofijo.stream().
+                map(act-> new ActivoFijoDto(act.getNombre(),act.getValor()
+                        ,act.getFechaCompra(),act.getDescripcion(),act.getPorcentajeDepreciacion(),act.getTipoActivoId()
+                        ,act.getMarcaId(),act.getUbicacionId(),act.getPersonalId(),act.getEstadoId(),act.getCondicionId()
+                        ,act.getEstado()))
+                .collect(Collectors.toList());
+        return listAct;
+
     }
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
@@ -142,6 +156,8 @@ public class ActivoFijoBl {
 
         return listUbi;
     }
+
+
 
 }
 
