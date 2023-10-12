@@ -5,7 +5,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "ubicacion")
-
 public class UbicacionDao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,38 +20,53 @@ public class UbicacionDao {
     @Column(name = "avenida")
     private String avenida;
 
+    @ManyToOne
+    @JoinColumn(name = "bloque_id")
+    private BloqueDao bloque;
+
+    @ManyToOne
+    @JoinColumn(name = "ciudad_id")
+    private CiudadDao ciudad;
+
     @OneToMany(mappedBy = "ubicacion")
     private List<ActivoFijoDao> activosFijos;
-    //constructor sin nada
+
+    // Constructor sin nada
     public UbicacionDao() {
     }
-    //constructor sin id
-    public UbicacionDao(String nombre, String calle, String avenida, List<ActivoFijoDao> activosFijos) {
+
+    // Constructor sin id
+    public UbicacionDao(String nombre, String calle, String avenida, BloqueDao bloque, CiudadDao ciudad, List<ActivoFijoDao> activosFijos) {
         this.nombre = nombre;
         this.calle = calle;
         this.avenida = avenida;
+        this.bloque = bloque;
+        this.ciudad = ciudad;
         this.activosFijos = activosFijos;
     }
 
-    //constructor con id
-    public UbicacionDao(Long id, String nombre, String calle, String avenida, List<ActivoFijoDao> activosFijos) {
+    // Constructor con id
+    public UbicacionDao(Long id, String nombre, String calle, String avenida, BloqueDao bloque, CiudadDao ciudad, List<ActivoFijoDao> activosFijos) {
         this.id = id;
         this.nombre = nombre;
         this.calle = calle;
         this.avenida = avenida;
+        this.bloque = bloque;
+        this.ciudad = ciudad;
         this.activosFijos = activosFijos;
     }
 
-    //Getters setters
+    // Getters y setters
     public Long getId() {
         return id;
-    }
-    public String getNombre() {
-        return nombre;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 
     public void setNombre(String nombre) {
@@ -73,6 +87,22 @@ public class UbicacionDao {
 
     public void setAvenida(String avenida) {
         this.avenida = avenida;
+    }
+
+    public BloqueDao getBloque() {
+        return bloque;
+    }
+
+    public void setBloque(BloqueDao bloque) {
+        this.bloque = bloque;
+    }
+
+    public CiudadDao getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(CiudadDao ciudad) {
+        this.ciudad = ciudad;
     }
 
     public List<ActivoFijoDao> getActivosFijos() {
