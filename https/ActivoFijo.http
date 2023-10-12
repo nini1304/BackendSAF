@@ -1,6 +1,6 @@
 POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Samsung&valor=900&fechaCompra=2023-09-26&descripcion=Note10&porcentajeDepreciacion=10&fechaRegistro=2023-09-26&tipoActivoId=1&marcaId=2&ubicacionId=3&personalId=4&estadoId=5&condicionId=6&estado=true
 ###
-POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Xiaomiii&valor=900&fechaCompra=19/09/2023&descripcion=Note10&porcentajeDepreciacion=10&tipoActivoId=1&marcaId=2&ubicacionId=3&personalId=1&estadoId=1&condicionId=1&estado=true
+POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=MonitorXD&valor=900&fechaCompra=19/09/2023&descripcion=Note10&tipoActivoId=1&marcaId=2&ubicacionId=3&personalId=1&estadoId=1&condicionId=1&estado=true
 ###
 GET http://localhost:1234/api/v1/activos-fijos/list
 ###

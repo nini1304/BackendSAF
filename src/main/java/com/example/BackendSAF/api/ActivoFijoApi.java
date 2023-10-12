@@ -43,7 +43,6 @@ public class ActivoFijoApi {
             @RequestParam(name = "valor") String valor,
             @RequestParam(name = "fechaCompra") Date fechaCompra,
             @RequestParam(name = "descripcion") String descripcion,
-            @RequestParam(name = "porcentajeDepreciacion") Integer porcentajeDepreciacion,
             @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
             @RequestParam(name = "marcaId") Integer marcaId,
             @RequestParam(name = "ubicacionId") Integer ubicacionId,
@@ -53,7 +52,7 @@ public class ActivoFijoApi {
             @RequestParam(name = "estado") Boolean estado
     ) throws ParseException {
         LOGGER.info("Ejecutando registrarActivosFijos...");
-        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, porcentajeDepreciacion, tipoActivoId, marcaId, ubicacionId, personalId, estadoId, condicionId, estado);
+        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, ubicacionId, personalId, estadoId, condicionId, estado);
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/actF")

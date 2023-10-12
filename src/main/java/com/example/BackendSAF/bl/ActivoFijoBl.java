@@ -45,6 +45,8 @@ public class ActivoFijoBl {
     private TipoActivoRepository tipoActivoRepository;
     @Autowired
     private UbicacionRepository ubicacionRepository;
+    @Autowired
+    private ActivoFijoHRepository activoFijoHRepository; // Repositorio para la tabla histórica
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
@@ -54,7 +56,6 @@ public class ActivoFijoBl {
                                    String valor,
                                    Date fechaCompra,
                                    String descripcion,
-                                   Integer porcentajeDepreciacion,
                                    Integer tipoActivoId,
                                    Integer marcaId,
                                    Integer ubicacionId,
@@ -71,7 +72,6 @@ public class ActivoFijoBl {
         act.setFechaCompra(new Date());
         //act.setFechaCompra(new Date());
         act.setDescripcion(descripcion);
-        act.setPorcentajeDepreciacion(porcentajeDepreciacion);
         act.setFechaRegistro(new Date());
         act.setTipoActivoId(tipoActivoId);
         act.setMarcaId(marcaId);
@@ -81,8 +81,23 @@ public class ActivoFijoBl {
         act.setCondicionId(condicionId);
         act.setEstado(estado);
         activofijorepository.save(act);
+        // Guardar en la tabla histórica
+        ActivoFijoHDao actH = new ActivoFijoHDao();
+        actH.setNombre(nombre);
+        actH.setValor(new BigDecimal(valor));
+        actH.setFechaCompra(new Date());
+        actH.setDescripcion(descripcion);
+        actH.setFechaRegistro(new Date());
+        actH.setTipoActivoId(tipoActivoId);
+        actH.setMarcaId(marcaId);
+        actH.setUbicacionId(ubicacionId);
+        actH.setPersonalId(personalId);
+        actH.setEstadoId(estadoId);
+        actH.setCondicionId(condicionId);
+        actH.setEstado(estado);
+        activoFijoHRepository.save(actH); // Guardar en la tabla histórica
 
-        return new ActivoFijoDto(act.getNombre(), act.getValor(), fechaCompra ,act.getDescripcion(), act.getPorcentajeDepreciacion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
+        return new ActivoFijoDto(act.getNombre(), act.getValor(), fechaCompra ,act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
     }
     public Date convertirStringADate(String fechaString) throws ParseException {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
@@ -95,7 +110,7 @@ public class ActivoFijoBl {
 
         List<ActivoFijoDto> listAct=activofijo.stream().
                 map(act-> new ActivoFijoDto(act.getNombre(),act.getValor()
-                        ,act.getFechaCompra(),act.getDescripcion(),act.getPorcentajeDepreciacion(),act.getTipoActivoId()
+                        ,act.getFechaCompra(),act.getDescripcion(),act.getTipoActivoId()
                         ,act.getMarcaId(),act.getUbicacionId(),act.getPersonalId(),act.getEstadoId(),act.getCondicionId()
                         ,act.getEstado()))
                 .collect(Collectors.toList());

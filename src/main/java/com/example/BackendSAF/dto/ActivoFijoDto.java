@@ -10,7 +10,7 @@ public class ActivoFijoDto {
     private BigDecimal valor;
     private Date fechaCompra;
     private String descripcion;
-    private Integer porcentajeDepreciacion;
+    //private Integer porcentajeDepreciacion;
     private Integer tipoObjetoId;
     private Integer marcaId;
     private Integer ubicacionId;
@@ -23,8 +23,7 @@ public class ActivoFijoDto {
 
     // Constructores
         //constructor sin el id
-    public ActivoFijoDto(String nombre, BigDecimal valor, Date fechaCompra, String descripcion,
-                         Integer porcentajeDepreciacion, Integer tipoActivoId, Integer marcaId,
+    public ActivoFijoDto(String nombre, BigDecimal valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId,
                          Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId,
                          Boolean estado) {
     }
@@ -70,14 +69,6 @@ public class ActivoFijoDto {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Integer getPorcentajeDepreciacion() {
-        return porcentajeDepreciacion;
-    }
-
-    public void setPorcentajeDepreciacion(Integer porcentajeDepreciacion) {
-        this.porcentajeDepreciacion = porcentajeDepreciacion;
     }
 
     public Integer getTipoObjetoId() {

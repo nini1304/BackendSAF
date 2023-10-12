@@ -24,9 +24,6 @@ public class ActivoFijoDao {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "porcentaje_depreciacion")
-    private Integer porcentajeDepreciacion;
-
     @Column(name = "fecha_registro")
     private Date fechaRegistro;
 
@@ -117,14 +114,6 @@ public class ActivoFijoDao {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Integer getPorcentajeDepreciacion() {
-        return porcentajeDepreciacion;
-    }
-
-    public void setPorcentajeDepreciacion(Integer porcentajeDepreciacion) {
-        this.porcentajeDepreciacion = porcentajeDepreciacion;
     }
 
     public Date getFechaRegistro() {
