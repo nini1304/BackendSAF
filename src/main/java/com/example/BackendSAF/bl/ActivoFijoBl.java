@@ -97,26 +97,29 @@ public class ActivoFijoBl {
         actH.setEstado(estado);
         activoFijoHRepository.save(actH); // Guardar en la tabla histórica
 
-        return new ActivoFijoDto(act.getNombre(), act.getValor(), fechaCompra ,act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
+        return new ActivoFijoDto(act.getNombre(), act.getValor(), fechaCompra, act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
     }
+
     public Date convertirStringADate(String fechaString) throws ParseException {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         return formatoFecha.parse(fechaString);
     }
+
     // Esto son los get para todas las listas de componentes
     //getACt te envia la lista de todos los activos fijos
     public List<ActivoFijoDto> getAct() {
-        List<ActivoFijoDao> activofijo=activofijorepository.findAll();
+        List<ActivoFijoDao> activofijo = activofijorepository.findAll();
 
-        List<ActivoFijoDto> listAct=activofijo.stream().
-                map(act-> new ActivoFijoDto(act.getNombre(),act.getValor()
-                        ,act.getFechaCompra(),act.getDescripcion(),act.getTipoActivoId()
-                        ,act.getMarcaId(),act.getUbicacionId(),act.getPersonalId(),act.getEstadoId(),act.getCondicionId()
-                        ,act.getEstado()))
+        List<ActivoFijoDto> listAct = activofijo.stream().
+                map(act -> new ActivoFijoDto(act.getNombre(), act.getValor()
+                        , act.getFechaCompra(), act.getDescripcion(), act.getTipoActivoId()
+                        , act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId()
+                        , act.getEstado()))
                 .collect(Collectors.toList());
         return listAct;
 
     }
+
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
 
@@ -126,6 +129,7 @@ public class ActivoFijoBl {
 
         return listConds;
     }
+
     public List<EstadoDto> getEst() {
         List<EstadoDao> estado = estadoRepository.findAll();
 
@@ -135,6 +139,7 @@ public class ActivoFijoBl {
 
         return listEst;
     }
+
     public List<MarcaDto> getMar() {
         List<MarcaDao> marca = marcaRepository.findAll();
 
@@ -144,6 +149,7 @@ public class ActivoFijoBl {
 
         return listMar;
     }
+
     public List<PersonalDto> getPer() {
         List<PersonalDao> personal = personalRepository.findAll();
 
@@ -153,6 +159,7 @@ public class ActivoFijoBl {
 
         return listPer;
     }
+
     public List<TipoActivoDto> getTip() {
         List<TipoActivoDao> tipoActivo = tipoActivoRepository.findAll();
 
@@ -162,6 +169,7 @@ public class ActivoFijoBl {
 
         return listTip;
     }
+
     public List<UbicacionDto> getUbi() {
         List<UbicacionDao> ubicacion = ubicacionRepository.findAll();
 
@@ -172,7 +180,47 @@ public class ActivoFijoBl {
         return listUbi;
     }
 
+    public ActivoFijoDto actualizarActivo(Integer id, String nombre, String valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+        Optional<ActivoFijoDao> optionalActivoFijoDao = activofijorepository.findById(Long.valueOf(id));
+        if (optionalActivoFijoDao.isPresent()) {
+            ActivoFijoDao activoFijoDto = optionalActivoFijoDao.get();
 
+            activoFijoDto.setNombre(nombre);
+            activoFijoDto.setValor(new BigDecimal(valor));
+            activoFijoDto.setFechaCompra(fechaCompra);
+            activoFijoDto.setDescripcion(descripcion);
+            activoFijoDto.setTipoActivoId(tipoActivoId);
+            activoFijoDto.setMarcaId(marcaId);
+            activoFijoDto.setUbicacionId(ubicacionId);
+            activoFijoDto.setPersonalId(personalId);
+            activoFijoDto.setEstadoId(estadoId);
+            activoFijoDto.setCondicionId(condicionId);
+            activoFijoDto.setEstado(estado);
 
+            activofijorepository.save(activoFijoDto);
+
+            ActivoFijoHDao acth = new ActivoFijoHDao();
+            acth.setNombre(nombre);
+            acth.setValor(new BigDecimal(valor));
+            acth.setFechaCompra(fechaCompra);
+            acth.setDescripcion(descripcion);
+            acth.setTipoActivoId(tipoActivoId);
+            acth.setMarcaId(marcaId);
+            acth.setUbicacionId(ubicacionId);
+            acth.setPersonalId(personalId);
+            acth.setEstadoId(estadoId);
+            acth.setCondicionId(condicionId);
+            acth.setEstado(estado);
+            activoFijoHRepository.save(acth);
+
+            return new ActivoFijoDto(activoFijoDto.getNombre(), activoFijoDto.getValor(), activoFijoDto.getFechaCompra(), activoFijoDto.getDescripcion(), activoFijoDto.getTipoActivoId(), activoFijoDto.getMarcaId(), activoFijoDto.getUbicacionId(), activoFijoDto.getPersonalId(), activoFijoDto.getEstadoId(), activoFijoDto.getCondicionId(), activoFijoDto.getEstado());
+        } else {
+            try {
+                throw new IllegalAccessException("No existe el activo fijo con el id: " + id);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
 
