@@ -7,12 +7,10 @@ import java.util.List;
 @Table(name = "ubicacion")
 public class UbicacionDao {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ubicacion_sequence")
+    @SequenceGenerator(name = "ubicacion_sequence", sequenceName = "ubicacion_sequence", allocationSize = 1)
     @Column(name = "id")
     private Long id;
-
-    @Column(name = "nombre")
-    private String nombre;
 
     @Column(name = "calle")
     private String calle;
@@ -20,12 +18,18 @@ public class UbicacionDao {
     @Column(name = "avenida")
     private String avenida;
 
+    @Column(name = "bloque_id")
+    private Integer bloqueId;
+
+    @Column(name = "ciudad_id")
+    private Integer ciudadId;
+
     @ManyToOne
-    @JoinColumn(name = "bloque_id")
+    @JoinColumn(name = "bloque_id", insertable = false, updatable = false)
     private BloqueDao bloque;
 
     @ManyToOne
-    @JoinColumn(name = "ciudad_id")
+    @JoinColumn(name = "ciudad_id", insertable = false, updatable = false)
     private CiudadDao ciudad;
 
     @OneToMany(mappedBy = "ubicacion")
@@ -36,23 +40,21 @@ public class UbicacionDao {
     }
 
     // Constructor sin id
-    public UbicacionDao(String nombre, String calle, String avenida, BloqueDao bloque, CiudadDao ciudad, List<ActivoFijoDao> activosFijos) {
-        this.nombre = nombre;
+    public UbicacionDao(String calle, String avenida, Integer bloqueId, Integer ciudadId, List<ActivoFijoDao> activosFijos) {
         this.calle = calle;
         this.avenida = avenida;
-        this.bloque = bloque;
-        this.ciudad = ciudad;
+        this.bloqueId = bloqueId;
+        this.ciudadId = ciudadId;
         this.activosFijos = activosFijos;
     }
 
     // Constructor con id
-    public UbicacionDao(Long id, String nombre, String calle, String avenida, BloqueDao bloque, CiudadDao ciudad, List<ActivoFijoDao> activosFijos) {
+    public UbicacionDao(Long id, String calle, String avenida, Integer bloqueId, Integer ciudadId, List<ActivoFijoDao> activosFijos) {
         this.id = id;
-        this.nombre = nombre;
         this.calle = calle;
         this.avenida = avenida;
-        this.bloque = bloque;
-        this.ciudad = ciudad;
+        this.bloqueId = bloqueId;
+        this.ciudadId = ciudadId;
         this.activosFijos = activosFijos;
     }
 
@@ -63,14 +65,6 @@ public class UbicacionDao {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getCalle() {
@@ -92,6 +86,13 @@ public class UbicacionDao {
     public BloqueDao getBloque() {
         return bloque;
     }
+    public Integer getBloqueId() {
+        return bloqueId;
+    }
+
+    public void setBloqueId(Integer bloqueId) {
+        this.bloqueId = bloqueId;
+    }
 
     public void setBloque(BloqueDao bloque) {
         this.bloque = bloque;
@@ -99,6 +100,13 @@ public class UbicacionDao {
 
     public CiudadDao getCiudad() {
         return ciudad;
+    }
+    public Integer getCiudadId() {
+        return ciudadId;
+    }
+
+    public void setCiudadId(Integer ciudadId) {
+        this.ciudadId = ciudadId;
     }
 
     public void setCiudad(CiudadDao ciudad) {

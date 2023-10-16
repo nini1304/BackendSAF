@@ -47,58 +47,89 @@ public class ActivoFijoBl {
     private UbicacionRepository ubicacionRepository;
     @Autowired
     private ActivoFijoHRepository activoFijoHRepository; // Repositorio para la tabla histórica
+    @Autowired
+    private BloqueRepository bloqueRepository;
+    @Autowired
+    private CiudadRepository ciudadRepository;
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
     }
 
-    public ActivoFijoDto registrar(String nombre,
-                                   String valor,
-                                   Date fechaCompra,
-                                   String descripcion,
-                                   Integer tipoActivoId,
-                                   Integer marcaId,
-                                   Integer ubicacionId,
-                                   Integer personalId,
-                                   Integer estadoId,
-                                   Integer condicionId,
-                                   Boolean estado) throws ParseException {
-        // Si el rol ya existe, no se puede agregar
+    public UbicacionDto registrarUbicacion(String calle, String avenida, Long bloqueId, Long ciudadId) {
+        //Log de la ubicación
+        LOGGER.info("Registrando ubicación...");
+        // Crea una instancia de UbicacionDao con los datos de ubicación
+        UbicacionDao ubicacionDao = new UbicacionDao();
+        ubicacionDao.setCalle(calle);
+        ubicacionDao.setAvenida(avenida);
 
+        // Aquí debes obtener los objetos BloqueDao y CiudadDao a partir de sus IDs, supongo que tienes métodos en tus repositorios para hacerlo
+        //BloqueDao bloque = bloqueRepository.findById(bloqueId).orElse(null);
+        //Log que muestra el bloque
+        //LOGGER.info("Bloque registrado: {}", bloque);
+        //CiudadDao ciudad = ciudadRepository.findById(ciudadId).orElse(null);
+        //Log que muestra la ciudad
+        //LOGGER.info("Ciudad registrada: {}", ciudad);
 
+        ubicacionDao.setBloqueId(Math.toIntExact(bloqueId));
+        ubicacionDao.setCiudadId(Math.toIntExact(ciudadId));
+
+        // Guarda la ubicación en la base de datos
+        //Log que muestra lo que se va a guardar
+        LOGGER.info("Ubicación registrada: {}", ubicacionDao);
+        UbicacionDao ubicacionRegistrada = ubicacionRepository.save(ubicacionDao);
+
+        // Devuelve un UbicacionDto con el ID de la ubicación registrada
+        return new UbicacionDto(
+                ubicacionRegistrada.getId(),
+                ubicacionRegistrada.getCalle(),
+                ubicacionRegistrada.getAvenida(),
+                Math.toIntExact(ubicacionRegistrada.getBloqueId()),
+                Math.toIntExact(ubicacionRegistrada.getCiudadId())
+        );
+
+    }
+
+    public ActivoFijoDto registrar(String nombre, String valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+        // Registra la ubicación primero
+        UbicacionDto ubicacionDto = registrarUbicacion(calle, avenida, bloqueId, ciudadId);
+
+        // Luego, crea un objeto ActivoFijoDao con los datos del formulario
         ActivoFijoDao act = new ActivoFijoDao();
         act.setNombre(nombre);
         act.setValor(new BigDecimal(valor));
-        act.setFechaCompra(new Date());
-        //act.setFechaCompra(new Date());
+        act.setFechaCompra(fechaCompra);
         act.setDescripcion(descripcion);
         act.setFechaRegistro(new Date());
         act.setTipoActivoId(tipoActivoId);
         act.setMarcaId(marcaId);
-        act.setUbicacionId(ubicacionId);
+        act.setUbicacionId(ubicacionDto.getId()); // Utiliza el ID de la ubicación registrada
         act.setPersonalId(personalId);
         act.setEstadoId(estadoId);
         act.setCondicionId(condicionId);
         act.setEstado(estado);
         activofijorepository.save(act);
+
         // Guardar en la tabla histórica
         ActivoFijoHDao actH = new ActivoFijoHDao();
         actH.setNombre(nombre);
         actH.setValor(new BigDecimal(valor));
-        actH.setFechaCompra(new Date());
+        actH.setFechaCompra(fechaCompra);
         actH.setDescripcion(descripcion);
         actH.setFechaRegistro(new Date());
         actH.setTipoActivoId(tipoActivoId);
         actH.setMarcaId(marcaId);
-        actH.setUbicacionId(ubicacionId);
+        actH.setUbicacionId(ubicacionDto.getId()); // Utiliza el ID de la ubicación registrada
         actH.setPersonalId(personalId);
         actH.setEstadoId(estadoId);
         actH.setCondicionId(condicionId);
         actH.setEstado(estado);
-        activoFijoHRepository.save(actH); // Guardar en la tabla histórica
+        activoFijoHRepository.save(actH);
 
         return new ActivoFijoDto(act.getNombre(), act.getValor(), fechaCompra, act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
     }
+
 
     public Date convertirStringADate(String fechaString) throws ParseException {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
@@ -169,7 +200,7 @@ public class ActivoFijoBl {
 
         return listTip;
     }
-
+/*
     public List<UbicacionDto> getUbi() {
         List<UbicacionDao> ubicacion = ubicacionRepository.findAll();
 
@@ -179,7 +210,7 @@ public class ActivoFijoBl {
 
         return listUbi;
     }
-
+*/
     public ActivoFijoDto actualizarActivo(Integer id, String nombre, String valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
         Optional<ActivoFijoDao> optionalActivoFijoDao = activofijorepository.findById(Long.valueOf(id));
         if (optionalActivoFijoDao.isPresent()) {

@@ -45,14 +45,16 @@ public class ActivoFijoApi {
             @RequestParam(name = "descripcion") String descripcion,
             @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
             @RequestParam(name = "marcaId") Integer marcaId,
-            @RequestParam(name = "ubicacionId") Integer ubicacionId,
+            @RequestParam(name = "calle") String calle,
+            @RequestParam(name = "avenida") String avenida,
+            @RequestParam(name = "bloqueId") Long bloqueId,
+            @RequestParam(name = "ciudadId") Long ciudadId,
             @RequestParam(name = "personalId") Integer personalId,
             @RequestParam(name = "estadoId") Integer estadoId,
             @RequestParam(name = "condicionId") Integer condicionId,
             @RequestParam(name = "estado") Boolean estado
     ) throws ParseException {
-        LOGGER.info("Ejecutando registrarActivosFijos...");
-        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, ubicacionId, personalId, estadoId, condicionId, estado);
+        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/actF")
@@ -79,10 +81,12 @@ public class ActivoFijoApi {
     public List<TipoActivoDto> obtenerListaDeTipoActivoDto() {
         return activoFijoBl.getTip();
     }
+    /*
     @GetMapping("/ubicacion")
     public List<UbicacionDto> obtenerListaDeUbicacionDto() {
         return activoFijoBl.getUbi();
     }
+     */
 
     @PostMapping("/actualizar/{id}")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijo(
