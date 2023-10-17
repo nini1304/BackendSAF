@@ -20,3 +20,7 @@ GET http://localhost:1234/api/v1/activos-fijos/tipo
 ###
 GET http://localhost:1234/api/v1/activos-fijos/personal
 ###
+GET http://localhost:1234/api/v1/activos-fijos/bloque
+###
+GET http://localhost:1234/api/v1/activos-fijos/ciudad
+###

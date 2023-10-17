@@ -81,6 +81,10 @@ public class ActivoFijoApi {
     public List<TipoActivoDto> obtenerListaDeTipoActivoDto() {
         return activoFijoBl.getTip();
     }
+    @GetMapping("/ciudad")
+    public List<CiudadDto> obtenerListaDeCiudadDto() {return activoFijoBl.getCiud();}
+    @GetMapping("/bloque")
+    public List<BloqueDto> obtenerListaDeBloqueDto() {return activoFijoBl.getBloq();}
     /*
     @GetMapping("/ubicacion")
     public List<UbicacionDto> obtenerListaDeUbicacionDto() {

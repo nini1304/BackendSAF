@@ -211,6 +211,25 @@ public class ActivoFijoBl {
         return listUbi;
     }
 */
+    public List<BloqueDto> getBloq() {
+        List<BloqueDao> bloque = bloqueRepository.findAll();
+
+        List<BloqueDto> listBloc = bloque.stream()
+                .map(blo -> new BloqueDto(blo.getId(), blo.getNombre()))
+                .collect(Collectors.toList());
+
+        return listBloc;
+    }
+
+    public List<CiudadDto> getCiud() {
+        List<CiudadDao> ciudad = ciudadRepository.findAll();
+
+        List<CiudadDto> listCiud = ciudad.stream()
+                .map(ciu -> new CiudadDto(ciu.getId(), ciu.getNombre()))
+                .collect(Collectors.toList());
+
+        return listCiud;
+    }
     public ActivoFijoDto actualizarActivo(Integer id, String nombre, String valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
         Optional<ActivoFijoDao> optionalActivoFijoDao = activofijorepository.findById(Long.valueOf(id));
         if (optionalActivoFijoDao.isPresent()) {
