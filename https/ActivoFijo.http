@@ -1,5 +1,7 @@
 POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Pantalla8k&valor=900&fechaCompra=19/09/2023&descripcion=LG50&tipoActivoId=1&marcaId=2&calle=Calle%20Principal&avenida=Avenida%20Central&bloqueId=3&ciudadId=4&personalId=1&estadoId=1&condicionId=1&estado=true
 ###
+POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Pantalla8k&valor=900&fechaCompra=Tue Oct 19 2023 00:00:00 GMT-0400&descripcion=LG50&tipoActivoId=1&marcaId=2&calle=Calle%20Principal&avenida=Avenida%20Central&bloqueId=3&ciudadId=4&personalId=1&estadoId=1&condicionId=1&estado=true
+###
 ###POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Samsung&valor=900&fechaCompra=2023-09-26&descripcion=Note10&porcentajeDepreciacion=10&fechaRegistro=2023-09-26&tipoActivoId=1&marcaId=2&ubicacionId=3&personalId=4&estadoId=5&condicionId=6&estado=true
 ###
 ###POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=MonitorXD&valor=900&fechaCompra=19/09/2023&descripcion=Note10&tipoActivoId=1&marcaId=2&ubicacionId=3&personalId=1&estadoId=1&condicionId=1&estado=true

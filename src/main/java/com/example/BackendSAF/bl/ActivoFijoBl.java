@@ -91,10 +91,10 @@ public class ActivoFijoBl {
 
     }
 
-    public ActivoFijoDto registrar(String nombre, String valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+    public ActivoFijoDto registrar(String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
         // Registra la ubicación primero
         UbicacionDto ubicacionDto = registrarUbicacion(calle, avenida, bloqueId, ciudadId);
-
+        Date fechaCompra = convertirADate(fechaCompraString);
         // Luego, crea un objeto ActivoFijoDao con los datos del formulario
         ActivoFijoDao act = new ActivoFijoDao();
         act.setNombre(nombre);
@@ -135,6 +135,13 @@ public class ActivoFijoBl {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         return formatoFecha.parse(fechaString);
     }
+    public Date convertirADate(String fechaString) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd yyyy", Locale.ENGLISH);
+        return dateFormat.parse(fechaString);
+    }
+
+
+
 
     // Esto son los get para todas las listas de componentes
     //getACt te envia la lista de todos los activos fijos
@@ -230,7 +237,8 @@ public class ActivoFijoBl {
 
         return listCiud;
     }
-    public ActivoFijoDto actualizarActivo(Integer id, String nombre, String valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+    public ActivoFijoDto actualizarActivo(Integer id, String nombre, String valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+        Date fechaCompra = convertirStringADate(fechaCompraString);
         Optional<ActivoFijoDao> optionalActivoFijoDao = activofijorepository.findById(Long.valueOf(id));
         if (optionalActivoFijoDao.isPresent()) {
             ActivoFijoDao activoFijoDto = optionalActivoFijoDao.get();

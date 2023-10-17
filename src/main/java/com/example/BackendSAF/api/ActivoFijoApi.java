@@ -40,8 +40,8 @@ public class ActivoFijoApi {
     @PostMapping("/registrar")
     public ResponseEntity<ActivoFijoDto> registrarActivoFijo(
             @RequestParam(name = "nombre") String nombre,
-            @RequestParam(name = "valor") String valor,
-            @RequestParam(name = "fechaCompra") Date fechaCompra,
+            @RequestParam(name = "valor") Integer valor,
+            @RequestParam(name = "fechaCompra") String fechaCompra,
             @RequestParam(name = "descripcion") String descripcion,
             @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
             @RequestParam(name = "marcaId") Integer marcaId,
@@ -97,7 +97,7 @@ public class ActivoFijoApi {
             @PathVariable Long id,
             @RequestParam(name = "nombre") String nombre,
             @RequestParam(name = "valor") String valor,
-            @RequestParam(name = "fechaCompra") Date fechaCompra,
+            @RequestParam(name = "fechaCompra") String fechaCompra,
             @RequestParam(name = "descripcion") String descripcion,
             @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
             @RequestParam(name = "marcaId") Integer marcaId,
