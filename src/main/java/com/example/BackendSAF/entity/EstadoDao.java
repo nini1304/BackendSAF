@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "estadod")
+@Table(name = "estado")
 
 public class EstadoDao {
     @Id
@@ -18,7 +18,7 @@ public class EstadoDao {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "estado")
+    @OneToMany(mappedBy = "estado_id")
     private List<ActivoFijoDao> activosFijos;
     //Getters
     public Long getId() {

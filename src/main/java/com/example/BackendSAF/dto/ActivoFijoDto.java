@@ -22,12 +22,27 @@ public class ActivoFijoDto {
 
 
     // Constructores
-        //constructor sin el id
-    public ActivoFijoDto(String nombre, BigDecimal valor, Date fechaCompra, String descripcion, Integer tipoActivoId, Integer marcaId,
-                         Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId,
-                         Boolean estado) {
+    public ActivoFijoDto() {
+        // Constructor sin argumentos
     }
-        //constructor con el id
+    public ActivoFijoDto(Long id, String nombre, BigDecimal valor, Date fechaCompra, String descripcion, Integer tipoObjetoId, Integer marcaId,
+                         Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) {
+        this.id = id;
+        this.nombre = nombre;
+        this.valor = valor;
+        this.fechaCompra = fechaCompra;
+        this.descripcion = descripcion;
+        this.tipoObjetoId = tipoObjetoId;
+        this.marcaId = marcaId;
+        this.ubicacionId = ubicacionId;
+        this.personalId = personalId;
+        this.estadoId = estadoId;
+        this.condicionId = condicionId;
+        this.estado = estado;
+    }
+
+
+
 
     // Métodos setter para cada atributo
 

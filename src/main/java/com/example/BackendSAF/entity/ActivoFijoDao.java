@@ -66,7 +66,7 @@ public class ActivoFijoDao {
 
     @ManyToOne
     @JoinColumn(name = "Estado_id", insertable = false, updatable = false)
-    private EstadoDao estadod;
+    private EstadoDao estado_id;
 
     @ManyToOne
     @JoinColumn(name = "Condicion_id", insertable = false, updatable = false)
