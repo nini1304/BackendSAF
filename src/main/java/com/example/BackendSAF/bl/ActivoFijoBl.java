@@ -240,48 +240,36 @@ public class ActivoFijoBl {
 
         return listCiud;
     }
-    public ActivoFijoDto actualizarActivo(Integer id, String nombre, String valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, Integer ubicacionId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
-        Date fechaCompra = convertirADate(fechaCompraString);
-        Optional<ActivoFijoDao> optionalActivoFijoDao = activofijorepository.findById(Long.valueOf(id));
-        if (optionalActivoFijoDao.isPresent()) {
-            ActivoFijoDao activoFijoDto = optionalActivoFijoDao.get();
+    public ActivoFijoDto actualizarActivoFijo(Long activoFijoId, String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+        // Busca el activo fijo existente por su ID
+        ActivoFijoDao activoExistente = activofijorepository.findById(activoFijoId).orElse(null);
 
-            activoFijoDto.setNombre(nombre);
-            activoFijoDto.setValor(new BigDecimal(valor));
-            activoFijoDto.setFechaCompra(fechaCompra);
-            activoFijoDto.setDescripcion(descripcion);
-            activoFijoDto.setTipoActivoId(tipoActivoId);
-            activoFijoDto.setMarcaId(marcaId);
-            activoFijoDto.setUbicacionId(ubicacionId);
-            activoFijoDto.setPersonalId(personalId);
-            activoFijoDto.setEstadoId(estadoId);
-            activoFijoDto.setCondicionId(condicionId);
-            activoFijoDto.setEstado(estado);
-
-            activofijorepository.save(activoFijoDto);
-
-            ActivoFijoHDao acth = new ActivoFijoHDao();
-            acth.setNombre(nombre);
-            acth.setValor(new BigDecimal(valor));
-            acth.setFechaCompra(fechaCompra);
-            acth.setDescripcion(descripcion);
-            acth.setTipoActivoId(tipoActivoId);
-            acth.setMarcaId(marcaId);
-            acth.setUbicacionId(ubicacionId);
-            acth.setPersonalId(personalId);
-            acth.setEstadoId(estadoId);
-            acth.setCondicionId(condicionId);
-            acth.setEstado(estado);
-            activoFijoHRepository.save(acth);
-
-            return new ActivoFijoDto(acth.getId(),activoFijoDto.getNombre(), activoFijoDto.getValor(), activoFijoDto.getFechaCompra(), activoFijoDto.getDescripcion(), activoFijoDto.getTipoActivoId(), activoFijoDto.getMarcaId(), activoFijoDto.getUbicacionId(), activoFijoDto.getPersonalId(), activoFijoDto.getEstadoId(), activoFijoDto.getCondicionId(), activoFijoDto.getEstado());
-        } else {
-            try {
-                throw new IllegalAccessException("No existe el activo fijo con el id: " + id);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+        if (activoExistente == null) {
+            throw new NoSuchElementException("El activo fijo con ID " + activoFijoId + " no existe");
         }
+
+        // Registra una nueva ubicación o actualiza la existente
+        UbicacionDto ubicacionDto = registrarUbicacion(calle, avenida, bloqueId, ciudadId);
+
+        // Actualiza los datos del activo fijo existente
+        activoExistente.setNombre(nombre);
+        activoExistente.setValor(new BigDecimal(valor));
+        activoExistente.setFechaCompra(convertirADate(fechaCompraString));
+        activoExistente.setDescripcion(descripcion);
+        activoExistente.setTipoActivoId(tipoActivoId);
+        activoExistente.setMarcaId(marcaId);
+        activoExistente.setUbicacionId(ubicacionDto.getId()); // Utiliza el ID de la ubicación registrada
+        activoExistente.setPersonalId(personalId);
+        activoExistente.setEstadoId(estadoId);
+        activoExistente.setCondicionId(condicionId);
+        activoExistente.setEstado(estado);
+
+        // Guarda los cambios en el activo fijo
+        activofijorepository.save(activoExistente);
+
+        return new ActivoFijoDto(activoExistente.getId(), activoExistente.getNombre(), activoExistente.getValor(),
+                activoExistente.getFechaCompra(), activoExistente.getDescripcion(), activoExistente.getTipoActivoId(),
+                activoExistente.getMarcaId(), activoExistente.getUbicacionId(), activoExistente.getPersonalId(),
+                activoExistente.getEstadoId(), activoExistente.getCondicionId(), activoExistente.getEstado());
     }
 }
-
