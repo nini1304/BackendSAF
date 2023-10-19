@@ -2,12 +2,12 @@ server:
   port: 1234
 accounting:
   url:${URL:jdbc:postgresql://localhost:5432/postgres}
-  key:${PASSWORD:13643389}
+  key:${PASSWORD:cuando15}
 spring:
   datasource:
     type: org.postgresql.jdbc2.optional.SimpleDataSource
     username: ${USER_NAME:postgres}
-    password: ${PASSWORD:13643389}
+    password: ${PASSWORD:cuando15}
     url: ${URL:jdbc:postgresql://localhost:5432/postgres}
   config:
     import: optional:file:.env[.properties]

@@ -26,3 +26,4 @@ GET http://localhost:1234/api/v1/activos-fijos/bloque
 ###
 GET http://localhost:1234/api/v1/activos-fijos/ciudad
 ###
+DELETE http://localhost:1234/api/v1/activos-fijos/eliminar/1

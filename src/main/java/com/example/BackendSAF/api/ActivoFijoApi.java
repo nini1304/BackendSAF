@@ -108,8 +108,15 @@ public class ActivoFijoApi {
             @RequestParam(name = "estadoId") Integer estadoId,
             @RequestParam(name = "condicionId") Integer condicionId,
             @RequestParam(name = "estado") Boolean estado
-    ) throws ParseException {
+    )throws ParseException {
         ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijo(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
         return ResponseEntity.ok(activoFijoDto);
     }
+
+    //metodo eliminar id
+    @DeleteMapping(path = "/eliminar/{id}")
+    public ResponseEntity<Object> eliminarActivoFijo(@PathVariable("id") Long id){
+        return this.activoFijoBl.deleteActivoFijo(id);
+    }
+
 }

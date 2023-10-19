@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class ActivoFijoBl {
 
+    HashMap<String,Object> datos;
+    //este hashmap para delete
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivoFijoBl.class);
 
@@ -149,7 +153,7 @@ public class ActivoFijoBl {
     }
 
     // Esto son los get para todas las listas de componentes
-    //getACt te envia la lista de todos los activos fijos
+    // getACt te envia la lista de todos los activos fijos
     public List<ActivoFijoDto> getAct() {
         List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
         List<ActivoFijoDto> listAct = new ArrayList<>();
@@ -157,11 +161,8 @@ public class ActivoFijoBl {
         for (ActivoFijoDao act : activoFijo) {
             listAct.add(new ActivoFijoDto(act.getId(), act.getNombre(), act.getValor(), act.getFechaCompra(), act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado()));
         }
-
         return listAct;
     }
-
-
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
         List<CondicionDto> listConds = condicion.stream()
@@ -271,5 +272,22 @@ public class ActivoFijoBl {
                 activoExistente.getFechaCompra(), activoExistente.getDescripcion(), activoExistente.getTipoActivoId(),
                 activoExistente.getMarcaId(), activoExistente.getUbicacionId(), activoExistente.getPersonalId(),
                 activoExistente.getEstadoId(), activoExistente.getCondicionId(), activoExistente.getEstado());
+    }
+    public ResponseEntity<Object> deleteActivoFijo(Long id){
+        datos=new HashMap<>();
+        boolean existe=this.activofijorepository.existsById(id);
+        if(!existe){
+            datos.put("error",true);
+            datos.put("message","No existe un activo fijo con ese id para eliminar");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        activofijorepository.deleteById(id);
+        datos.put("message","Activo fijo Eliminado");
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.ACCEPTED);
     }
 }
