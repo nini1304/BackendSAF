@@ -160,7 +160,7 @@ public class ActivoFijoBl {
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
 
         for (ActivoFijoDao act : activoFijo) {
-
+            if (act.getEstado()){
             listAct.add(new ActivoFijoListDto(
                     act.getId(),
                     act.getNombre(),
@@ -176,7 +176,9 @@ public class ActivoFijoBl {
                     personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
                     estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
                     fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId()))
+
             ));
+            }
         }
 
         return listAct;
