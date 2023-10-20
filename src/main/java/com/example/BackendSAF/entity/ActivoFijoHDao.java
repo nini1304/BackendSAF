@@ -12,6 +12,9 @@ public class ActivoFijoHDao {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "id_activo")
+    private Long idActivo;
+
     @Column(name = "nombre")
     private String nombre;
 
@@ -47,6 +50,10 @@ public class ActivoFijoHDao {
 
     @Column(name = "estado")
     private Boolean estado;
+    @Column(name = "evento")
+    private String evento;
+    @Column(name = "usuario")
+    private String usuario;
 
     // Getters y Setters
     public Long getId() {
@@ -55,6 +62,14 @@ public class ActivoFijoHDao {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdActivo() {
+        return idActivo;
+    }
+
+    public void setIdActivo(Long idActivo) {
+        this.idActivo = idActivo;
     }
 
     public String getNombre() {
@@ -151,6 +166,22 @@ public class ActivoFijoHDao {
 
     public void setEstado(Boolean estado) {
         this.estado = estado;
+    }
+
+    public String getEvento() {
+        return evento;
+    }
+
+    public void setEvento(String evento) {
+        this.evento = evento;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
 }

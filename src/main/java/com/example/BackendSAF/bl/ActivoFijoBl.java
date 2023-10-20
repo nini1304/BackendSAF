@@ -117,6 +117,7 @@ public class ActivoFijoBl {
 
         // Guardar en la tabla histórica
         ActivoFijoHDao actH = new ActivoFijoHDao();
+        actH.setIdActivo(act.getId());
         actH.setNombre(nombre);
         actH.setValor(new BigDecimal(valor));
         actH.setFechaCompra(fechaCompra);
@@ -129,6 +130,8 @@ public class ActivoFijoBl {
         actH.setEstadoId(estadoId);
         actH.setCondicionId(condicionId);
         actH.setEstado(estado);
+        actH.setEvento("Registro");
+        actH.setUsuario("User");
         activoFijoHRepository.save(actH);
 
         return new ActivoFijoDto(act.getId(),act.getNombre(), act.getValor(), fechaCompra, act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
