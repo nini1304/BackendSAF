@@ -154,6 +154,39 @@ public class ActivoFijoBl {
 
     // Esto son los get para todas las listas de componentes
     // getACt te envia la lista de todos los activos fijos
+    public List<ActivoFijoListDto> getAct() {
+        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
+        List<ActivoFijoListDto> listAct = new ArrayList<>();
+        //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
+
+        for (ActivoFijoDao act : activoFijo) {
+
+            listAct.add(new ActivoFijoListDto(
+                    act.getId(),
+                    act.getNombre(),
+                    act.getValor(),
+                    act.getFechaCompra(),
+                    act.getDescripcion(),
+                    tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                    marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                    ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                    ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                    bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                    ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                    personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                    estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                    fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId()))
+            ));
+        }
+
+        return listAct;
+    }
+
+
+
+
+
+    /*
     public List<ActivoFijoDto> getAct() {
         List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
         List<ActivoFijoDto> listAct = new ArrayList<>();
@@ -163,6 +196,7 @@ public class ActivoFijoBl {
         }
         return listAct;
     }
+    */
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
         List<CondicionDto> listConds = condicion.stream()

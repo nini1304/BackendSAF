@@ -58,7 +58,7 @@ public class ActivoFijoApi {
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/actF")
-    public List<ActivoFijoDto> obtenerListaActivosFijos() throws ParseException {
+    public List<ActivoFijoListDto> obtenerListaActivosFijos() throws ParseException {
         return  activoFijoBl.getAct();
     }
     @GetMapping("/cond")
