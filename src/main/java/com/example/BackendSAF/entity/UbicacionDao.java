@@ -7,8 +7,7 @@ import java.util.List;
 @Table(name = "ubicacion")
 public class UbicacionDao {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ubicacion_sequence")
-    @SequenceGenerator(name = "ubicacion_sequence", sequenceName = "ubicacion_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
