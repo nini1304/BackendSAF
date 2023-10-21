@@ -303,6 +303,24 @@ public class ActivoFijoBl {
         activoExistente.setEstadoId(estadoId);
         activoExistente.setCondicionId(condicionId);
         activoExistente.setEstado(estado);
+        //Guardar en la tabla histórica
+        ActivoFijoHDao actH = new ActivoFijoHDao();
+        actH.setIdActivo(activoExistente.getId());
+        actH.setNombre(nombre);
+        actH.setValor(new BigDecimal(valor));
+        actH.setFechaCompra(convertirADate(fechaCompraString));
+        actH.setDescripcion(descripcion);
+        actH.setFechaRegistro(new Date());
+        actH.setTipoActivoId(tipoActivoId);
+        actH.setMarcaId(marcaId);
+        actH.setUbicacionId(ubicacionDto.getId()); // Utiliza el ID de la ubicación registrada
+        actH.setPersonalId(personalId);
+        actH.setEstadoId(estadoId);
+        actH.setCondicionId(condicionId);
+        actH.setEstado(estado);
+        actH.setEvento("Actualizacion");
+        actH.setUsuario("User");
+        activoFijoHRepository.save(actH);
 
         // Guarda los cambios en el activo fijo
         activofijorepository.save(activoExistente);

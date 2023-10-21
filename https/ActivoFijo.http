@@ -28,7 +28,7 @@ GET http://localhost:1234/api/v1/activos-fijos/ciudad
 ###
 DELETE http://localhost:1234/api/v1/activos-fijos/eliminar/1
 ###
-PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo%20Actualizado&valor=1500&fechaCompra=Wed%20Oct%2009%202023&descripcion=Descripción%20Actualizada&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true
+PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo%20Actualizado2&valor=1500&fechaCompra=Wed%20Oct%2009%202023&descripcion=Descripción%20Actualizada2&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true
 ###
 Activo fijo Historico
 ###
