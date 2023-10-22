@@ -33,3 +33,7 @@ PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo%20Act
 Activo fijo Historico
 ###
 GET http://localhost:1234/api/v1/activos-fijos-H/actFH
+###
+Usuarios
+###
+POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234
