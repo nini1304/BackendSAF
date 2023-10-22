@@ -49,6 +49,7 @@ public class ActivoFijoHBl {
                         act.getNombre(),
                         act.getValor(),
                         act.getFechaCompra(),
+                        act.getFechaRegistro(),
                         act.getDescripcion(),
                         tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
                         marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),

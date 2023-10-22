@@ -9,6 +9,7 @@ public class ACtivoFijoHListDto {
     private String nombre;
     private BigDecimal valor;
     private Date fechaCompra;
+    private Date fechaRegistro;
     private String descripcion;
     private String tipoActivoNombre;
     private String marcaNombre;
@@ -25,12 +26,13 @@ public class ACtivoFijoHListDto {
     //cosntructor
     public ACtivoFijoHListDto() {
     }
-    public ACtivoFijoHListDto(Long id, Long idActivo, String nombre, BigDecimal valor, Date fechaCompra, String descripcion, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, String evento, String usuario) {
+    public ACtivoFijoHListDto(Long id, Long idActivo, String nombre, BigDecimal valor, Date fechaCompra,Date fechaRegistro, String descripcion, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, String evento, String usuario) {
         this.id = id;
         this.idActivo = idActivo;
         this.nombre = nombre;
         this.valor = valor;
         this.fechaCompra = fechaCompra;
+        this.fechaRegistro=fechaRegistro;
         this.descripcion = descripcion;
         this.tipoActivoNombre = tipoActivoNombre;
         this.marcaNombre = marcaNombre;
@@ -44,6 +46,7 @@ public class ACtivoFijoHListDto {
         this.evento = evento;
         this.usuario = usuario;
     }
+
 
     public Long getId() {
         return id;
@@ -83,6 +86,14 @@ public class ACtivoFijoHListDto {
 
     public void setFechaCompra(Date fechaCompra) {
         this.fechaCompra = fechaCompra;
+    }
+
+    public Date getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 
     public String getDescripcion() {
