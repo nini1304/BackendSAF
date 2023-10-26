@@ -12,13 +12,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import java.time.format.DateTimeFormatter;
 import java.math.BigDecimal;
-import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 
 @Service
@@ -137,71 +145,192 @@ public class ActivoFijoBl {
         return new ActivoFijoDto(act.getId(),act.getNombre(), act.getValor(), fechaCompra, act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
     }
 
-
-    public Date convertirStringADate(String fechaString) throws ParseException {
-        DateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
-        return formatoFecha.parse(fechaString);
-    }
-    // Función para formatear la fecha en "dd-MM-yyyy"
-    public static Date convertirFecha(String fechaString) throws ParseException {
-        SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-        SimpleDateFormat formatoSalida = new SimpleDateFormat("dd-MM-yyyy");
-        Date fecha = formatoEntrada.parse(fechaString);
-        String fechaFormateada = formatoSalida.format(fecha);
-        return formatoSalida.parse(fechaFormateada);
-    }
     public Date convertirADate(String fechaString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd yyyy", Locale.ENGLISH);
         return dateFormat.parse(fechaString);
     }
-
     // Esto son los get para todas las listas de componentes
     // getACt te envia la lista de todos los activos fijos
-    public List<ActivoFijoListDto> getAct() {
+    public List<ActivoFijoList2Dto> getAct(String mesIngresado, int añoIngresado) {
+        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
+        List<ActivoFijoList2Dto> listAct = new ArrayList<>();
+        //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
+        if(mesIngresado.equals("-")&&añoIngresado==0){
+            for (ActivoFijoDao act : activoFijo) {
+                if (act.getEstado()){
+                    listAct.add(new ActivoFijoList2Dto(
+                            act.getId(),
+                            act.getNombre(),
+                            act.getValor(),
+                            formatearFecha(act.getFechaCompra().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()),
+                            act.getDescripcion(),
+                            tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                            marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                            ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                            ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                            bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                            ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                            personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                            estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                            fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
+                            tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())),
+                            BigDecimal.valueOf(0),
+                            BigDecimal.valueOf(0)
+                    ));
+                }
+            }
+        }
+        else{
+            for (ActivoFijoDao act : activoFijo) {
+                if (act.getEstado()){
+                    listAct.add(new ActivoFijoList2Dto(
+                            act.getId(),
+                            act.getNombre(),
+                            act.getValor(),
+                            formatearFecha(act.getFechaCompra().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()),
+                            act.getDescripcion(),
+                            tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                            marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                            ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                            ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                            bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                            ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                            personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                            estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                            fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
+                            tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())),
+                            calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))),
+                            act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))))
+                    ));
+                }
+            }
+        }
+        //generarExcel(listAct,"C:\\Users\\ccama\\OneDrive\\Escritorio.ActivoFijo.xlsx");
+        return listAct;
+
+    }
+    public BigDecimal calcularDepreciacion(Date fechaCompra, String mesIngresado, int añoIngresado, BigDecimal valorActual, Integer porcentajeDepreciacion) {
+
+        // Convertir la fecha de compra (java.util.Date) a LocalDate
+        LocalDate fechaCompraLocal = fechaCompra.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LOGGER.info("Fecha de compra: {}", fechaCompraLocal);
+        // Obtener el mes ingresado como parámetro (asumiendo que es el nombre del mes)
+        Month mesParametro = Month.valueOf(mesIngresado.toUpperCase());
+        LOGGER.info("Mes ingresado: {}", mesParametro);
+
+        // Crear una fecha con el mes y año ingresados
+        LocalDate fechaIngresada = LocalDate.of(añoIngresado, mesParametro, 1);
+        LOGGER.info("Fecha ingresada: {}", fechaIngresada);
+
+        // Calcular la diferencia en meses entre la fecha de compra y el mes ingresado
+        long mesesDiferencia = (fechaCompraLocal.until(fechaIngresada).toTotalMonths()) + 1;
+
+        LOGGER.info("Meses de diferencia: {}", mesesDiferencia);
+
+        // Calcular la depreciación
+        BigDecimal depreciacion = valorActual.multiply(BigDecimal.valueOf(mesesDiferencia))
+                .multiply(BigDecimal.valueOf(porcentajeDepreciacion))
+                .divide(BigDecimal.valueOf(100 * 12), 2, BigDecimal.ROUND_HALF_UP);
+
+        return depreciacion;
+    }
+    public String formatearFecha(LocalDate fecha) {
+        // Define el formato deseado
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        // Formatea la fecha
+        String fechaFormateada = fecha.format(formatter);
+        // Devuelve la fecha formateada
+        return fechaFormateada;
+    }
+    public List<ActivoFijoListDto> getAct2() {
         List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
         List<ActivoFijoListDto> listAct = new ArrayList<>();
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
 
         for (ActivoFijoDao act : activoFijo) {
             if (act.getEstado()){
-            listAct.add(new ActivoFijoListDto(
-                    act.getId(),
-                    act.getNombre(),
-                    act.getValor(),
-                    act.getFechaCompra(),
-                    act.getDescripcion(),
-                    tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
-                    marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
-                    ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
-                    ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
-                    bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
-                    ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
-                    personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
-                    estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
-                    fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId()))
-
-            ));
+                listAct.add(new ActivoFijoListDto(
+                        act.getId(),
+                        act.getNombre(),
+                        act.getValor(),
+                        formatearFecha(act.getFechaCompra().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()),
+                        act.getDescripcion(),
+                        tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                        marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                        ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                        ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                        bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                        ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                        personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                        estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                        fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId()))
+                ));
             }
         }
 
         return listAct;
+
     }
+    public void generarExcel(List<ActivoFijoList2Dto> listaActivoFijo, String nombreArchivo) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("ActivoFijo");
 
+        // Crear encabezados
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Nombre");
+        headerRow.createCell(2).setCellValue("Valor");
+        headerRow.createCell(3).setCellValue("Fecha de compra");
+        headerRow.createCell(4).setCellValue("Descripción");
+        headerRow.createCell(5).setCellValue("Tipo de activo");
+        headerRow.createCell(6).setCellValue("Marca");
+        headerRow.createCell(7).setCellValue("Calle");
+        headerRow.createCell(8).setCellValue("Avenida");
+        headerRow.createCell(9).setCellValue("Bloque");
+        headerRow.createCell(10).setCellValue("Ciudad");
+        headerRow.createCell(11).setCellValue("Personal");
+        headerRow.createCell(12).setCellValue("Estado");
+        headerRow.createCell(13).setCellValue("Condición");
+        headerRow.createCell(14).setCellValue("Porcentaje de depreciación");
+        headerRow.createCell(15).setCellValue("Valor de depreciación");
+        headerRow.createCell(16).setCellValue("Valor actual");
 
+        // Agrega más encabezados según tus necesidades
 
-
-
-    /*
-    public List<ActivoFijoDto> getAct() {
-        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
-        List<ActivoFijoDto> listAct = new ArrayList<>();
-
-        for (ActivoFijoDao act : activoFijo) {
-            listAct.add(new ActivoFijoDto(act.getId(), act.getNombre(), act.getValor(), act.getFechaCompra(), act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado()));
+        // Llena los datos
+        for (int i = 0; i < listaActivoFijo.size(); i++) {
+            ActivoFijoList2Dto activoFijo = listaActivoFijo.get(i);
+            Row row = sheet.createRow(i + 1);
+            row.createCell(0).setCellValue(activoFijo.getId());
+            row.createCell(1).setCellValue(activoFijo.getNombre());
+            row.createCell(2).setCellValue(activoFijo.getValor().doubleValue());
+            row.createCell(3).setCellValue(activoFijo.getFechaCompra());
+            row.createCell(4).setCellValue(activoFijo.getDescripcion());
+            row.createCell(5).setCellValue(activoFijo.getTipoActivoNombre());
+            row.createCell(6).setCellValue(activoFijo.getMarcaNombre());
+            row.createCell(7).setCellValue(activoFijo.getCalle());
+            row.createCell(8).setCellValue(activoFijo.getAvenida());
+            row.createCell(9).setCellValue(activoFijo.getBloqueNombre());
+            row.createCell(10).setCellValue(activoFijo.getCiudadNombre());
+            row.createCell(11).setCellValue(activoFijo.getPersonalNombre());
+            row.createCell(12).setCellValue(activoFijo.getEstadoNombre());
+            row.createCell(13).setCellValue(activoFijo.getCondicionNombre());
+            row.createCell(14).setCellValue(activoFijo.getPorcentajeDepreciacion());
+            row.createCell(15).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
+            row.createCell(16).setCellValue(activoFijo.getValorActual().doubleValue());
+            // Agrega más celdas según tus necesidades
         }
-        return listAct;
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(nombreArchivo);
+            workbook.write(outputStream);
+            outputStream.close();
+            workbook.close();
+            System.out.println("Archivo Excel generado exitosamente: " + nombreArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    */
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
         List<CondicionDto> listConds = condicion.stream()
@@ -348,5 +477,6 @@ public class ActivoFijoBl {
                 datos,
                 HttpStatus.ACCEPTED);
     }
+
 }
 

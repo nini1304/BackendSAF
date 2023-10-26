@@ -49,6 +49,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+			<!-- Agrega las dependencias de Apache POI -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>4.1.2</version> <!-- Asegúrate de usar la versión correcta -->
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>4.1.2</version> <!-- Asegúrate de usar la versión correcta -->
+			</dependency>
 	</dependencies>
 
 	<build>
