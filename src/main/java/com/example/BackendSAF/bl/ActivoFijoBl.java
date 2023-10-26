@@ -12,8 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import java.time.format.DateTimeFormatter;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -137,71 +141,129 @@ public class ActivoFijoBl {
         return new ActivoFijoDto(act.getId(),act.getNombre(), act.getValor(), fechaCompra, act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
     }
 
-
-    public Date convertirStringADate(String fechaString) throws ParseException {
-        DateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
-        return formatoFecha.parse(fechaString);
-    }
-    // Función para formatear la fecha en "dd-MM-yyyy"
-    public static Date convertirFecha(String fechaString) throws ParseException {
-        SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-        SimpleDateFormat formatoSalida = new SimpleDateFormat("dd-MM-yyyy");
-        Date fecha = formatoEntrada.parse(fechaString);
-        String fechaFormateada = formatoSalida.format(fecha);
-        return formatoSalida.parse(fechaFormateada);
-    }
     public Date convertirADate(String fechaString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd yyyy", Locale.ENGLISH);
         return dateFormat.parse(fechaString);
     }
-
     // Esto son los get para todas las listas de componentes
     // getACt te envia la lista de todos los activos fijos
-    public List<ActivoFijoListDto> getAct() {
+    public List<ActivoFijoList2Dto> getAct(String mesIngresado, int añoIngresado) {
+        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
+        List<ActivoFijoList2Dto> listAct = new ArrayList<>();
+        //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
+        if(mesIngresado.equals("-")&&añoIngresado==0){
+            for (ActivoFijoDao act : activoFijo) {
+                if (act.getEstado()){
+                    listAct.add(new ActivoFijoList2Dto(
+                            act.getId(),
+                            act.getNombre(),
+                            act.getValor(),
+                            formatearFecha(act.getFechaCompra().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()),
+                            act.getDescripcion(),
+                            tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                            marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                            ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                            ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                            bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                            ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                            personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                            estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                            fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
+                            tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())),
+                            BigDecimal.valueOf(0),
+                            BigDecimal.valueOf(0)
+                    ));
+                }
+            }
+        }
+        else{
+            for (ActivoFijoDao act : activoFijo) {
+                if (act.getEstado()){
+                    listAct.add(new ActivoFijoList2Dto(
+                            act.getId(),
+                            act.getNombre(),
+                            act.getValor(),
+                            formatearFecha(act.getFechaCompra().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()),
+                            act.getDescripcion(),
+                            tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                            marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                            ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                            ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                            bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                            ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                            personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                            estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                            fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
+                            tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())),
+                            calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))),
+                            act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))))
+                    ));
+                }
+            }
+        }
+        return listAct;
+    }
+    public BigDecimal calcularDepreciacion(Date fechaCompra, String mesIngresado, int añoIngresado, BigDecimal valorActual, Integer porcentajeDepreciacion) {
+
+        // Convertir la fecha de compra (java.util.Date) a LocalDate
+        LocalDate fechaCompraLocal = fechaCompra.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LOGGER.info("Fecha de compra: {}", fechaCompraLocal);
+        // Obtener el mes ingresado como parámetro (asumiendo que es el nombre del mes)
+        Month mesParametro = Month.valueOf(mesIngresado.toUpperCase());
+        LOGGER.info("Mes ingresado: {}", mesParametro);
+
+        // Crear una fecha con el mes y año ingresados
+        LocalDate fechaIngresada = LocalDate.of(añoIngresado, mesParametro, 1);
+        LOGGER.info("Fecha ingresada: {}", fechaIngresada);
+
+        // Calcular la diferencia en meses entre la fecha de compra y el mes ingresado
+        long mesesDiferencia = (fechaCompraLocal.until(fechaIngresada).toTotalMonths()) + 1;
+
+        LOGGER.info("Meses de diferencia: {}", mesesDiferencia);
+
+        // Calcular la depreciación
+        BigDecimal depreciacion = valorActual.multiply(BigDecimal.valueOf(mesesDiferencia))
+                .multiply(BigDecimal.valueOf(porcentajeDepreciacion))
+                .divide(BigDecimal.valueOf(100 * 12), 2, BigDecimal.ROUND_HALF_UP);
+
+        return depreciacion;
+    }
+    public String formatearFecha(LocalDate fecha) {
+        // Define el formato deseado
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        // Formatea la fecha
+        String fechaFormateada = fecha.format(formatter);
+        // Devuelve la fecha formateada
+        return fechaFormateada;
+    }
+    public List<ActivoFijoListDto> getAct2() {
         List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
         List<ActivoFijoListDto> listAct = new ArrayList<>();
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
 
         for (ActivoFijoDao act : activoFijo) {
             if (act.getEstado()){
-            listAct.add(new ActivoFijoListDto(
-                    act.getId(),
-                    act.getNombre(),
-                    act.getValor(),
-                    act.getFechaCompra(),
-                    act.getDescripcion(),
-                    tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
-                    marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
-                    ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
-                    ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
-                    bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
-                    ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
-                    personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
-                    estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
-                    fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId()))
-
-            ));
+                listAct.add(new ActivoFijoListDto(
+                        act.getId(),
+                        act.getNombre(),
+                        act.getValor(),
+                        formatearFecha(act.getFechaCompra().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()),
+                        act.getDescripcion(),
+                        tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                        marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                        ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                        ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                        bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                        ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                        personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                        estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                        fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId()))
+                ));
             }
         }
 
         return listAct;
     }
-
-
-
-
-
-    /*
-    public List<ActivoFijoDto> getAct() {
-        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
-        List<ActivoFijoDto> listAct = new ArrayList<>();
-
-        for (ActivoFijoDao act : activoFijo) {
-            listAct.add(new ActivoFijoDto(act.getId(), act.getNombre(), act.getValor(), act.getFechaCompra(), act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado()));
-        }
-        return listAct;
-    }
-    */
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
         List<CondicionDto> listConds = condicion.stream()
@@ -347,4 +409,5 @@ public class ActivoFijoBl {
                 datos,
                 HttpStatus.ACCEPTED);
     }
+
 }

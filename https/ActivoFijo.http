@@ -8,7 +8,9 @@ POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Laptop8k&valor=
 ###
 GET http://localhost:1234/api/v1/activos-fijos/list
 ###
-GET http://localhost:1234/api/v1/activos-fijos/actF
+GET http://localhost:1234/api/v1/activos-fijos/actF?mes=JANUARY&anio=2024
+###
+GET http://localhost:1234/api/v1/activos-fijos/actF2
 ###
 GET http://localhost:1234/api/v1/activos-fijos/cond
 ###
