@@ -91,7 +91,7 @@ public class ActivoFijoApi {
         return activoFijoBl.getUbi();
     }
      */
-    @PutMapping("actualizar/{id}")
+    @PutMapping("/actualizar/{id}")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijo(
             @PathVariable Long id,
             @RequestParam(name = "nombre") String nombre,

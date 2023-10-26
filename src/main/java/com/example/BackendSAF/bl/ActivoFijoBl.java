@@ -273,3 +273,4 @@ public class ActivoFijoBl {
                 activoExistente.getEstadoId(), activoExistente.getCondicionId(), activoExistente.getEstado());
     }
 }
+
