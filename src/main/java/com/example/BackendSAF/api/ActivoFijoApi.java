@@ -113,6 +113,7 @@ public class ActivoFijoApi {
         return ResponseEntity.ok(activoFijoDto);
     }
 
+
     //metodo eliminar id
     @DeleteMapping(path = "/eliminar/{id}")
     public ResponseEntity<Object> eliminarActivoFijo(@PathVariable("id") Long id){

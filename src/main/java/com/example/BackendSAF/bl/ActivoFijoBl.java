@@ -330,6 +330,7 @@ public class ActivoFijoBl {
                 activoExistente.getMarcaId(), activoExistente.getUbicacionId(), activoExistente.getPersonalId(),
                 activoExistente.getEstadoId(), activoExistente.getCondicionId(), activoExistente.getEstado());
     }
+
     public ResponseEntity<Object> deleteActivoFijo(Long id){
         datos=new HashMap<>();
         boolean existe=this.activofijorepository.existsById(id);

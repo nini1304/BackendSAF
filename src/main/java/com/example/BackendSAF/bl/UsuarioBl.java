@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;
+import java.text.ParseException;
 
 @Service
 public class UsuarioBl {
@@ -41,4 +42,6 @@ public class UsuarioBl {
                 empresa.getLogo());
 
     }
+
+
 }
