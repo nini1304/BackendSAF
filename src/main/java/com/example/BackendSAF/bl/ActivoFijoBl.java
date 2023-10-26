@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class ActivoFijoBl {
 
+    HashMap<String,Object> datos;
+    //este hashmap para delete
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivoFijoBl.class);
 
@@ -113,6 +117,7 @@ public class ActivoFijoBl {
 
         // Guardar en la tabla histórica
         ActivoFijoHDao actH = new ActivoFijoHDao();
+        actH.setIdActivo(act.getId());
         actH.setNombre(nombre);
         actH.setValor(new BigDecimal(valor));
         actH.setFechaCompra(fechaCompra);
@@ -125,6 +130,8 @@ public class ActivoFijoBl {
         actH.setEstadoId(estadoId);
         actH.setCondicionId(condicionId);
         actH.setEstado(estado);
+        actH.setEvento("Registro");
+        actH.setUsuario("User");
         activoFijoHRepository.save(actH);
 
         return new ActivoFijoDto(act.getId(),act.getNombre(), act.getValor(), fechaCompra, act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
@@ -149,7 +156,42 @@ public class ActivoFijoBl {
     }
 
     // Esto son los get para todas las listas de componentes
-    //getACt te envia la lista de todos los activos fijos
+    // getACt te envia la lista de todos los activos fijos
+    public List<ActivoFijoListDto> getAct() {
+        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
+        List<ActivoFijoListDto> listAct = new ArrayList<>();
+        //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
+
+        for (ActivoFijoDao act : activoFijo) {
+            if (act.getEstado()){
+            listAct.add(new ActivoFijoListDto(
+                    act.getId(),
+                    act.getNombre(),
+                    act.getValor(),
+                    act.getFechaCompra(),
+                    act.getDescripcion(),
+                    tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())),
+                    marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())),
+                    ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())),
+                    ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())),
+                    bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))),
+                    ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))),
+                    personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
+                    estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
+                    fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId()))
+
+            ));
+            }
+        }
+
+        return listAct;
+    }
+
+
+
+
+
+    /*
     public List<ActivoFijoDto> getAct() {
         List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
         List<ActivoFijoDto> listAct = new ArrayList<>();
@@ -157,11 +199,9 @@ public class ActivoFijoBl {
         for (ActivoFijoDao act : activoFijo) {
             listAct.add(new ActivoFijoDto(act.getId(), act.getNombre(), act.getValor(), act.getFechaCompra(), act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado()));
         }
-
         return listAct;
     }
-
-
+    */
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
         List<CondicionDto> listConds = condicion.stream()
@@ -263,6 +303,24 @@ public class ActivoFijoBl {
         activoExistente.setEstadoId(estadoId);
         activoExistente.setCondicionId(condicionId);
         activoExistente.setEstado(estado);
+        //Guardar en la tabla histórica
+        ActivoFijoHDao actH = new ActivoFijoHDao();
+        actH.setIdActivo(activoExistente.getId());
+        actH.setNombre(nombre);
+        actH.setValor(new BigDecimal(valor));
+        actH.setFechaCompra(convertirADate(fechaCompraString));
+        actH.setDescripcion(descripcion);
+        actH.setFechaRegistro(new Date());
+        actH.setTipoActivoId(tipoActivoId);
+        actH.setMarcaId(marcaId);
+        actH.setUbicacionId(ubicacionDto.getId()); // Utiliza el ID de la ubicación registrada
+        actH.setPersonalId(personalId);
+        actH.setEstadoId(estadoId);
+        actH.setCondicionId(condicionId);
+        actH.setEstado(estado);
+        actH.setEvento("Actualizacion");
+        actH.setUsuario("User");
+        activoFijoHRepository.save(actH);
 
         // Guarda los cambios en el activo fijo
         activofijorepository.save(activoExistente);
@@ -271,6 +329,23 @@ public class ActivoFijoBl {
                 activoExistente.getFechaCompra(), activoExistente.getDescripcion(), activoExistente.getTipoActivoId(),
                 activoExistente.getMarcaId(), activoExistente.getUbicacionId(), activoExistente.getPersonalId(),
                 activoExistente.getEstadoId(), activoExistente.getCondicionId(), activoExistente.getEstado());
+    }
+    public ResponseEntity<Object> deleteActivoFijo(Long id){
+        datos=new HashMap<>();
+        boolean existe=this.activofijorepository.existsById(id);
+        if(!existe){
+            datos.put("error",true);
+            datos.put("message","No existe un activo fijo con ese id para eliminar");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        activofijorepository.deleteById(id);
+        datos.put("message","Activo fijo Eliminado");
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.ACCEPTED);
     }
 }
 
