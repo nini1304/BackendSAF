@@ -18,11 +18,15 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 
 @Service
@@ -201,7 +205,9 @@ public class ActivoFijoBl {
                 }
             }
         }
+        //generarExcel(listAct,"C:\\Users\\ccama\\OneDrive\\Escritorio.ActivoFijo.xlsx");
         return listAct;
+
     }
     public BigDecimal calcularDepreciacion(Date fechaCompra, String mesIngresado, int añoIngresado, BigDecimal valorActual, Integer porcentajeDepreciacion) {
 
@@ -263,6 +269,67 @@ public class ActivoFijoBl {
         }
 
         return listAct;
+
+    }
+    public void generarExcel(List<ActivoFijoList2Dto> listaActivoFijo, String nombreArchivo) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("ActivoFijo");
+
+        // Crear encabezados
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Nombre");
+        headerRow.createCell(2).setCellValue("Valor");
+        headerRow.createCell(3).setCellValue("Fecha de compra");
+        headerRow.createCell(4).setCellValue("Descripción");
+        headerRow.createCell(5).setCellValue("Tipo de activo");
+        headerRow.createCell(6).setCellValue("Marca");
+        headerRow.createCell(7).setCellValue("Calle");
+        headerRow.createCell(8).setCellValue("Avenida");
+        headerRow.createCell(9).setCellValue("Bloque");
+        headerRow.createCell(10).setCellValue("Ciudad");
+        headerRow.createCell(11).setCellValue("Personal");
+        headerRow.createCell(12).setCellValue("Estado");
+        headerRow.createCell(13).setCellValue("Condición");
+        headerRow.createCell(14).setCellValue("Porcentaje de depreciación");
+        headerRow.createCell(15).setCellValue("Valor de depreciación");
+        headerRow.createCell(16).setCellValue("Valor actual");
+
+        // Agrega más encabezados según tus necesidades
+
+        // Llena los datos
+        for (int i = 0; i < listaActivoFijo.size(); i++) {
+            ActivoFijoList2Dto activoFijo = listaActivoFijo.get(i);
+            Row row = sheet.createRow(i + 1);
+            row.createCell(0).setCellValue(activoFijo.getId());
+            row.createCell(1).setCellValue(activoFijo.getNombre());
+            row.createCell(2).setCellValue(activoFijo.getValor().doubleValue());
+            row.createCell(3).setCellValue(activoFijo.getFechaCompra());
+            row.createCell(4).setCellValue(activoFijo.getDescripcion());
+            row.createCell(5).setCellValue(activoFijo.getTipoActivoNombre());
+            row.createCell(6).setCellValue(activoFijo.getMarcaNombre());
+            row.createCell(7).setCellValue(activoFijo.getCalle());
+            row.createCell(8).setCellValue(activoFijo.getAvenida());
+            row.createCell(9).setCellValue(activoFijo.getBloqueNombre());
+            row.createCell(10).setCellValue(activoFijo.getCiudadNombre());
+            row.createCell(11).setCellValue(activoFijo.getPersonalNombre());
+            row.createCell(12).setCellValue(activoFijo.getEstadoNombre());
+            row.createCell(13).setCellValue(activoFijo.getCondicionNombre());
+            row.createCell(14).setCellValue(activoFijo.getPorcentajeDepreciacion());
+            row.createCell(15).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
+            row.createCell(16).setCellValue(activoFijo.getValorActual().doubleValue());
+            // Agrega más celdas según tus necesidades
+        }
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(nombreArchivo);
+            workbook.write(outputStream);
+            outputStream.close();
+            workbook.close();
+            System.out.println("Archivo Excel generado exitosamente: " + nombreArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
