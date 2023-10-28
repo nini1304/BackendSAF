@@ -211,7 +211,7 @@ public class ActivoFijoBl {
             }
         }
         //generarExcel(listAct,"C:\\Users\\ccama\\OneDrive\\Escritorio.ActivoFijo.xlsx");
-        PDFReportGenerator.generatePDFReport(listAct, "C:\\Users\\ccama\\OneDrive\\Escritorio\\reporte.pdf");
+        PDFReportGenerator.generatePDFReport2(listAct, "C:\\Users\\ccama\\OneDrive\\Escritorio\\reporte.pdf");
         return listAct;
 
     }

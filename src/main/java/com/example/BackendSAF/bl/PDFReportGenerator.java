@@ -1,5 +1,6 @@
 package com.example.BackendSAF.bl;
 
+import java.awt.*;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import com.example.BackendSAF.dto.ActivoFijoList2Dto;
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -61,6 +63,61 @@ public class PDFReportGenerator {
                 table.addCell(createCell(activo.getPersonalNombre(), contentFont));
                 table.addCell(createCell(activo.getEstadoNombre(), contentFont));
                 table.addCell(createCell(activo.getCondicionNombre(), contentFont));
+                table.addCell(createCell(activo.getPorcentajeDepreciacion().toString(), contentFont));
+                table.addCell(createCell(activo.getValorDepreciacion().toString(), contentFont));
+            }
+
+            document.add(table);
+            document.close();
+
+            System.out.println("PDF report generated: " + fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void generatePDFReport2(List<ActivoFijoList2Dto> data, String fileName) {
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(fileName));
+            document.open();
+
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+            Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
+
+            Paragraph title = new Paragraph("Informe de Activos Fijos", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            PdfPTable table = new PdfPTable(9); // Reducir el número de columnas a 9
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
+
+            // Encabezados de columna
+            String[] headers = {
+                    "ID", "Nombre", "Valor", "Fecha de Compra", "Descripción", "Tipo de Activo", "Marca",
+                    "% Depreciación", "Depreciación"
+            };
+
+            for (String header : headers) {
+                PdfPCell headerCell = new PdfPCell();
+                headerCell.addElement(new Phrase(header, headerFont));
+                headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headerCell.setBackgroundColor(Color.CYAN); // Fondo gris para encabezados
+                headerCell.setBorderWidth(1); // Agregar bordes
+                table.addCell(headerCell);
+            }
+
+            // Datos de activos fijos (sin incluir las columnas omitidas)
+            for (ActivoFijoList2Dto activo : data) {
+                table.addCell(createCell(activo.getId().toString(), contentFont));
+                table.addCell(createCell(activo.getNombre(), contentFont));
+                table.addCell(createCell(activo.getValor().toString(), contentFont));
+                table.addCell(createCell(activo.getFechaCompra(), contentFont));
+                table.addCell(createCell(activo.getDescripcion(), contentFont));
+                table.addCell(createCell(activo.getTipoActivoNombre(), contentFont));
+                table.addCell(createCell(activo.getMarcaNombre(), contentFont));
                 table.addCell(createCell(activo.getPorcentajeDepreciacion().toString(), contentFont));
                 table.addCell(createCell(activo.getValorDepreciacion().toString(), contentFont));
             }
