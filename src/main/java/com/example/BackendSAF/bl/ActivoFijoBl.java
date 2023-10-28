@@ -27,6 +27,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 
 @Service
@@ -206,6 +211,7 @@ public class ActivoFijoBl {
             }
         }
         //generarExcel(listAct,"C:\\Users\\ccama\\OneDrive\\Escritorio.ActivoFijo.xlsx");
+        PDFReportGenerator.generatePDFReport(listAct, "C:\\Users\\ccama\\OneDrive\\Escritorio\\reporte.pdf");
         return listAct;
 
     }
@@ -331,6 +337,9 @@ public class ActivoFijoBl {
             e.printStackTrace();
         }
     }
+
+
+
     public List<CondicionDto> getCond() {
         List<CondicionDao> condicion = fijoRepository.findAll();
         List<CondicionDto> listConds = condicion.stream()
