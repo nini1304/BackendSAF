@@ -6,6 +6,7 @@ import com.example.BackendSAF.entity.EmpresaDao;
 import com.example.BackendSAF.entity.Repository.EmpresaRepository;
 import com.example.BackendSAF.entity.Repository.UsuarioRepository;
 import com.example.BackendSAF.entity.UsuarioDao;
+import com.example.BackendSAF.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +44,16 @@ public class UsuarioBl {
 
     }
 
+    public UsuarioDto registrar (String nombre, String username, String password, Long idRol, Long idEmpresa) throws ParseException{
+        UsuarioDao usuarioDao = new UsuarioDao();
+        usuarioDao.setNombre(nombre);
+        usuarioDao.setUser(username);
+        usuarioDao.setPassword(password);
+        usuarioDao.setIdRol(idRol);
+        usuarioDao.setIdEmpresa(idEmpresa);
+        usuarioRepository.save(usuarioDao);
+
+        return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), usuarioDao.getIdEmpresa());
+    }
 
 }

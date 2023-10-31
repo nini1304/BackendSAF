@@ -2,6 +2,7 @@ package com.example.BackendSAF.api;
 
 import com.example.BackendSAF.bl.UsuarioBl;
 import com.example.BackendSAF.dto.LoginDto;
+import com.example.BackendSAF.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.security.sasl.AuthenticationException;
+import java.text.ParseException;
 
 
 @RestController
@@ -37,8 +39,16 @@ public class UsuarioApi {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
-
-
+    @PostMapping ("/registrar")
+    public ResponseEntity<UsuarioDto> registrar(
+            @RequestParam(name = "nombre") String nombre,
+            @RequestParam(name = "username") String username,
+            @RequestParam(name = "password") String password,
+            @RequestParam(name = "idRol") Long idRol,
+            @RequestParam(name = "idEmpresa") Long idEmpresa
+    ) throws ParseException {
+        UsuarioDto usuarioDto = usuarioBl.registrar(nombre, username, password, idRol, idEmpresa);
+        return ResponseEntity.ok(usuarioDto);
+    }
 }
 
