@@ -2,9 +2,67 @@ POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Pantalla8k&valo
 ###
 POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Laptop8k&valor=500&fechaCompra=Wed%20Oct%2004%202023&descripcion=LG200&tipoActivoId=1&marcaId=2&calle=Calle%20Principal&avenida=Avenida%20Central&bloqueId=3&ciudadId=4&personalId=1&estadoId=1&condicionId=1&estado=true
 ###
-###POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Samsung&valor=900&fechaCompra=2023-09-26&descripcion=Note10&porcentajeDepreciacion=10&fechaRegistro=2023-09-26&tipoActivoId=1&marcaId=2&ubicacionId=3&personalId=4&estadoId=5&condicionId=6&estado=true
+POST http://localhost:1234/api/v1/activos-fijos/excel?nombreArchivo=activosFijos.xlsx
+Content-Type: application/json
+
+[
+  {
+    "id": 1,
+    "nombre": "Activo 1",
+    "valor": 100.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 1",
+    "tipoActivoNombre": "Tipo 1",
+    "marcaNombre": "Marca 1",
+    "porcentajeDepreciacion": 10,
+    "valorDepreciacion": 10.0,
+    "valorActual": 90.0
+  },
+  {
+    "id": 2,
+    "nombre": "Activo 2",
+    "valor": 200.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 2",
+    "tipoActivoNombre": "Tipo 2",
+    "marcaNombre": "Marca 2",
+    "porcentajeDepreciacion": 15,
+    "valorDepreciacion": 30.0,
+    "valorActual": 170.0
+  }
+]
 ###
-###POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=MonitorXD&valor=900&fechaCompra=19/09/2023&descripcion=Note10&tipoActivoId=1&marcaId=2&ubicacionId=3&personalId=1&estadoId=1&condicionId=1&estado=true
+###
+POST http://localhost:1234/api/v1/activos-fijos/pdf?nombreArchivo=activosFijos.pdf
+Content-Type: application/json
+
+[
+  {
+    "id": 1,
+    "nombre": "Activo 1",
+    "valor": 100.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 1",
+    "tipoActivoNombre": "Tipo 1",
+    "marcaNombre": "Marca 1",
+    "porcentajeDepreciacion": 10,
+    "valorDepreciacion": 10.0,
+    "valorActual": 90.0
+  },
+  {
+    "id": 2,
+    "nombre": "Activo 2",
+    "valor": 200.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 2",
+    "tipoActivoNombre": "Tipo 2",
+    "marcaNombre": "Marca 2",
+    "porcentajeDepreciacion": 15,
+    "valorDepreciacion": 30.0,
+    "valorActual": 170.0
+  }
+]
+###
 ###
 GET http://localhost:1234/api/v1/activos-fijos/list
 ###
@@ -30,7 +88,7 @@ GET http://localhost:1234/api/v1/activos-fijos/ciudad
 ###
 DELETE http://localhost:1234/api/v1/activos-fijos/eliminar/1
 ###
-PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo%20Actualizado2&valor=1500&fechaCompra=Wed%20Oct%2009%202023&descripcion=Descripción%20Actualizada2&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true
+PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo5%20Actualizado3&valor=6900&fechaCompra=Wed%20Oct%2027%202023&descripcion=Descripción%20Actualizada3&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true
 ###
 Activo fijo Historico
 ###

@@ -1,6 +1,7 @@
 package com.example.BackendSAF.api;
 
 import com.example.BackendSAF.bl.ActivoFijoBl;
+import com.example.BackendSAF.bl.PDFReportGenerator;
 import com.example.BackendSAF.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public class ActivoFijoApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivoFijoApi.class);
 
     private final ActivoFijoBl activoFijoBl;
-
+    private PDFReportGenerator pdfReportGenerator;
 
     @Autowired
 
@@ -65,6 +66,18 @@ public class ActivoFijoApi {
     public List<ActivoFijoListDto> obtenerListaActivosFijosUser() throws ParseException {
         return  activoFijoBl.getAct2();
     }
+    @PostMapping("/excel")
+    public ResponseEntity<String> generarExcel(@RequestParam String nombreArchivo, @RequestBody List<ActivoFijoList2Dto> activos) {
+        activoFijoBl.generarExcel(activos, nombreArchivo);
+        return ResponseEntity.ok("Excel generado correctamente");
+    }
+
+    @PostMapping("/pdf")
+    public ResponseEntity<String> generarPDFReport2(@RequestParam String nombreArchivo, @RequestBody List<ActivoFijoList2Dto> activos) {
+        pdfReportGenerator.generatePDFReport2(activos, nombreArchivo);
+        return ResponseEntity.ok("PDF generado correctamente");
+    }
+
     @GetMapping("/cond")
     public List<CondicionDto> obtenerListaDeCondicionDto() {
         return activoFijoBl.getCond();

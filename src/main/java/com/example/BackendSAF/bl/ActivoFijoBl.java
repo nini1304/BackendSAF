@@ -211,7 +211,7 @@ public class ActivoFijoBl {
             }
         }
         //generarExcel(listAct,"C:\\Users\\ccama\\OneDrive\\Escritorio.ActivoFijo.xlsx");
-        PDFReportGenerator.generatePDFReport2(listAct, "C:\\Users\\ccama\\OneDrive\\Escritorio\\reporte.pdf");
+        PDFReportGenerator.generatePDFReport2(listAct, "reporte.pdf");
         return listAct;
 
     }
@@ -290,16 +290,16 @@ public class ActivoFijoBl {
         headerRow.createCell(4).setCellValue("Descripción");
         headerRow.createCell(5).setCellValue("Tipo de activo");
         headerRow.createCell(6).setCellValue("Marca");
-        headerRow.createCell(7).setCellValue("Calle");
-        headerRow.createCell(8).setCellValue("Avenida");
-        headerRow.createCell(9).setCellValue("Bloque");
-        headerRow.createCell(10).setCellValue("Ciudad");
-        headerRow.createCell(11).setCellValue("Personal");
-        headerRow.createCell(12).setCellValue("Estado");
-        headerRow.createCell(13).setCellValue("Condición");
-        headerRow.createCell(14).setCellValue("Porcentaje de depreciación");
-        headerRow.createCell(15).setCellValue("Valor de depreciación");
-        headerRow.createCell(16).setCellValue("Valor actual");
+        //headerRow.createCell(7).setCellValue("Calle");
+        //headerRow.createCell(8).setCellValue("Avenida");
+        //headerRow.createCell(9).setCellValue("Bloque");
+        //headerRow.createCell(10).setCellValue("Ciudad");
+        //headerRow.createCell(11).setCellValue("Personal");
+        //headerRow.createCell(12).setCellValue("Estado");
+        //headerRow.createCell(13).setCellValue("Condición");
+        headerRow.createCell(7).setCellValue("Porcentaje de depreciación");
+        headerRow.createCell(8).setCellValue("Valor de depreciación");
+        headerRow.createCell(9).setCellValue("Valor actual");
 
         // Agrega más encabezados según tus necesidades
 
@@ -314,16 +314,16 @@ public class ActivoFijoBl {
             row.createCell(4).setCellValue(activoFijo.getDescripcion());
             row.createCell(5).setCellValue(activoFijo.getTipoActivoNombre());
             row.createCell(6).setCellValue(activoFijo.getMarcaNombre());
-            row.createCell(7).setCellValue(activoFijo.getCalle());
-            row.createCell(8).setCellValue(activoFijo.getAvenida());
-            row.createCell(9).setCellValue(activoFijo.getBloqueNombre());
-            row.createCell(10).setCellValue(activoFijo.getCiudadNombre());
-            row.createCell(11).setCellValue(activoFijo.getPersonalNombre());
-            row.createCell(12).setCellValue(activoFijo.getEstadoNombre());
-            row.createCell(13).setCellValue(activoFijo.getCondicionNombre());
-            row.createCell(14).setCellValue(activoFijo.getPorcentajeDepreciacion());
-            row.createCell(15).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
-            row.createCell(16).setCellValue(activoFijo.getValorActual().doubleValue());
+            //row.createCell(7).setCellValue(activoFijo.getCalle());
+            //row.createCell(8).setCellValue(activoFijo.getAvenida());
+            //row.createCell(9).setCellValue(activoFijo.getBloqueNombre());
+            //row.createCell(10).setCellValue(activoFijo.getCiudadNombre());
+            //row.createCell(11).setCellValue(activoFijo.getPersonalNombre());
+            //row.createCell(12).setCellValue(activoFijo.getEstadoNombre());
+            //row.createCell(13).setCellValue(activoFijo.getCondicionNombre());
+            row.createCell(7).setCellValue(activoFijo.getPorcentajeDepreciacion());
+            row.createCell(8).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
+            row.createCell(9).setCellValue(activoFijo.getValorActual().doubleValue());
             // Agrega más celdas según tus necesidades
         }
 
