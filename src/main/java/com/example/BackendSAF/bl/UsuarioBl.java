@@ -1,10 +1,14 @@
 package com.example.BackendSAF.bl;
 
+import com.example.BackendSAF.dto.EmpresaDto;
 import com.example.BackendSAF.dto.LoginDto;
+import com.example.BackendSAF.dto.RolDto;
 import com.example.BackendSAF.entity.ActivoFijoDao;
 import com.example.BackendSAF.entity.EmpresaDao;
 import com.example.BackendSAF.entity.Repository.EmpresaRepository;
+import com.example.BackendSAF.entity.Repository.RolRepository;
 import com.example.BackendSAF.entity.Repository.UsuarioRepository;
+import com.example.BackendSAF.entity.RolDao;
 import com.example.BackendSAF.entity.UsuarioDao;
 import com.example.BackendSAF.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;
 import java.text.ParseException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioBl {
@@ -20,6 +26,8 @@ public class UsuarioBl {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private EmpresaRepository empresaRepository;
+    @Autowired
+    private RolRepository rolRepository;
 
 
     public UsuarioBl(UsuarioRepository usuarioRepository) {
@@ -54,6 +62,22 @@ public class UsuarioBl {
         usuarioRepository.save(usuarioDao);
 
         return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), usuarioDao.getIdEmpresa());
+    }
+
+    public List<EmpresaDto> getEmpresa(){
+        List<EmpresaDao> empresa = empresaRepository.findAll();
+        List<EmpresaDto> listEmpresa = empresa.stream()
+                .map(empre -> new EmpresaDto(empre.getIdEmpresa(), empre.getNombre(), empre.getLogo()))
+                .collect(Collectors.toList());
+        return listEmpresa;
+    }
+
+    public List<RolDto> getRoles(){
+        List<RolDao> rol = rolRepository.findAll();
+        List<RolDto> listRol = rol.stream()
+                .map(roles -> new RolDto(roles.getIdRol(), roles.getRol()))
+                .collect(Collectors.toList());
+        return listRol;
     }
 
 }
