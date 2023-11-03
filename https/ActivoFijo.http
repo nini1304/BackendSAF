@@ -90,11 +90,11 @@ DELETE http://localhost:1234/api/v1/activos-fijos/eliminar/1
 ###
 PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo5%20Actualizado3&valor=6900&fechaCompra=Wed%20Oct%2027%202023&descripcion=Descripción%20Actualizada3&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true
 ###
-Activo fijo Historico
+                        Activo fijo Historico
 ###
 GET http://localhost:1234/api/v1/activos-fijos-H/actFH
 ###
-Usuarios
+                        Usuarios
 ###
 POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234
 ###

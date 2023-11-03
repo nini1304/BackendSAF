@@ -129,12 +129,34 @@ public class ActivoFijoApi {
         ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijo(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
         return ResponseEntity.ok(activoFijoDto);
     }
-
+    //actualizar pero solo para el estado
+    @PutMapping("/actualizarEstado/{id}")
+    public ResponseEntity<ActivoFijoDto> actualizarActivoFijoEstado(
+            @PathVariable Long id,
+            @RequestParam(name = "nombre") String nombre,
+            @RequestParam(name = "valor") Integer valor,
+            @RequestParam(name = "fechaCompra") String fechaCompra,
+            @RequestParam(name = "descripcion") String descripcion,
+            @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
+            @RequestParam(name = "marcaId") Integer marcaId,
+            @RequestParam(name = "calle") String calle,
+            @RequestParam(name = "avenida") String avenida,
+            @RequestParam(name = "bloqueId") Long bloqueId,
+            @RequestParam(name = "ciudadId") Long ciudadId,
+            @RequestParam(name = "personalId") Integer personalId,
+            @RequestParam(name = "estadoId") Integer estadoId,
+            @RequestParam(name = "condicionId") Integer condicionId,
+            @RequestParam(name = "estado") Boolean estado
+    )throws ParseException {
+        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijoEstado(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
+        return ResponseEntity.ok(activoFijoDto);
+    }
 
     //metodo eliminar id
     @DeleteMapping(path = "/eliminar/{id}")
     public ResponseEntity<Object> eliminarActivoFijo(@PathVariable("id") Long id){
         return this.activoFijoBl.deleteActivoFijo(id);
     }
+
 
 }
