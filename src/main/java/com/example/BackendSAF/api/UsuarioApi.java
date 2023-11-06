@@ -5,6 +5,8 @@ import com.example.BackendSAF.dto.EmpresaDto;
 import com.example.BackendSAF.dto.LoginDto;
 import com.example.BackendSAF.dto.RolDto;
 import com.example.BackendSAF.dto.UsuarioDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/v1/usuarios")
 public class UsuarioApi {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UsuarioApi.class);
     private final UsuarioBl usuarioBl;
 
     @Autowired
@@ -49,6 +52,15 @@ public class UsuarioApi {
     ) throws ParseException {
         UsuarioDto usuarioDto = usuarioBl.registrar(nombre, username, password, idRol, idEmpresa);
         return ResponseEntity.ok(usuarioDto);
+    }
+
+    @GetMapping("/listar")
+    public Object listarUsuarios(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        LOGGER.info("Ejecutando listarUsuarios...");
+        return usuarioBl.list(page, size);
     }
 
     @GetMapping("/empresa")

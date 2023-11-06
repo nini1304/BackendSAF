@@ -130,6 +130,15 @@ public class ActivoFijoApi {
         return ResponseEntity.ok(activoFijoDto);
     }
 
+    @GetMapping("/obtener/{id}")
+    public ResponseEntity<ActivoFijoDto> getActivoFijoById(@PathVariable Long id){
+        ActivoFijoDto activoFijoDto = activoFijoBl.getActivoFijoById(id);
+        if (activoFijoDto == null){
+            return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok(activoFijoDto);
+        }
+    }
 
     //metodo eliminar id
     @DeleteMapping(path = "/eliminar/{id}")

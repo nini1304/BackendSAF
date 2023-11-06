@@ -469,6 +469,27 @@ public class ActivoFijoBl {
                 activoExistente.getEstadoId(), activoExistente.getCondicionId(), activoExistente.getEstado());
     }
 
+    public ActivoFijoDto getActivoFijoById(Long id){
+        ActivoFijoDao activoFijoDao = activofijorepository.findById(id).orElse(null);
+        if(activoFijoDao == null){
+            return null;
+        }
+        return new ActivoFijoDto(
+                activoFijoDao.getId(),
+                activoFijoDao.getNombre(),
+                activoFijoDao.getValor(),
+                activoFijoDao.getFechaCompra(),
+                activoFijoDao.getDescripcion(),
+                activoFijoDao.getTipoActivoId(),
+                activoFijoDao.getMarcaId(),
+                activoFijoDao.getUbicacionId(),
+                activoFijoDao.getPersonalId(),
+                activoFijoDao.getEstadoId(),
+                activoFijoDao.getCondicionId(),
+                activoFijoDao.getEstado()
+        );
+    }
+
     public ResponseEntity<Object> deleteActivoFijo(Long id){
         datos=new HashMap<>();
         boolean existe=this.activofijorepository.existsById(id);
