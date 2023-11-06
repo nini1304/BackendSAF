@@ -129,6 +129,18 @@ public class ActivoFijoApi {
         ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijo(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
         return ResponseEntity.ok(activoFijoDto);
     }
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<ActivoFijoDto> obtenerActivoFijoId(
+            @PathVariable Long id
+    ){
+        ActivoFijoDto activoFijo = activoFijoBl.getActivoFijoById(id);
+       if (id != null){
+           return ResponseEntity.ok(activoFijo);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     //actualizar pero solo para el estado
     @PutMapping("/actualizarEstado/{id}")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijoEstado(
