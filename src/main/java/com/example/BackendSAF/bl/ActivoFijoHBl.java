@@ -42,7 +42,6 @@ public class ActivoFijoHBl {
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
 
         for (ActivoFijoHDao act : activoFijoH) {
-            if (act.getEstado()){
                 listAct.add(new ACtivoFijoHListDto(
                         act.getId(),
                         act.getIdActivo(),
@@ -63,7 +62,7 @@ public class ActivoFijoHBl {
                         activoFijoHRepository.getEventoNombreById(Long.valueOf(act.getId())),
                         activoFijoHRepository.getUsuarioNombreById(Long.valueOf(act.getId()))
                 ));
-            }
+
         }
 
         return listAct;

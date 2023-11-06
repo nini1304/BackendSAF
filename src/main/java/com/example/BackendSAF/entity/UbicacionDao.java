@@ -31,20 +31,17 @@ public class UbicacionDao {
     @JoinColumn(name = "ciudad_id", insertable = false, updatable = false)
     private CiudadDao ciudad;
 
-    @OneToMany(mappedBy = "ubicacion")
-    private List<ActivoFijoDao> activosFijos;
 
     // Constructor sin nada
     public UbicacionDao() {
     }
 
     // Constructor sin id
-    public UbicacionDao(String calle, String avenida, Integer bloqueId, Integer ciudadId, List<ActivoFijoDao> activosFijos) {
+    public UbicacionDao(String calle, String avenida, Integer bloqueId, Integer ciudadId) {
         this.calle = calle;
         this.avenida = avenida;
         this.bloqueId = bloqueId;
         this.ciudadId = ciudadId;
-        this.activosFijos = activosFijos;
     }
 
     // Constructor con id
@@ -54,7 +51,6 @@ public class UbicacionDao {
         this.avenida = avenida;
         this.bloqueId = bloqueId;
         this.ciudadId = ciudadId;
-        this.activosFijos = activosFijos;
     }
 
     // Getters y setters
@@ -112,11 +108,11 @@ public class UbicacionDao {
         this.ciudad = ciudad;
     }
 
-    public List<ActivoFijoDao> getActivosFijos() {
-        return activosFijos;
-    }
-
-    public void setActivosFijos(List<ActivoFijoDao> activosFijos) {
-        this.activosFijos = activosFijos;
-    }
+//    public List<ActivoFijoDao> getActivosFijos() {
+//        return activosFijos;
+//    }
+//
+//    public void setActivosFijos(List<ActivoFijoDao> activosFijos) {
+//        this.activosFijos = activosFijos;
+//    }
 }
