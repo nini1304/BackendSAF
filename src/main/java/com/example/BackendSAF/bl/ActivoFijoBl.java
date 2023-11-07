@@ -68,6 +68,8 @@ public class ActivoFijoBl {
     private BloqueRepository bloqueRepository;
     @Autowired
     private CiudadRepository ciudadRepository;
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
@@ -387,17 +389,16 @@ public class ActivoFijoBl {
 
         return listTip;
     }
-/*
-    public List<UbicacionDto> getUbi() {
-        List<UbicacionDao> ubicacion = ubicacionRepository.findAll();
+    public List<EmpresaDto> getEmp() {
+        List<EmpresaDao> empresa = empresaRepository.findAll();
 
-        List<UbicacionDto> listUbi = ubicacion.stream()
-                .map(ubi -> new UbicacionDto(ubi.getId(), ubi.getNombre()))
+        List<EmpresaDto> listEmp = empresa.stream()
+                .map(emp -> new EmpresaDto(emp.getIdEmpresa(), emp.getNombre(), emp.getLogo()))
                 .collect(Collectors.toList());
 
-        return listUbi;
+        return listEmp;
     }
-*/
+
     public List<BloqueDto> getBloq() {
         List<BloqueDao> bloque = bloqueRepository.findAll();
 

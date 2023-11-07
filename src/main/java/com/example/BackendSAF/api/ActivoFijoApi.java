@@ -102,12 +102,8 @@ public class ActivoFijoApi {
     public List<CiudadDto> obtenerListaDeCiudadDto() {return activoFijoBl.getCiud();}
     @GetMapping("/bloque")
     public List<BloqueDto> obtenerListaDeBloqueDto() {return activoFijoBl.getBloq();}
-    /*
-    @GetMapping("/ubicacion")
-    public List<UbicacionDto> obtenerListaDeUbicacionDto() {
-        return activoFijoBl.getUbi();
-    }
-     */
+    @GetMapping("/empresas")
+    public List<EmpresaDto> obtenerListaDeEmpresaDto() {return activoFijoBl.getEmp();}
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijo(
             @PathVariable Long id,

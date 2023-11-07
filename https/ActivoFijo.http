@@ -86,6 +86,8 @@ GET http://localhost:1234/api/v1/activos-fijos/bloque
 ###
 GET http://localhost:1234/api/v1/activos-fijos/ciudad
 ###
+GET http://localhost:1234/api/v1/activos-fijos/empresas
+###
 DELETE http://localhost:1234/api/v1/activos-fijos/eliminar/1
 ###
 GET http://localhost:1234/api/v1/activos-fijos/obtener/1
@@ -100,7 +102,7 @@ GET http://localhost:1234/api/v1/activos-fijos-H/actFH
 ###
                         Usuarios
 ###
-POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234
+POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234&empId=4
 ###
 POST http://localhost:1234/api/v1/usuarios/registrar?nombre=Juan&username=juan.perez&password=1234&idRol=1&idEmpresa=1&estado=true
 ###

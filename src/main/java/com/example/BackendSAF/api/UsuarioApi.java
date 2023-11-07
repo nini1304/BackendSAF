@@ -32,11 +32,12 @@ public class UsuarioApi {
     @PostMapping("/login")
     public ResponseEntity<LoginDto> login(
             @RequestParam(name = "user") String user,
-            @RequestParam(name = "password") String password
+            @RequestParam(name = "password") String password,
+            @RequestParam(name = "empId") Long empId
     ) {
         try {
             // Lógica de autenticación aquí
-            LoginDto loginDto = usuarioBl.login(user, password);
+            LoginDto loginDto = usuarioBl.login(user, password, empId);
             return ResponseEntity.ok(loginDto);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

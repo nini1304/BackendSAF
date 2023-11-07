@@ -18,7 +18,7 @@ public class EmpresaDao {
     private String logo;
 
     @OneToMany(mappedBy = "empresa")
-    private List<UsuarioDao> usuarios;
+    private List<UsuarioEmpresaDao> usuarios;
 
     //Getters y setters
     public Long getIdEmpresa() {
@@ -41,5 +41,13 @@ public class EmpresaDao {
     public void setLogo(String logo) {
         this.logo = logo;
     }
+
+    public List<UsuarioEmpresaDao> getUsuarios() {
+        return usuarios;
+    }
+    public void setUsuarios(List<UsuarioEmpresaDao> usuarios) {
+        this.usuarios = usuarios;
+    }
+
 }
 
