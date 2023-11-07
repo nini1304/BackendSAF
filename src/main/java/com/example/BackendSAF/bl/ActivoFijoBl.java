@@ -68,6 +68,8 @@ public class ActivoFijoBl {
     private BloqueRepository bloqueRepository;
     @Autowired
     private CiudadRepository ciudadRepository;
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
@@ -107,7 +109,7 @@ public class ActivoFijoBl {
 
     }
 
-    public ActivoFijoDto registrar(String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+    public ActivoFijoDto registrar(String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado, Long idEmpresa) throws ParseException {
         // Registra la ubicación primero
         UbicacionDto ubicacionDto = registrarUbicacion(calle, avenida, bloqueId, ciudadId);
         Date fechaCompra = convertirADate(fechaCompraString);
@@ -125,6 +127,7 @@ public class ActivoFijoBl {
         act.setEstadoId(estadoId);
         act.setCondicionId(condicionId);
         act.setEstado(estado);
+        act.setEmpresaId(idEmpresa);
         activofijorepository.save(act);
 
         // Guardar en la tabla histórica
@@ -142,6 +145,7 @@ public class ActivoFijoBl {
         actH.setEstadoId(estadoId);
         actH.setCondicionId(condicionId);
         actH.setEstado(estado);
+        actH.setEmpresaId(idEmpresa);
         actH.setEvento("Registro");
         actH.setUsuario("User");
         activoFijoHRepository.save(actH);
@@ -155,8 +159,8 @@ public class ActivoFijoBl {
     }
     // Esto son los get para todas las listas de componentes
     // getACt te envia la lista de todos los activos fijos
-    public List<ActivoFijoList2Dto> getAct(String mesIngresado, int añoIngresado) {
-        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
+    public List<ActivoFijoList2Dto> getAct(String mesIngresado, int añoIngresado,Long idEmpresa) {
+        List<ActivoFijoDao> activoFijo = activofijorepository.findAllByIdEmpresa(idEmpresa);
         List<ActivoFijoList2Dto> listAct = new ArrayList<>();
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
         if(mesIngresado.equals("-")&&añoIngresado==0){
@@ -247,8 +251,8 @@ public class ActivoFijoBl {
         // Devuelve la fecha formateada
         return fechaFormateada;
     }
-    public List<ActivoFijoListDto> getAct2() {
-        List<ActivoFijoDao> activoFijo = activofijorepository.findAll();
+    public List<ActivoFijoListDto> getAct2(Long idEmpresa) {
+        List<ActivoFijoDao> activoFijo = activofijorepository.findAllByIdEmpresa(idEmpresa);
         List<ActivoFijoListDto> listAct = new ArrayList<>();
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
 
@@ -387,17 +391,16 @@ public class ActivoFijoBl {
 
         return listTip;
     }
-/*
-    public List<UbicacionDto> getUbi() {
-        List<UbicacionDao> ubicacion = ubicacionRepository.findAll();
+    public List<EmpresaDto> getEmp() {
+        List<EmpresaDao> empresa = empresaRepository.findAll();
 
-        List<UbicacionDto> listUbi = ubicacion.stream()
-                .map(ubi -> new UbicacionDto(ubi.getId(), ubi.getNombre()))
+        List<EmpresaDto> listEmp = empresa.stream()
+                .map(emp -> new EmpresaDto(emp.getIdEmpresa(), emp.getNombre(), emp.getLogo()))
                 .collect(Collectors.toList());
 
-        return listUbi;
+        return listEmp;
     }
-*/
+
     public List<BloqueDto> getBloq() {
         List<BloqueDao> bloque = bloqueRepository.findAll();
 
@@ -455,6 +458,7 @@ public class ActivoFijoBl {
         actH.setEstadoId(estadoId);
         actH.setCondicionId(condicionId);
         actH.setEstado(estado);
+        actH.setEmpresaId(activoExistente.getEmpresaId());
         actH.setEvento("Actualizacion");
         actH.setUsuario("User");
         activoFijoHRepository.save(actH);
@@ -507,37 +511,33 @@ public class ActivoFijoBl {
                 HttpStatus.ACCEPTED);
     }
 
-    public ActivoFijoDto actualizarActivoFijoEstado(Long id, String nombre, Integer valor, String fechaCompraString,
-                                                    String descripcion, Integer tipoActivoId, Integer marcaId,
-                                                    String calle, String avenida, Long bloqueId, Long ciudadId,
-                                                    Integer personalId, Integer estadoId, Integer condicionId,
-                                                    Boolean estado) throws ParseException {
+    public ActivoFijoDto actualizarActivoFijoEstado(Long id) throws ParseException {
         // Busca el activo fijo existente por su ID
         ActivoFijoDao activoExistente = activofijorepository.findById(id).orElse(null);
         if (activoExistente == null) {
             throw new NoSuchElementException("El activo fijo con ID " + id + " no existe");
         }
-        // Registra una nueva ubicación o actualiza la existente
-        UbicacionDto ubicacionDto = registrarUbicacion(calle, avenida, bloqueId, ciudadId);
+
         //solamente actualiza el estado
-        activoExistente.setEstado(estado);
+        activoExistente.setEstado(false);
         LOGGER.info("Registrando Evento....");
         //Guardar en la tabla histórica y se crea con el evento actualiza estado
         ActivoFijoHDao actH = new ActivoFijoHDao();
         actH.setIdActivo(activoExistente.getId());
-        actH.setNombre(nombre);
-        actH.setValor(new BigDecimal(valor));
-        actH.setFechaCompra(convertirADate(fechaCompraString));
-        actH.setDescripcion(descripcion);
+        actH.setNombre(activoExistente.getNombre());
+        actH.setValor(activoExistente.getValor());
+        actH.setFechaCompra(activoExistente.getFechaCompra());
+        actH.setDescripcion(activoExistente.getDescripcion());
         actH.setFechaRegistro(new Date());
-        actH.setTipoActivoId(tipoActivoId);
-        actH.setMarcaId(marcaId);
-        actH.setUbicacionId(ubicacionDto.getId()); // Utiliza el ID de la ubicación registrada
-        actH.setPersonalId(personalId);
-        actH.setEstadoId(estadoId);
-        actH.setCondicionId(condicionId);
-        actH.setEstado(estado);
-        actH.setEvento("Actualizacion Estado");
+        actH.setTipoActivoId(activoExistente.getTipoActivoId());
+        actH.setMarcaId(activoExistente.getMarcaId());
+        actH.setUbicacionId(activoExistente.getUbicacionId()); // Utiliza el ID de la ubicación registrada
+        actH.setPersonalId(activoExistente.getPersonalId());
+        actH.setEstadoId(activoExistente.getEstadoId());
+        actH.setCondicionId(activoExistente.getCondicionId());
+        actH.setEstado(activoExistente.getEstado());
+        actH.setEmpresaId(activoExistente.getEmpresaId());
+        actH.setEvento("Actualizacion Estado A False");
         actH.setUsuario("User");
         LOGGER.info("Activo Fijo historico registrado: {}", actH);
         activoFijoHRepository.save(actH);

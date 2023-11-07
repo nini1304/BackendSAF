@@ -22,16 +22,12 @@ public class UsuarioDao {
     @Column(name = "idRol")
     private Long idRol;
 
-    @Column(name = "idEmpresa")
-    private Long idEmpresa;
-
     @ManyToOne
     @JoinColumn(name = "idRol", insertable = false, updatable = false)
     private RolDao rol;
 
-    @ManyToOne
-    @JoinColumn(name = "idEmpresa", insertable = false, updatable = false)
-    private EmpresaDao empresa;
+    @OneToMany(mappedBy = "usuario")
+    private List<UsuarioEmpresaDao> empresas;
 
     // Getters y setters
     public Long getIdUsuario() {
@@ -69,13 +65,6 @@ public class UsuarioDao {
         this.idRol = idRol;
     }
 
-    public Long getIdEmpresa() {
-        return idEmpresa;
-    }
-    public void setIdEmpresa(Long idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
-
     public RolDao getRol() {
         return rol;
     }
@@ -83,11 +72,11 @@ public class UsuarioDao {
         this.rol = rol;
     }
 
-    public EmpresaDao getEmpresa() {
-        return empresa;
+    public List<UsuarioEmpresaDao> getEmpresas() {
+        return empresas;
     }
-    public void setEmpresa(EmpresaDao empresa) {
-        this.empresa = empresa;
+    public void setEmpresas(List<UsuarioEmpresaDao> empresas) {
+        this.empresas = empresas;
     }
 
 

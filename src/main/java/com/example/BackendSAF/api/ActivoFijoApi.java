@@ -53,18 +53,19 @@ public class ActivoFijoApi {
             @RequestParam(name = "personalId") Integer personalId,
             @RequestParam(name = "estadoId") Integer estadoId,
             @RequestParam(name = "condicionId") Integer condicionId,
-            @RequestParam(name = "estado") Boolean estado
+            @RequestParam(name = "estado") Boolean estado,
+            @RequestParam(name="idEmp")Long idEmp
     ) throws ParseException {
-        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
+        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado,idEmp);
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/actF")
-    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio) throws ParseException {
-        return  activoFijoBl.getAct(mesIngresado,anio);
+    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio,@RequestParam(name="idEmp")Long idEmp) throws ParseException {
+        return  activoFijoBl.getAct(mesIngresado,anio,idEmp);
     }
     @GetMapping("/actF2")
-    public List<ActivoFijoListDto> obtenerListaActivosFijosUser() throws ParseException {
-        return  activoFijoBl.getAct2();
+    public List<ActivoFijoListDto> obtenerListaActivosFijosUser(@RequestParam(name="idEmp")Long idEmp) throws ParseException {
+        return  activoFijoBl.getAct2(idEmp);
     }
     @PostMapping("/excel")
     public ResponseEntity<String> generarExcel(@RequestParam String nombreArchivo, @RequestBody List<ActivoFijoList2Dto> activos) {
@@ -102,12 +103,8 @@ public class ActivoFijoApi {
     public List<CiudadDto> obtenerListaDeCiudadDto() {return activoFijoBl.getCiud();}
     @GetMapping("/bloque")
     public List<BloqueDto> obtenerListaDeBloqueDto() {return activoFijoBl.getBloq();}
-    /*
-    @GetMapping("/ubicacion")
-    public List<UbicacionDto> obtenerListaDeUbicacionDto() {
-        return activoFijoBl.getUbi();
-    }
-     */
+    @GetMapping("/empresas")
+    public List<EmpresaDto> obtenerListaDeEmpresaDto() {return activoFijoBl.getEmp();}
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijo(
             @PathVariable Long id,
@@ -142,25 +139,11 @@ public class ActivoFijoApi {
     }
 
     //actualizar pero solo para el estado
-    @PutMapping("/actualizarEstado/{id}")
+    @PutMapping("/disable")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijoEstado(
-            @PathVariable Long id,
-            @RequestParam(name = "nombre") String nombre,
-            @RequestParam(name = "valor") Integer valor,
-            @RequestParam(name = "fechaCompra") String fechaCompra,
-            @RequestParam(name = "descripcion") String descripcion,
-            @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
-            @RequestParam(name = "marcaId") Integer marcaId,
-            @RequestParam(name = "calle") String calle,
-            @RequestParam(name = "avenida") String avenida,
-            @RequestParam(name = "bloqueId") Long bloqueId,
-            @RequestParam(name = "ciudadId") Long ciudadId,
-            @RequestParam(name = "personalId") Integer personalId,
-            @RequestParam(name = "estadoId") Integer estadoId,
-            @RequestParam(name = "condicionId") Integer condicionId,
-            @RequestParam(name = "estado") Boolean estado
+            @RequestParam Long id
     )throws ParseException {
-        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijoEstado(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
+        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijoEstado(id);
         return ResponseEntity.ok(activoFijoDto);
     }
 

@@ -1,6 +1,6 @@
 POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Pantalla8k&valor=900&fechaCompra=19/09/2023&descripcion=LG50&tipoActivoId=1&marcaId=2&calle=Calle%20Principal&avenida=Avenida%20Central&bloqueId=3&ciudadId=4&personalId=1&estadoId=1&condicionId=1&estado=true
 ###
-POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Laptop8k&valor=500&fechaCompra=Wed%20Oct%2004%202023&descripcion=LG200&tipoActivoId=1&marcaId=2&calle=Calle%20Principal&avenida=Avenida%20Central&bloqueId=3&ciudadId=4&personalId=1&estadoId=1&condicionId=1&estado=true
+POST http://localhost:1234/api/v1/activos-fijos/registrar?nombre=Laptop8k&valor=500&fechaCompra=Wed%20Oct%2004%202023&descripcion=LG200&tipoActivoId=1&marcaId=2&calle=Calle%20Principal&avenida=Avenida%20Central&bloqueId=3&ciudadId=4&personalId=1&estadoId=1&condicionId=1&estado=true&idEmp=1
 ###
 POST http://localhost:1234/api/v1/activos-fijos/excel?nombreArchivo=activosFijos.xlsx
 Content-Type: application/json
@@ -66,9 +66,9 @@ Content-Type: application/json
 ###
 GET http://localhost:1234/api/v1/activos-fijos/list
 ###
-GET http://localhost:1234/api/v1/activos-fijos/actF?mes=JANUARY&anio=2024
+GET http://localhost:1234/api/v1/activos-fijos/actF?mes=JANUARY&anio=2024?idEmp=1
 ###
-GET http://localhost:1234/api/v1/activos-fijos/actF2
+GET http://localhost:1234/api/v1/activos-fijos/actF2?idEmp=1
 ###
 GET http://localhost:1234/api/v1/activos-fijos/cond
 ###
@@ -86,26 +86,30 @@ GET http://localhost:1234/api/v1/activos-fijos/bloque
 ###
 GET http://localhost:1234/api/v1/activos-fijos/ciudad
 ###
+GET http://localhost:1234/api/v1/activos-fijos/empresas
+###
 DELETE http://localhost:1234/api/v1/activos-fijos/eliminar/1
 ###
 GET http://localhost:1234/api/v1/activos-fijos/obtener/1
 ###
 PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo5%20Actualizado3&valor=6900&fechaCompra=Wed%20Oct%2027%202023&descripcion=Descripción%20Actualizada3&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true
 ###
-GET http://localhost:1234/api/v1/activos-fijos/listar/1
-
-//Activo fijo Historico
+PUT http://localhost:1234/api/v1/activos-fijos/disable?id=10
+###
+                        Activo fijo Historico
 ###
 GET http://localhost:1234/api/v1/activos-fijos-H/actFH
 ###
-  //                      Usuarios
+                        Usuarios
 ###
-POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234
+POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234&empId=2
 ###
 POST http://localhost:1234/api/v1/usuarios/registrar?nombre=Juan&username=juan.perez&password=1234&idRol=1&idEmpresa=1&estado=true
 ###
 GET http://localhost:1234/api/v1/usuarios/rol
 ###
 GET http://localhost:1234/api/v1/usuarios/listar
+###
+GET http://localhost:1234/api/v1/usuarios/empresa
 
 

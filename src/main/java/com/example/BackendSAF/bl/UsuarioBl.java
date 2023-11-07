@@ -1,13 +1,11 @@
 package com.example.BackendSAF.bl;
 
 import com.example.BackendSAF.dto.*;
-import com.example.BackendSAF.entity.ActivoFijoDao;
-import com.example.BackendSAF.entity.EmpresaDao;
+import com.example.BackendSAF.entity.*;
 import com.example.BackendSAF.entity.Repository.EmpresaRepository;
 import com.example.BackendSAF.entity.Repository.RolRepository;
+import com.example.BackendSAF.entity.Repository.UsuarioEmpresaRepository;
 import com.example.BackendSAF.entity.Repository.UsuarioRepository;
-import com.example.BackendSAF.entity.RolDao;
-import com.example.BackendSAF.entity.UsuarioDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,8 @@ public class UsuarioBl {
     @Autowired
     private EmpresaRepository empresaRepository;
     @Autowired
+    private UsuarioEmpresaRepository usuarioEmpresaRepository;
+    @Autowired
     private RolRepository rolRepository;
 
     public Object list (int page, int size){
@@ -35,19 +35,24 @@ public class UsuarioBl {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public LoginDto login(String username, String password) throws AuthenticationException {
+    public LoginDto login(String username, String password, Long empId) throws AuthenticationException {
         UsuarioDao usuario=usuarioRepository.findByUserAndPassword(username, password);
         if (usuario == null) {
             // Lanza una excepción si la autenticación falla
             throw new AuthenticationException("Credenciales de inicio de sesión incorrectas");
         }
-        EmpresaDao empresa=empresaRepository.findById(usuario.getIdEmpresa()).orElse(null);
+        UsuarioEmpresaDao userEmp=usuarioEmpresaRepository.findAllByIds(usuario.getIdUsuario(),empId);
+        if (userEmp == null) {
+            // Lanza una excepción si la autenticación falla
+            throw new AuthenticationException("El usuario no esta asociado a esa empresa");
+        }
+        EmpresaDao empresa=empresaRepository.findById(empId).orElse(null);
         assert empresa != null;
         return new LoginDto(
                 usuario.getIdUsuario(),
                 usuario.getNombre(),
                 usuario.getIdRol(),
-                usuario.getIdEmpresa(),
+                empId,
                 empresa.getNombre(),
                 empresa.getLogo());
 
@@ -59,10 +64,10 @@ public class UsuarioBl {
         usuarioDao.setUser(username);
         usuarioDao.setPassword(password);
         usuarioDao.setIdRol(idRol);
-        usuarioDao.setIdEmpresa(idEmpresa);
+        //usuarioDao.setIdEmpresa(idEmpresa);
         usuarioRepository.save(usuarioDao);
 
-        return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), usuarioDao.getIdEmpresa());
+        return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), 1L);
     }
 
     public List<EmpresaDto> getEmpresa(){
@@ -90,7 +95,7 @@ public class UsuarioBl {
                     act.getNombre(),
                     act.getUsername(),
                     act.getPassword(),
-                    empresaRepository.getEmpresaNombreById(Long.valueOf(act.getIdEmpresa())),
+                    "empresaRepository.getEmpresaNombreById(1)",
                     rolRepository.getRolNombreById(Long.valueOf(act.getIdRol()))
             ));
         }
