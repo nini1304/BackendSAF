@@ -52,7 +52,7 @@ public class UsuarioBl {
                 usuario.getIdUsuario(),
                 usuario.getNombre(),
                 usuario.getIdRol(),
-                usuario.getIdEmpresa(),
+                empId,
                 empresa.getNombre(),
                 empresa.getLogo());
 
@@ -64,10 +64,10 @@ public class UsuarioBl {
         usuarioDao.setUser(username);
         usuarioDao.setPassword(password);
         usuarioDao.setIdRol(idRol);
-        usuarioDao.setIdEmpresa(idEmpresa);
+        //usuarioDao.setIdEmpresa(idEmpresa);
         usuarioRepository.save(usuarioDao);
 
-        return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), usuarioDao.getIdEmpresa());
+        return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), 1L);
     }
 
     public List<EmpresaDto> getEmpresa(){
@@ -95,7 +95,7 @@ public class UsuarioBl {
                     act.getNombre(),
                     act.getUsername(),
                     act.getPassword(),
-                    empresaRepository.getEmpresaNombreById(Long.valueOf(act.getIdEmpresa())),
+                    "empresaRepository.getEmpresaNombreById(1)",
                     rolRepository.getRolNombreById(Long.valueOf(act.getIdRol()))
             ));
         }
