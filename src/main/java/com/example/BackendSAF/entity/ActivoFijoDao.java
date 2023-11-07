@@ -47,6 +47,8 @@ public class ActivoFijoDao {
 
     @Column(name = "estado")
     private Boolean estado;
+    @Column(name = "empresa_id")
+    private Long empresaId;
 
     @ManyToOne
     @JoinColumn(name = "Tipo_Activo_id", insertable = false, updatable = false)
@@ -71,6 +73,9 @@ public class ActivoFijoDao {
     @ManyToOne
     @JoinColumn(name = "Condicion_id", insertable = false, updatable = false)
     private CondicionDao condicion;
+    @ManyToOne
+    @JoinColumn(name = "empresa_id", insertable = false, updatable = false)
+    private EmpresaDao empresa;
 
 
     // Getters y Setters
@@ -178,5 +183,11 @@ public class ActivoFijoDao {
 
     public void setEstado(Boolean estado) {
         this.estado = estado;
+    }
+    public Long getEmpresaId() {
+        return empresaId;
+    }
+    public void setEmpresaId(Long empresaId) {
+        this.empresaId = empresaId;
     }
 }

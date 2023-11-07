@@ -50,6 +50,8 @@ public class ActivoFijoHDao {
 
     @Column(name = "estado")
     private Boolean estado;
+    @Column(name = "empresa_id")
+    private Long empresaId;
     @Column(name = "evento")
     private String evento;
     @Column(name = "usuario")
@@ -182,6 +184,12 @@ public class ActivoFijoHDao {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+    public Long getEmpresaId() {
+        return empresaId;
+    }
+    public void setEmpresaId(Long empresaId) {
+        this.empresaId = empresaId;
     }
 
 }

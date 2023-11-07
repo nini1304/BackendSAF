@@ -53,18 +53,19 @@ public class ActivoFijoApi {
             @RequestParam(name = "personalId") Integer personalId,
             @RequestParam(name = "estadoId") Integer estadoId,
             @RequestParam(name = "condicionId") Integer condicionId,
-            @RequestParam(name = "estado") Boolean estado
+            @RequestParam(name = "estado") Boolean estado,
+            @RequestParam(name="idEmp")Long idEmp
     ) throws ParseException {
-        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
+        ActivoFijoDto activoFijoDto = activoFijoBl.registrar(nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado,idEmp);
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/actF")
-    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio) throws ParseException {
-        return  activoFijoBl.getAct(mesIngresado,anio);
+    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio,@RequestParam(name="idEmp")Long idEmp) throws ParseException {
+        return  activoFijoBl.getAct(mesIngresado,anio,idEmp);
     }
     @GetMapping("/actF2")
-    public List<ActivoFijoListDto> obtenerListaActivosFijosUser() throws ParseException {
-        return  activoFijoBl.getAct2();
+    public List<ActivoFijoListDto> obtenerListaActivosFijosUser(@RequestParam(name="idEmp")Long idEmp) throws ParseException {
+        return  activoFijoBl.getAct2(idEmp);
     }
     @PostMapping("/excel")
     public ResponseEntity<String> generarExcel(@RequestParam String nombreArchivo, @RequestBody List<ActivoFijoList2Dto> activos) {
