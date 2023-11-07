@@ -507,37 +507,32 @@ public class ActivoFijoBl {
                 HttpStatus.ACCEPTED);
     }
 
-    public ActivoFijoDto actualizarActivoFijoEstado(Long id, String nombre, Integer valor, String fechaCompraString,
-                                                    String descripcion, Integer tipoActivoId, Integer marcaId,
-                                                    String calle, String avenida, Long bloqueId, Long ciudadId,
-                                                    Integer personalId, Integer estadoId, Integer condicionId,
-                                                    Boolean estado) throws ParseException {
+    public ActivoFijoDto actualizarActivoFijoEstado(Long id) throws ParseException {
         // Busca el activo fijo existente por su ID
         ActivoFijoDao activoExistente = activofijorepository.findById(id).orElse(null);
         if (activoExistente == null) {
             throw new NoSuchElementException("El activo fijo con ID " + id + " no existe");
         }
-        // Registra una nueva ubicación o actualiza la existente
-        UbicacionDto ubicacionDto = registrarUbicacion(calle, avenida, bloqueId, ciudadId);
+
         //solamente actualiza el estado
-        activoExistente.setEstado(estado);
+        activoExistente.setEstado(false);
         LOGGER.info("Registrando Evento....");
         //Guardar en la tabla histórica y se crea con el evento actualiza estado
         ActivoFijoHDao actH = new ActivoFijoHDao();
         actH.setIdActivo(activoExistente.getId());
-        actH.setNombre(nombre);
-        actH.setValor(new BigDecimal(valor));
-        actH.setFechaCompra(convertirADate(fechaCompraString));
-        actH.setDescripcion(descripcion);
+        actH.setNombre(activoExistente.getNombre());
+        actH.setValor(activoExistente.getValor());
+        actH.setFechaCompra(activoExistente.getFechaCompra());
+        actH.setDescripcion(activoExistente.getDescripcion());
         actH.setFechaRegistro(new Date());
-        actH.setTipoActivoId(tipoActivoId);
-        actH.setMarcaId(marcaId);
-        actH.setUbicacionId(ubicacionDto.getId()); // Utiliza el ID de la ubicación registrada
-        actH.setPersonalId(personalId);
-        actH.setEstadoId(estadoId);
-        actH.setCondicionId(condicionId);
-        actH.setEstado(estado);
-        actH.setEvento("Actualizacion Estado");
+        actH.setTipoActivoId(activoExistente.getTipoActivoId());
+        actH.setMarcaId(activoExistente.getMarcaId());
+        actH.setUbicacionId(activoExistente.getUbicacionId()); // Utiliza el ID de la ubicación registrada
+        actH.setPersonalId(activoExistente.getPersonalId());
+        actH.setEstadoId(activoExistente.getEstadoId());
+        actH.setCondicionId(activoExistente.getCondicionId());
+        actH.setEstado(activoExistente.getEstado());
+        actH.setEvento("Actualizacion Estado A False");
         actH.setUsuario("User");
         LOGGER.info("Activo Fijo historico registrado: {}", actH);
         activoFijoHRepository.save(actH);

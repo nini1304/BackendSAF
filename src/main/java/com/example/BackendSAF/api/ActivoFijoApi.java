@@ -142,25 +142,11 @@ public class ActivoFijoApi {
     }
 
     //actualizar pero solo para el estado
-    @PutMapping("/actualizarEstado/{id}")
+    @PutMapping("/disable")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijoEstado(
-            @PathVariable Long id,
-            @RequestParam(name = "nombre") String nombre,
-            @RequestParam(name = "valor") Integer valor,
-            @RequestParam(name = "fechaCompra") String fechaCompra,
-            @RequestParam(name = "descripcion") String descripcion,
-            @RequestParam(name = "tipoActivoId") Integer tipoActivoId,
-            @RequestParam(name = "marcaId") Integer marcaId,
-            @RequestParam(name = "calle") String calle,
-            @RequestParam(name = "avenida") String avenida,
-            @RequestParam(name = "bloqueId") Long bloqueId,
-            @RequestParam(name = "ciudadId") Long ciudadId,
-            @RequestParam(name = "personalId") Integer personalId,
-            @RequestParam(name = "estadoId") Integer estadoId,
-            @RequestParam(name = "condicionId") Integer condicionId,
-            @RequestParam(name = "estado") Boolean estado
+            @RequestParam Long id
     )throws ParseException {
-        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijoEstado(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
+        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijoEstado(id);
         return ResponseEntity.ok(activoFijoDto);
     }
 
