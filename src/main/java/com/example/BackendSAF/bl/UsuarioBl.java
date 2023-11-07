@@ -64,10 +64,21 @@ public class UsuarioBl {
         usuarioDao.setUser(username);
         usuarioDao.setPassword(password);
         usuarioDao.setIdRol(idRol);
-        //usuarioDao.setIdEmpresa(idEmpresa);
         usuarioRepository.save(usuarioDao);
 
-        return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), 1L);
+        UsuarioEmpresaDao usuarioEmpresaDao = new UsuarioEmpresaDao();
+        usuarioEmpresaDao.setUsuario(usuarioDao);
+
+        EmpresaDao empresa = empresaRepository.findById(idEmpresa).orElse(null);
+        if(empresa == null){
+            throw new ParseException("No se encontro la empresa", 0);
+        }else{
+            usuarioEmpresaDao.setEmpresa(empresa);
+            usuarioEmpresaRepository.save(usuarioEmpresaDao);
+        }
+        usuarioEmpresaRepository.save(usuarioEmpresaDao);
+
+        return new UsuarioDto(usuarioDao.getNombre(), usuarioDao.getUsername(), usuarioDao.getPassword(), usuarioDao.getIdRol(), idEmpresa);
     }
 
     public List<EmpresaDto> getEmpresa(){

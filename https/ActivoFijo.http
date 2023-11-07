@@ -106,6 +106,8 @@ POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234&e
 ###
 POST http://localhost:1234/api/v1/usuarios/registrar?nombre=Juan&username=juan.perez&password=1234&idRol=1&idEmpresa=1&estado=true
 ###
+POST http://localhost:1234/api/v1/usuarios/registrar?nombre=Juan&username=juan.luis&password=1234&idRol=2&idEmpresa=2&estado=true
+###
 GET http://localhost:1234/api/v1/usuarios/rol
 ###
 GET http://localhost:1234/api/v1/usuarios/listar
