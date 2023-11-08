@@ -113,5 +113,10 @@ GET http://localhost:1234/api/v1/usuarios/rol
 GET http://localhost:1234/api/v1/usuarios/listar
 ###
 GET http://localhost:1234/api/v1/usuarios/empresa
+###
+                         Activo fijo depreciado
+###
+GET http://localhost:1234/api/v1/depreciados/tiempo
+###
 
 
