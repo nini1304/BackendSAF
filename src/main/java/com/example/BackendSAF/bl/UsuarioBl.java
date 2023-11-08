@@ -97,20 +97,18 @@ public class UsuarioBl {
         return listRol;
     }
 
-    public List<UsuarioListDto> getUsuarios(){
-        List<UsuarioDao> usuario = usuarioRepository.findAll();
+    public List<UsuarioListDto> getUsuariosEmpresa(Long idEmpresa){
+        List<UsuarioEmpresaDao> usuarioEmpresa = usuarioEmpresaRepository.findAllByEmpresaId(idEmpresa);
         List<UsuarioListDto> listUsu = new ArrayList<>();
-        for (UsuarioDao act: usuario) {
+        for (UsuarioEmpresaDao usu : usuarioEmpresa){
             listUsu.add(new UsuarioListDto(
-                    act.getIdUsuario(),
-                    act.getNombre(),
-                    act.getUsername(),
-                    act.getPassword(),
-                    "empresaRepository.getEmpresaNombreById(1)",
-                    rolRepository.getRolNombreById(Long.valueOf(act.getIdRol()))
+                    usu.getId(),
+                    usu.getUsuario().getNombre(),
+                    usu.getUsuario().getUsername(),
+                    usu.getUsuario().getPassword(),
+                    usu.getUsuario().getRol().getRol()
             ));
         }
         return listUsu;
     }
-
 }

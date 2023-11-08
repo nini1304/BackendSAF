@@ -79,5 +79,4 @@ public class UsuarioDao {
         this.empresas = empresas;
     }
 
-
 }

@@ -9,5 +9,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioDao, Long> {
     // Función personalizada para buscar un usuario por su nombre de usuario y contraseña
     @Query("SELECT u FROM UsuarioDao u WHERE u.username = :username AND u.password = :password")
     UsuarioDao findByUserAndPassword(@Param("username") String username, @Param("password") String password);
+
 }
 

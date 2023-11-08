@@ -1,10 +1,7 @@
 package com.example.BackendSAF.api;
 
 import com.example.BackendSAF.bl.UsuarioBl;
-import com.example.BackendSAF.dto.EmpresaDto;
-import com.example.BackendSAF.dto.LoginDto;
-import com.example.BackendSAF.dto.RolDto;
-import com.example.BackendSAF.dto.UsuarioDto;
+import com.example.BackendSAF.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +59,13 @@ public class UsuarioApi {
     ) {
         LOGGER.info("Ejecutando listarUsuarios...");
         return usuarioBl.list(page, size);
+    }
+
+    @GetMapping("/listaUsuario")
+    public List<UsuarioListDto> listarUsuario(
+            @RequestParam(name = "idEmp") Long idEmp
+    )  throws  ParseException {
+        return usuarioBl.getUsuariosEmpresa(idEmp);
     }
 
     @GetMapping("/empresa")

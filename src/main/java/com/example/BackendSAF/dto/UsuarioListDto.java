@@ -1,23 +1,26 @@
 package com.example.BackendSAF.dto;
 
+import com.example.BackendSAF.entity.RolDao;
+import com.example.BackendSAF.entity.UsuarioEmpresaDao;
+
+import java.util.List;
+
 public class UsuarioListDto {
     private Long id;
     private String nombre;
     private String username;
     private String password;
     private String rolNombre;
-    private String empresaNombre;
 
     public UsuarioListDto() {
     }
 
-    public UsuarioListDto(Long id, String nombre, String username, String password, String rolNombre, String empresaNombre) {
+    public UsuarioListDto(Long id, String nombre, String username, String password, String rolNombre) {
         this.id = id;
         this.nombre = nombre;
         this.username = username;
         this.password = password;
         this.rolNombre = rolNombre;
-        this.empresaNombre = empresaNombre;
     }
 
     public Long getId() {
@@ -58,13 +61,5 @@ public class UsuarioListDto {
 
     public void setRolNombre(String rolNombre) {
         this.rolNombre = rolNombre;
-    }
-
-    public String getEmpresaNombre() {
-        return empresaNombre;
-    }
-
-    public void setEmpresaNombre(String empresaNombre) {
-        this.empresaNombre = empresaNombre;
     }
 }
