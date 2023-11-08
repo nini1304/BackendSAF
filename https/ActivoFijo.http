@@ -100,6 +100,8 @@ PUT http://localhost:1234/api/v1/activos-fijos/disable?id=10
 ###
 GET http://localhost:1234/api/v1/activos-fijos-H/actFH
 ###
+http://localhost:1234/api/v1/activos-fijos-H/actFHEmpresa/?idEmp=3
+
                         Usuarios
 ###
 POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234&empId=2
