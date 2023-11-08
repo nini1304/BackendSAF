@@ -8,8 +8,8 @@ public class ACtivoFijoHListDto {
     private Long idActivo;
     private String nombre;
     private BigDecimal valor;
-    private Date fechaCompra;
-    private Date fechaRegistro;
+    private String fechaCompra;
+    private String fechaRegistro;
     private String descripcion;
     private String tipoActivoNombre;
     private String marcaNombre;
@@ -21,12 +21,14 @@ public class ACtivoFijoHListDto {
     private String personalNombre;
     private String estadoNombre;
     private String condicionNombre;
+
+    private String empresa;
     private String evento;
     private String usuario;
     //cosntructor
     public ACtivoFijoHListDto() {
     }
-    public ACtivoFijoHListDto(Long id, Long idActivo, String nombre, BigDecimal valor, Date fechaCompra,Date fechaRegistro, String descripcion, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, String evento, String usuario) {
+    public ACtivoFijoHListDto(Long id, Long idActivo, String nombre, BigDecimal valor, String fechaCompra,String fechaRegistro, String descripcion, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, String evento, String usuario) {
         this.id = id;
         this.idActivo = idActivo;
         this.nombre = nombre;
@@ -80,19 +82,19 @@ public class ACtivoFijoHListDto {
         this.valor = valor;
     }
 
-    public Date getFechaCompra() {
+    public String getFechaCompra() {
         return fechaCompra;
     }
 
-    public void setFechaCompra(Date fechaCompra) {
+    public void setFechaCompra(String fechaCompra) {
         this.fechaCompra = fechaCompra;
     }
 
-    public Date getFechaRegistro() {
+    public String getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(Date fechaRegistro) {
+    public void setFechaRegistro(String fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
