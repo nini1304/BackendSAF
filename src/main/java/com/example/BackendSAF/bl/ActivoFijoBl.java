@@ -247,7 +247,7 @@ public class ActivoFijoBl {
         BigDecimal depreciacion = valorActual.multiply(BigDecimal.valueOf(mesesDiferencia))
                 .multiply(BigDecimal.valueOf(porcentajeDepreciacion))
                 .divide(BigDecimal.valueOf(100 * 12), 2, BigDecimal.ROUND_HALF_UP);
-
+        LOGGER.info("Depreciacion: {}", depreciacion);
         return depreciacion;
     }
     public String formatearFecha(LocalDate fecha) {

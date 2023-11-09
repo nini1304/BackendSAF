@@ -31,30 +31,46 @@ public class ActivoFijoDDao {
     @Column(name = "fecha_registro")
     private Date fechaRegistro;
 
-    @Column(name = "tipo_activo_id")
-    private Integer tipoActivoId;
+    @Column(name = "tipo_activo_nombre")
+    private String tipoActivoNombre;
 
-    @Column(name = "marca_id")
-    private Integer marcaId;
+    @Column(name = "marca_nombre")
+    private String marcaNombre;
 
-    @Column(name = "ubicacion_id")
-    private Integer ubicacionId;
+    @Column(name = "calle")
+    private String calle;
 
-    @Column(name = "personal_id")
-    private Integer personalId;
+    @Column(name = "avenida")
+    private String avenida;
 
-    @Column(name = "estado_id")
-    private Integer estadoId;
+    @Column(name = "bloque_nombre")
+    private String bloqueNombre;
 
-    @Column(name = "condicion_id")
-    private Integer condicionId;
+    @Column(name = "ciudad_nombre")
+    private String ciudadNombre;
 
-    @Column(name = "estado")
-    private Boolean estado;
+    @Column(name = "personal_nombre")
+    private String personalNombre;
+
+    @Column(name = "estado_nombre")
+    private String estadoNombre;
+
+    @Column(name = "condicion_nombre")
+    private String condicionNombre;
+
+    @Column(name = "porcentaje_depreciacion")
+    private Integer porcentajeDepreciacion;
+
+    @Column(name = "valor_depreciacion")
+    private BigDecimal valorDepreciacion;
+
+    @Column(name = "valor_actual")
+    private BigDecimal valorActual;
+
     @Column(name = "empresa_id")
     private Long empresaId;
     @Column(name = "fecha_depreciacion")
-    private String fechaD;
+    private Date fechaD;
     @Column(name = "usuario")
     private String usuario;
     @Column(name = "id_tiempo")
@@ -67,7 +83,6 @@ public class ActivoFijoDDao {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -75,7 +90,6 @@ public class ActivoFijoDDao {
     public Long getIdActivo() {
         return idActivo;
     }
-
     public void setIdActivo(Long idActivo) {
         this.idActivo = idActivo;
     }
@@ -83,125 +97,147 @@ public class ActivoFijoDDao {
     public String getNombre() {
         return nombre;
     }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
     public BigDecimal getValor() {
         return valor;
+    }
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
     public Date getFechaCompra() {
         return fechaCompra;
     }
+    public void setFechaCompra(Date fechaCompra) {
+        this.fechaCompra = fechaCompra;
+    }
 
     public String getDescripcion() {
         return descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public Date getFechaRegistro() {
         return fechaRegistro;
     }
-
-    public Integer getTipoActivoId() {
-        return tipoActivoId;
-    }
-
-    public Integer getMarcaId() {
-        return marcaId;
-    }
-
-    public Integer getUbicacionId() {
-        return ubicacionId;
-    }
-
-    public Integer getPersonalId() {
-        return personalId;
-    }
-
-    public Integer getEstadoId() {
-        return estadoId;
-    }
-
-    public Integer getCondicionId() {
-        return condicionId;
-    }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public void setFechaCompra(Date fechaCompra) {
-        this.fechaCompra = fechaCompra;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public void setTipoActivoId(Integer tipoActivoId) {
-        this.tipoActivoId = tipoActivoId;
+    public String getTipoActivoNombre() {
+        return tipoActivoNombre;
+    }
+    public void setTipoActivoNombre(String tipoActivoNombre) {
+        this.tipoActivoNombre = tipoActivoNombre;
     }
 
-    public void setMarcaId(Integer marcaId) {
-        this.marcaId = marcaId;
+    public String getMarcaNombre() {
+        return marcaNombre;
+    }
+    public void setMarcaNombre(String marcaNombre) {
+        this.marcaNombre = marcaNombre;
     }
 
-    public void setUbicacionId(Integer ubicacionId) {
-        this.ubicacionId = ubicacionId;
+    public String getCalle() {
+        return calle;
+    }
+    public void setCalle(String calle) {
+        this.calle = calle;
     }
 
-    public void setPersonalId(Integer personalId) {
-        this.personalId = personalId;
+    public String getAvenida() {
+        return avenida;
+    }
+    public void setAvenida(String avenida) {
+        this.avenida = avenida;
     }
 
-    public void setEstadoId(Integer estadoId) {
-        this.estadoId = estadoId;
+    public String getBloqueNombre() {
+        return bloqueNombre;
+    }
+    public void setBloqueNombre(String bloqueNombre) {
+        this.bloqueNombre = bloqueNombre;
     }
 
-    public void setCondicionId(Integer condicionId) {
-        this.condicionId = condicionId;
+    public String getCiudadNombre() {
+        return ciudadNombre;
+    }
+    public void setCiudadNombre(String ciudadNombre) {
+        this.ciudadNombre = ciudadNombre;
     }
 
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
+    public String getPersonalNombre() {
+        return personalNombre;
+    }
+    public void setPersonalNombre(String personalNombre) {
+        this.personalNombre = personalNombre;
     }
 
-    public String getFechaD() {
-        return fechaD;
+    public String getEstadoNombre() {
+        return estadoNombre;
+    }
+    public void setEstadoNombre(String estadoNombre) {
+        this.estadoNombre = estadoNombre;
     }
 
-    public void setFechaD(String fechaD) {
-        this.fechaD = fechaD;
+    public String getCondicionNombre() {
+        return condicionNombre;
+    }
+    public void setCondicionNombre(String condicionNombre) {
+        this.condicionNombre = condicionNombre;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public Integer getPorcentajeDepreciacion() {
+        return porcentajeDepreciacion;
+    }
+    public void setPorcentajeDepreciacion(Integer porcentajeDepreciacion) {
+        this.porcentajeDepreciacion = porcentajeDepreciacion;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public BigDecimal getValorDepreciacion() {
+        return valorDepreciacion;
     }
+    public void setValorDepreciacion(BigDecimal valorDepreciacion) {
+        this.valorDepreciacion = valorDepreciacion;
+    }
+
+    public BigDecimal getValorActual() {
+        return valorActual;
+    }
+    public void setValorActual(BigDecimal valorActual) {
+        this.valorActual = valorActual;
+    }
+
     public Long getEmpresaId() {
         return empresaId;
     }
     public void setEmpresaId(Long empresaId) {
         this.empresaId = empresaId;
     }
+
+    public Date getFechaD() {
+        return fechaD;
+    }
+    public void setFechaD(Date fechaD) {
+        this.fechaD = fechaD;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
     public Long getIdTiempo() {
         return idTiempo;
     }
     public void setIdTiempo(Long idTiempo) {
         this.idTiempo = idTiempo;
     }
-
 }

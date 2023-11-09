@@ -66,7 +66,7 @@ Content-Type: application/json
 ###
 GET http://localhost:1234/api/v1/activos-fijos/list
 ###
-GET http://localhost:1234/api/v1/activos-fijos/actF?mes=JANUARY&anio=2024?idEmp=1
+GET http://localhost:1234/api/v1/activos-fijos/actF?mes=DECEMBER&anio=2025&idEmp=1
 ###
 GET http://localhost:1234/api/v1/activos-fijos/actF2?idEmp=1
 ###
@@ -100,7 +100,7 @@ PUT http://localhost:1234/api/v1/activos-fijos/disable?id=10
 ###
 GET http://localhost:1234/api/v1/activos-fijos-H/actFH
 ###
-http://localhost:1234/api/v1/activos-fijos-H/actFHEmpresa/?idEmp=3
+GET http://localhost:1234/api/v1/activos-fijos-H/actFHEmpresa?idEmp=1
 
                         Usuarios
 ###

@@ -20,11 +20,11 @@ public class ActivoFIjoHApi {
     public ActivoFIjoHApi(ActivoFijoHBl activoFijoHBl) {
         this.activoFijoHBl=activoFijoHBl;
     }
-    @GetMapping("/actFH/")
+    @GetMapping("/actFH")
     public List<ACtivoFijoHListDto> obtenerListaActivosFijosHistoricos() throws ParseException {
         return  activoFijoHBl.getAct();
     }
-    @GetMapping("/actFHEmpresa/")
+    @GetMapping("/actFHEmpresa")
     public List<ACtivoFijoHListDto> obtenerListaActivosFijosHistoricoEmpresa(@RequestParam(name="idEmp")Long idEmp) throws ParseException {
         return  activoFijoHBl.getActByEmpresaid(idEmp);
     }

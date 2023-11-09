@@ -33,17 +33,24 @@ public class ActivoFijoDBl {
                         acD.getFechaCompra(),
                         acD.getDescripcion(),
                         acD.getFechaRegistro(),
-                        acD.getTipoActivoId(),
-                        acD.getMarcaId(),
-                        acD.getUbicacionId(),
-                        acD.getPersonalId(),
-                        acD.getEstadoId(),
-                        acD.getCondicionId(),
-                        acD.getEstado(),
+                        acD.getTipoActivoNombre(),
+                        acD.getMarcaNombre(),
+                        acD.getCalle(),
+                        acD.getAvenida(),
+                        acD.getBloqueNombre(),
+                        acD.getCiudadNombre(),
+                        acD.getPersonalNombre(),
+                        acD.getEstadoNombre(),
+                        acD.getCondicionNombre(),
+                        acD.getPorcentajeDepreciacion(),
+                        acD.getValorDepreciacion(),
+                        acD.getValorActual(),
                         acD.getEmpresaId(),
                         acD.getFechaD(),
                         acD.getUsuario(),
-                        acD.getIdTiempo()
+                        "acD.getMes()",
+                        "acD.getAnio()"
+
                 )).collect(Collectors.toList());
 
         return listAD;
