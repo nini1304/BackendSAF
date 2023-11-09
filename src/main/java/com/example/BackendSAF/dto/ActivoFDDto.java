@@ -22,7 +22,6 @@ public class ActivoFDDto {
     private Integer porcentajeDepreciacion;
     private BigDecimal valorDepreciacion;
     private BigDecimal valorActual;
-    private Long empresaId;
     private Date fechaDepreciacion;
     private String usuario;
     private String mes;
@@ -30,7 +29,7 @@ public class ActivoFDDto {
     //Constructor
     public ActivoFDDto() {
     }
-    public ActivoFDDto(Long id, Long idActivo, String nombre, BigDecimal valor, Date fechaCompra, String descripcion, Date fechaRegistro, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual, Long empresaId, Date fechaDepreciacion, String usuario, String mes, String anio) {
+    public ActivoFDDto(Long id, Long idActivo, String nombre, BigDecimal valor, Date fechaCompra, String descripcion, Date fechaRegistro, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual, Date fechaDepreciacion, String usuario, String mes, String anio) {
         this.id = id;
         this.idActivo = idActivo;
         this.nombre = nombre;
@@ -50,7 +49,6 @@ public class ActivoFDDto {
         this.porcentajeDepreciacion = porcentajeDepreciacion;
         this.valorDepreciacion = valorDepreciacion;
         this.valorActual = valorActual;
-        this.empresaId = empresaId;
         this.fechaDepreciacion = fechaDepreciacion;
         this.usuario = usuario;
         this.mes = mes;
@@ -189,13 +187,6 @@ public class ActivoFDDto {
     }
     public void setValorActual(BigDecimal valorActual) {
         this.valorActual = valorActual;
-    }
-
-    public Long getEmpresaId() {
-        return empresaId;
-    }
-    public void setEmpresaId(Long empresaId) {
-        this.empresaId = empresaId;
     }
 
     public Date getFechaDepreciacion() {

@@ -70,6 +70,10 @@ public class ActivoFijoBl {
     private CiudadRepository ciudadRepository;
     @Autowired
     private EmpresaRepository empresaRepository;
+    @Autowired
+    private ActivoFijoDRepository activofijodrepository;
+    @Autowired
+    private TiempoRepository tiemporepository;
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
@@ -159,7 +163,7 @@ public class ActivoFijoBl {
     }
     // Esto son los get para todas las listas de componentes
     // getACt te envia la lista de todos los activos fijos
-    public List<ActivoFijoList2Dto> getAct(String mesIngresado, int añoIngresado,Long idEmpresa) {
+    public List<ActivoFijoList2Dto> getAct(String mesIngresado, Integer añoIngresado,Long idEmpresa) throws Exception {
         BigDecimal aux = BigDecimal.valueOf(1);
         List<ActivoFijoDao> activoFijo = activofijorepository.findAllByIdEmpresa(idEmpresa);
         List<ActivoFijoList2Dto> listAct = new ArrayList<>();
@@ -190,6 +194,15 @@ public class ActivoFijoBl {
             }
         }
         else{
+            TiempoDao tiempo = tiemporepository.findByMesAndAnio(mesIngresado, añoIngresado.toString());
+            if (tiempo != null) {
+                // El registro de tiempo para el mes y año ya existe, lanzar una excepción
+                throw new Exception("Ya existe un registro para el mes " + mesIngresado + " y el año " + añoIngresado);
+            }
+            tiempo = new TiempoDao();
+            tiempo.setMes(mesIngresado);
+            tiempo.setAnio(añoIngresado.toString());
+            tiemporepository.save(tiempo);
             for (ActivoFijoDao act : activoFijo) {
                 if((act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))))).compareTo(BigDecimal.ZERO) <= 0){
                     aux=BigDecimal.valueOf(1);
@@ -217,11 +230,36 @@ public class ActivoFijoBl {
                             calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))),
                             aux
                     ));
+                    ActivoFijoDDao actD = new ActivoFijoDDao();
+                    actD.setIdActivo(act.getId());
+                    actD.setNombre(act.getNombre());
+                    actD.setValor(act.getValor());
+                    actD.setFechaCompra(act.getFechaCompra());
+                    actD.setDescripcion(act.getDescripcion());
+                    actD.setFechaRegistro(act.getFechaRegistro());
+                    actD.setTipoActivoNombre(tipoActivoRepository.getTipoActivoNombreById(Long.valueOf(act.getTipoActivoId())));
+                    actD.setMarcaNombre(marcaRepository.getMarcaNombreById(Long.valueOf(act.getMarcaId())));
+                    actD.setCalle(ubicacionRepository.getUbicacionCalleById(Long.valueOf(act.getUbicacionId())));
+                    actD.setAvenida(ubicacionRepository.getUbicacionAvenidaById(Long.valueOf(act.getUbicacionId())));
+                    actD.setBloqueNombre(bloqueRepository.getBloqueNombreById(ubicacionRepository.getUbicacionBloqueIdById(Long.valueOf(act.getUbicacionId()))));
+                    actD.setCiudadNombre(ciudadRepository.getCiudadNombreById(ubicacionRepository.getUbicacionCiudadIdById(Long.valueOf(act.getUbicacionId()))));
+                    actD.setPersonalNombre(personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())));
+                    actD.setEstadoNombre(estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())));
+                    actD.setCondicionNombre(fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())));
+                    actD.setPorcentajeDepreciacion(tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())));
+                    actD.setValorDepreciacion(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))));
+                    actD.setValorActual(aux);
+                    actD.setEmpresaId(idEmpresa);
+                    actD.setUsuario("User");
+                    actD.setFechaD(new Date());
+                    actD.setIdTiempo(tiempo.getId());
+                    activofijodrepository.save(actD);
+
                 }
             }
         }
         //generarExcel(listAct,"C:\\Users\\ccama\\OneDrive\\Escritorio.ActivoFijo.xlsx");
-        PDFReportGenerator.generatePDFReport2(listAct, "reporte.pdf");
+        //PDFReportGenerator.generatePDFReport2(listAct, "reporte.pdf");
         return listAct;
 
     }

@@ -45,7 +45,6 @@ public class ActivoFijoDBl {
                         acD.getPorcentajeDepreciacion(),
                         acD.getValorDepreciacion(),
                         acD.getValorActual(),
-                        acD.getEmpresaId(),
                         acD.getFechaD(),
                         acD.getUsuario(),
                         "acD.getMes()",

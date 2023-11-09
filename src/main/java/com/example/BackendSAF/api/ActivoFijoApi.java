@@ -60,7 +60,7 @@ public class ActivoFijoApi {
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/actF")
-    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio,@RequestParam(name="idEmp")Long idEmp) throws ParseException {
+    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio,@RequestParam(name="idEmp")Long idEmp) throws Exception {
         return  activoFijoBl.getAct(mesIngresado,anio,idEmp);
     }
     @GetMapping("/actF2")
