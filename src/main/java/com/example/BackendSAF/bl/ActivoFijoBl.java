@@ -160,6 +160,7 @@ public class ActivoFijoBl {
     // Esto son los get para todas las listas de componentes
     // getACt te envia la lista de todos los activos fijos
     public List<ActivoFijoList2Dto> getAct(String mesIngresado, int añoIngresado,Long idEmpresa) {
+        BigDecimal aux = BigDecimal.valueOf(1);
         List<ActivoFijoDao> activoFijo = activofijorepository.findAllByIdEmpresa(idEmpresa);
         List<ActivoFijoList2Dto> listAct = new ArrayList<>();
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
@@ -190,6 +191,12 @@ public class ActivoFijoBl {
         }
         else{
             for (ActivoFijoDao act : activoFijo) {
+                if((act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))))).compareTo(BigDecimal.ZERO) <= 0){
+                    aux=BigDecimal.valueOf(1);
+                }
+                else{
+                    aux=act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))));
+                }
                 if (act.getEstado()){
                     listAct.add(new ActivoFijoList2Dto(
                             act.getId(),
@@ -208,7 +215,7 @@ public class ActivoFijoBl {
                             fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
                             tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())),
                             calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))),
-                            act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))))
+                            aux
                     ));
                 }
             }
