@@ -22,7 +22,6 @@ public class ACtivoFijoHListDto {
     private String estadoNombre;
     private String condicionNombre;
 
-    private String empresa;
     private String evento;
     private String usuario;
     //cosntructor
