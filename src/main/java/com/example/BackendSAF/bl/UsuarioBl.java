@@ -73,6 +73,7 @@ public class UsuarioBl {
         if(empresa == null){
             throw new ParseException("No se encontro la empresa", 0);
         }else{
+            usuarioDao.setIdEmpresa(idEmpresa);
             usuarioEmpresaDao.setEmpresa(empresa);
             usuarioEmpresaRepository.save(usuarioEmpresaDao);
         }
@@ -102,7 +103,7 @@ public class UsuarioBl {
         List<UsuarioListDto> listUsu = new ArrayList<>();
         for (UsuarioEmpresaDao usu : usuarioEmpresa){
             listUsu.add(new UsuarioListDto(
-                    usu.getId(),
+                    usu.getUsuario().getIdUsuario(),
                     usu.getUsuario().getNombre(),
                     usu.getUsuario().getUsername(),
                     usu.getUsuario().getPassword(),

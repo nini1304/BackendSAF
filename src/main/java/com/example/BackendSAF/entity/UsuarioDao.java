@@ -22,6 +22,9 @@ public class UsuarioDao {
     @Column(name = "idRol")
     private Long idRol;
 
+    @Column(name = "idEmpresa")
+    private Long idEmpresa;
+
     @ManyToOne
     @JoinColumn(name = "idRol", insertable = false, updatable = false)
     private RolDao rol;
@@ -70,6 +73,14 @@ public class UsuarioDao {
     }
     public void setRol(RolDao rol) {
         this.rol = rol;
+    }
+
+    public Long getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Long idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 
     public List<UsuarioEmpresaDao> getEmpresas() {
