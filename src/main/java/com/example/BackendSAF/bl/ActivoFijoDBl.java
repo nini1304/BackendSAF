@@ -21,9 +21,10 @@ public class ActivoFijoDBl {
     @Autowired
     private TiempoRepository tiemporepository;
 
-    public List<ActivoFDDto> getActD() {
-        List<ActivoFijoDDao> activoD = activofijodrepository.findAll();
-
+    public List<ActivoFDDto> getActD(Long idEmpresa, Long idTiempo) {
+        List<ActivoFijoDDao> activoD = activofijodrepository.findByIdEmpresaAndIdTiempo(idEmpresa, idTiempo);
+        String mes = tiemporepository.findMesById(idTiempo);
+        String anio = tiemporepository.findAnioById(idTiempo);
         List<ActivoFDDto> listAD = activoD.stream()
                 .map(acD -> new ActivoFDDto(
                         acD.getId(),
@@ -47,8 +48,8 @@ public class ActivoFijoDBl {
                         acD.getValorActual(),
                         acD.getFechaD(),
                         acD.getUsuario(),
-                        "acD.getMes()",
-                        "acD.getAnio()"
+                        mes,
+                        anio
 
                 )).collect(Collectors.toList());
 
