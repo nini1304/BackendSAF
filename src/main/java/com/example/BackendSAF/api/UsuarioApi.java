@@ -52,6 +52,19 @@ public class UsuarioApi {
         return ResponseEntity.ok(usuarioDto);
     }
 
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<UsuarioDto> actualizar(
+            @PathVariable Long id,
+            @RequestParam(name = "nombre") String nombre,
+            @RequestParam(name = "username") String username,
+            @RequestParam(name = "password") String password,
+            @RequestParam(name = "idRol") Long idRol
+    ) throws ParseException {
+        UsuarioDto usuarioDto = usuarioBl.actualizarUsuario(id, nombre, username, password, idRol);
+        return ResponseEntity.ok(usuarioDto);
+    }
+
+
     @GetMapping("/listar")
     public Object listarUsuarios(
             @RequestParam(name = "page", defaultValue = "0") int page,

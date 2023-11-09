@@ -111,4 +111,16 @@ public class UsuarioBl {
         }
         return listUsu;
     }
+    public UsuarioDto actualizarUsuario(Long usuarioId, String nombre, String username, String password, Long idRol) throws ParseException {
+        UsuarioDao usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null) {
+            throw new ParseException("No se encontro el usuario", 0);
+        }
+        usuario.setNombre(nombre);
+        usuario.setUser(username);
+        usuario.setPassword(password);
+        usuario.setIdRol(idRol);
+        usuarioRepository.save(usuario);
+        return new UsuarioDto(usuario.getNombre(), usuario.getUsername(), usuario.getPassword(), usuario.getIdRol(), usuario.getIdUsuario());
+    }
 }

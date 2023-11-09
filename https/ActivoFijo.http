@@ -116,6 +116,8 @@ GET http://localhost:1234/api/v1/usuarios/listaUsuario?idEmp=2
 ###
 GET http://localhost:1234/api/v1/usuarios/empresa
 ###
+PUT http://localhost:1234/api/v1/usuarios/actualizar/1?nombre=Juan&username=juan.pablo&password=1234&idRol=1
+###
                          Activo fijo depreciado
 ###
 GET http://localhost:1234/api/v1/depreciados/tiempo
