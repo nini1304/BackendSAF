@@ -73,7 +73,6 @@ public class UsuarioBl {
         if(empresa == null){
             throw new ParseException("No se encontro la empresa", 0);
         }else{
-            usuarioDao.setIdEmpresa(idEmpresa);
             usuarioEmpresaDao.setEmpresa(empresa);
             usuarioEmpresaRepository.save(usuarioEmpresaDao);
         }

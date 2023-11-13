@@ -106,7 +106,7 @@ GET http://localhost:1234/api/v1/activos-fijos-H/actFHEmpresa?idEmp=1
 ###
 POST http://localhost:1234/api/v1/usuarios/login?user=juan.perez&password=1234&empId=2
 ###
-POST http://localhost:1234/api/v1/usuarios/registrar?nombre=Juan&username=juan.perez&password=1234&idRol=1&idEmpresa=1&estado=true
+POST http://localhost:1234/api/v1/usuarios/registrar?nombre=Juanote&username=juan.rezpe&password=1234&idRol=1&idEmpresa=1&estado=true
 ###
 POST http://localhost:1234/api/v1/usuarios/registrar?nombre=Juan&username=juan.luis&password=1234&idRol=2&idEmpresa=2&estado=true
 ###
