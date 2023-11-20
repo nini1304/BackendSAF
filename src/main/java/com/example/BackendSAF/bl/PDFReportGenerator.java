@@ -90,15 +90,15 @@ public class PDFReportGenerator {
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
 
-            PdfPTable table = new PdfPTable(8); // Reducir el número de columnas a 9
+            PdfPTable table = new PdfPTable(9); // Reducir el número de columnas a 9
             table.setWidthPercentage(100);
             table.setSpacingBefore(10f);
             table.setSpacingAfter(10f);
 
             // Encabezados de columna
             String[] headers = {
-                    "ID", "Nombre", "Valor", "Fecha de Compra", "Tipo de Activo", "Marca",
-                    "Porcentaje Depreciación", "Depreciación"
+                    "ID", "Nombre", "Valor (Bs.)", "Fecha de Compra", "Tipo de Activo","Ciudad",
+                    "Porcentaje Depreciación", "Depreciación","Valor Actual (Bs.)"
             };
 
             for (String header : headers) {
@@ -118,9 +118,10 @@ public class PDFReportGenerator {
                 table.addCell(createCell(activo.getFechaCompra(), contentFont));
                 //table.addCell(createCell(activo.getDescripcion(), contentFont));
                 table.addCell(createCell(activo.getTipoActivoNombre(), contentFont));
-                table.addCell(createCell(activo.getMarcaNombre(), contentFont));
+                table.addCell(createCell(activo.getCiudadNombre(), contentFont));
                 table.addCell(createCell(activo.getPorcentajeDepreciacion().toString(), contentFont));
                 table.addCell(createCell(activo.getValorDepreciacion().toString(), contentFont));
+                table.addCell(createCell(activo.getValorActual().toString(),contentFont));
             }
 
             document.add(table);

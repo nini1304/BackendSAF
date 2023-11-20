@@ -33,7 +33,7 @@ Content-Type: application/json
 ]
 ###
 ###
-POST http://localhost:1234/api/v1/activos-fijos/pdf?nombreArchivo=activosFijos.pdf
+POST http://localhost:1234/api/v1/activos-fijos/pdf?nombreArchivo=activosFijos2.pdf
 Content-Type: application/json
 
 [
@@ -44,7 +44,7 @@ Content-Type: application/json
     "fechaCompra": "2023-10-26",
     "descripcion": "Descripción 1",
     "tipoActivoNombre": "Tipo 1",
-    "marcaNombre": "Marca 1",
+    "ciudadNombre": "La Paz",
     "porcentajeDepreciacion": 10,
     "valorDepreciacion": 10.0,
     "valorActual": 90.0
@@ -56,7 +56,7 @@ Content-Type: application/json
     "fechaCompra": "2023-10-26",
     "descripcion": "Descripción 2",
     "tipoActivoNombre": "Tipo 2",
-    "marcaNombre": "Marca 2",
+    "ciudadNombre": "Santa Cruz",
     "porcentajeDepreciacion": 15,
     "valorDepreciacion": 30.0,
     "valorActual": 170.0
