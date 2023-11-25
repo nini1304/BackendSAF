@@ -33,7 +33,7 @@ Content-Type: application/json
 ]
 ###
 ###
-POST http://localhost:1234/api/v1/activos-fijos/pdf?nombreArchivo=activosFijos2.pdf
+POST http://localhost:1234/api/v1/activos-fijos/pdf?nombreArchivo=activosFijos2.pdf&image=logo.png
 Content-Type: application/json
 
 [

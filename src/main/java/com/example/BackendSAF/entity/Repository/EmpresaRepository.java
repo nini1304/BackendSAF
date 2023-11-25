@@ -8,6 +8,9 @@ public interface EmpresaRepository extends JpaRepository<EmpresaDao, Long> {
     //Consulta personalizada para obtener el nombre de una empresa por su ID
     @Query("SELECT e.nombre FROM EmpresaDao e WHERE e.idEmpresa = :id")
     String getEmpresaNombreById(Long id);
+    //Obtener el logo de una empresa por su ID
+    @Query("SELECT e.logo FROM EmpresaDao e WHERE e.idEmpresa = :id")
+    String getEmpresaLogoById(Long id);
 
 
 }
