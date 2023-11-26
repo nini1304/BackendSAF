@@ -33,7 +33,7 @@ Content-Type: application/json
 ]
 ###
 ###
-POST http://localhost:1234/api/v1/activos-fijos/pdf?nombreArchivo=activosFijos2.pdf&image=logo.png
+POST http://localhost:1234/api/v1/activos-fijos/pdf?nombreArchivo=activosFijos2.pdf&imageUrl=logo.png&username=JuanPerez&empresa=EmpresaSRL
 Content-Type: application/json
 
 [

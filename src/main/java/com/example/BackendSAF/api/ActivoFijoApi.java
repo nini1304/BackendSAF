@@ -74,8 +74,8 @@ public class ActivoFijoApi {
     }
 
     @PostMapping("/pdf")
-    public ResponseEntity<String> generarPDFReport2(@RequestParam String nombreArchivo,@RequestParam String imageUrl, @RequestBody List<ActivoFijoList2Dto> activos) {
-        pdfReportGenerator.generatePDFReport2(activos, nombreArchivo, imageUrl);
+    public ResponseEntity<String> generarPDFReport2(@RequestParam String nombreArchivo,@RequestParam String imageUrl,@RequestParam String username,@RequestParam String empresa, @RequestBody List<ActivoFijoList2Dto> activos) {
+        pdfReportGenerator.generatePDFReport2(activos, nombreArchivo, imageUrl, username, empresa);
         return ResponseEntity.ok("PDF generado correctamente");
     }
 

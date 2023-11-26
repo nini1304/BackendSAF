@@ -22,24 +22,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class PDFReportGenerator {
     private static int totalPages;
-    public static void generatePDFReport2(List<ActivoFijoList2Dto> data, String fileName, String imageUrl) {
+    public static void generatePDFReport2(List<ActivoFijoList2Dto> data, String fileName, String imageUrl, String username, String empresa) {
+
         Document document = new Document();
         PdfWriter writer = null;
+        // Color personalizado en formato RGB (FFC436)
+        Color customColor = new Color(255, 196, 54);
         try {
-            //String imageUrl = "https://us.123rf.com/450wm/outchill/outchill1712/outchill171204062/91291455-texto-del-ejemplo-escrito-en-el-sello-vintage-de-goma-del-c%C3%ADrculo-simple-verde.jpg";
+            imageUrl = "https://rotulosmatesanz.com/wp-content/uploads/2017/09/2000px-Google_G_Logo.svg_.png";
+            username = "Carlos Camargo";
+            empresa = "Google";
             writer = PdfWriter.getInstance(document, new FileOutputStream(fileName));
 
-            writer.setPageEvent(new PageNumberDateImageEventHandler(imageUrl)); // Usar el nuevo manejador de eventos
+            writer.setPageEvent(new PageNumberDateImageEventHandler(imageUrl,username)); // Usar el nuevo manejador de eventos
 
             document.open();
 
             Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
             Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8);
             Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+            Font subtitleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, new Color(169, 169, 169));
 
             Paragraph title = new Paragraph("Informe de Activos Fijos", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingBefore(80f);
+            title.setSpacingAfter(5f);
             document.add(title);
+
+            Paragraph subtitle = new Paragraph("Empresa: "+empresa, subtitleFont);
+            subtitle.setAlignment(Element.ALIGN_CENTER);
+            document.add(subtitle);
+
+            Paragraph subtitle2 = new Paragraph("Expresado en BOLIVIANO - BOLIVIA", subtitleFont);
+            subtitle2.setAlignment(Element.ALIGN_CENTER);
+            document.add(subtitle2);
 
             PdfPTable table = new PdfPTable(9); // Reducir el número de columnas a 9
             table.setWidthPercentage(100);
@@ -48,15 +64,15 @@ public class PDFReportGenerator {
 
             // Encabezados de columna
             String[] headers = {
-                    "ID", "Nombre", "Valor (Bs.)", "Fecha de Compra", "Tipo de Activo","Ciudad",
-                    "Porcentaje Depreciación", "Depreciación","Valor Actual (Bs.)"
+                    "ID", "Nombre", "Valor", "Fecha de Compra", "Tipo de Activo","Ciudad",
+                    "Porcentaje Depreciación", "Depreciación","Valor Actual"
             };
 
             for (String header : headers) {
                 PdfPCell headerCell = new PdfPCell();
                 headerCell.addElement(new Phrase(header, headerFont));
                 headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                headerCell.setBackgroundColor(Color.pink); // Fondo gris para encabezados
+                headerCell.setBackgroundColor(customColor); // gris para encabezados
                 headerCell.setBorderWidth(1); // Agregar bordes
                 table.addCell(headerCell);
             }
@@ -107,9 +123,11 @@ public class PDFReportGenerator {
     static class PageNumberDateImageEventHandler extends PdfPageEventHelper {
 
         private String imageUrl;
+        private String username;
 
-        public PageNumberDateImageEventHandler(String imageUrl) {
+        public PageNumberDateImageEventHandler(String imageUrl, String username ) {
             this.imageUrl = imageUrl;
+            this.username = username;
         }
 
         public void onEndPage(PdfWriter writer, Document document) {
@@ -125,16 +143,34 @@ public class PDFReportGenerator {
             try {
                 URL url = new URL(imageUrl);
                 Image image = Image.getInstance(url);
-                image.scaleAbsolute(45, 45); // Ajustar el tamaño de la imagen según sea necesario
-                image.setAbsolutePosition(document.left() + 7, document.top() - 25);
+                image.scaleAbsolute(40, 40); // Ajustar el tamaño de la imagen según sea necesario
+                image.setAbsolutePosition(document.left() + 7, document.top() - 35);
                 document.add(image);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            // Mostrar el título (ahora en dos líneas)
+            //cb.setColorFill(Color.BLACK); // Restablecer el color a negro
+            //cb.showTextAligned(PdfContentByte.ALIGN_CENTER, "Informe de Activos Fijos", (document.left() + document.right()) / 2, document.top() - 60, 0);
 
-            // Mostrar la fecha de creación en la esquina superior derecha
-            cb.showTextAligned(PdfContentByte.ALIGN_RIGHT, getCurrentDate(), document.right() - 10, document.top() - 10, 0);
+            // Mostrar un texto en gris claro debajo del título
+            //cb.setColorFill(new Color(169, 169, 169)); // Gris claro
+            //cb.showTextAligned(PdfContentByte.ALIGN_CENTER, "Empresa: Google", (document.left() + document.right()) / 2, document.top() - 70, 0);
 
+            // Mostrar "Expresado en BOLIVIANO - BOLIVIA" debajo de "Empresa"
+            //cb.showTextAligned(PdfContentByte.ALIGN_CENTER, "Expresado en BOLIVIANO - BOLIVIA", (document.left() + document.right()) / 2, document.top() - 80, 0);
+
+            // Mostrar la fecha en gris claro con el formato "Fecha: dd/MM/yyyy"
+            cb.setColorFill(new Color(169, 169, 169)); // Gris claro
+            cb.showTextAligned(PdfContentByte.ALIGN_RIGHT, "Fecha: " + getCurrentDate(), document.right() - 10, document.top() - 10, 0);
+
+            // Mostrar la hora con el formato "Hora: HH:mm:ss"
+            cb.showTextAligned(PdfContentByte.ALIGN_RIGHT, "Hora: " + getCurrentTime(), document.right() - 10, document.top() - 20, 0);
+
+            // Mostrar "Generado" debajo de la hora
+            cb.showTextAligned(PdfContentByte.ALIGN_RIGHT, "Generado por: "+username, document.right() - 10, document.top() - 30, 0);
+
+            cb.setColorFill(Color.BLACK);
             // Mostrar la numeración de página en la esquina inferior derecha
             cb.showTextAligned(PdfContentByte.ALIGN_RIGHT, "Page " + writer.getPageNumber() + " of " + totalPages, document.right() - 10, document.bottom() - 10, 0);
 
@@ -143,6 +179,11 @@ public class PDFReportGenerator {
 
         private String getCurrentDate() {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            return sdf.format(new Date());
+        }
+
+        private String getCurrentTime() {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             return sdf.format(new Date());
         }
     }
