@@ -1,6 +1,7 @@
 package com.example.BackendSAF.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "tiempo")
@@ -15,6 +16,11 @@ public class TiempoDao {
 
     @Column(name = "anio")
     private String anio;
+
+    @Column(name = "empresa_id")
+    private Long empresaId;
+
+
     //Getters y setters
     public Long getId() {
         return id;
@@ -35,6 +41,13 @@ public class TiempoDao {
     }
     public void setAnio(String anio) {
         this.anio = anio;
+    }
+
+    public Long getEmpresaId() {
+        return empresaId;
+    }
+    public void setEmpresaId(Long empresaId) {
+        this.empresaId = empresaId;
     }
 
 }

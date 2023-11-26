@@ -122,7 +122,7 @@ PUT http://localhost:1234/api/v1/usuarios/actualizar/1?nombre=Juan&username=juan
 ###
 GET http://localhost:1234/api/v1/depreciados/actD?idEmp=1&idTie=3
 ###
-GET http://localhost:1234/api/v1/depreciados/tiempo
+GET http://localhost:1234/api/v1/depreciados/tiempo?idEmp=1
 ###
 
 

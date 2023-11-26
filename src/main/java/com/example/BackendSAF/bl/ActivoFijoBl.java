@@ -194,7 +194,7 @@ public class ActivoFijoBl {
             }
         }
         else{
-            TiempoDao tiempo = tiemporepository.findByMesAndAnio(mesIngresado, añoIngresado.toString());
+            TiempoDao tiempo = tiemporepository.findByMesAndAnioAndEmpresaId(mesIngresado, añoIngresado.toString(),idEmpresa);
             if (tiempo != null) {
                 // El registro de tiempo para el mes y año ya existe, lanzar una excepción
                 throw new Exception("Ya existe un registro para el mes " + mesIngresado + " y el año " + añoIngresado);
@@ -202,6 +202,7 @@ public class ActivoFijoBl {
             tiempo = new TiempoDao();
             tiempo.setMes(mesIngresado);
             tiempo.setAnio(añoIngresado.toString());
+            tiempo.setEmpresaId(idEmpresa);
             tiemporepository.save(tiempo);
             for (ActivoFijoDao act : activoFijo) {
                 if((act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))))).compareTo(BigDecimal.ZERO) <= 0){

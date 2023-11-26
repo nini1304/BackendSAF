@@ -55,8 +55,8 @@ public class ActivoFijoDBl {
 
         return listAD;
     }
-    public List<TiempoDto> getTie(){
-        List<TiempoDao> tiempo= tiemporepository.findAll();
+    public List<TiempoDto> getTie(Long EmpresaId){
+        List<TiempoDao> tiempo= tiemporepository.findByIdEmpresa(EmpresaId);
         List<TiempoDto> listT= tiempo.stream()
                 .map(tie-> new TiempoDto(
                         tie.getId(),

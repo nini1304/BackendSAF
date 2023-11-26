@@ -25,7 +25,7 @@ public class ActivoFijoDApi {
         return  activoFijoDBl.getActD(idEmp,idTie);
     }
     @GetMapping("/tiempo")
-    public List<TiempoDto> obtenerListaDeTiempo() {
-        return activoFijoDBl.getTie();
+    public List<TiempoDto> obtenerListaDeTiempo(@RequestParam(name="idEmp")Long idEmp) {
+        return activoFijoDBl.getTie(idEmp);
     }
 }
