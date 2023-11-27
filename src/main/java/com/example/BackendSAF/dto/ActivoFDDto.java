@@ -7,9 +7,9 @@ public class ActivoFDDto {
     private Long idActivo;
     private String nombre;
     private BigDecimal valor;
-    private Date fechaCompra;
+    private String fechaCompra;
     private String descripcion;
-    private Date fechaRegistro;
+    private String fechaRegistro;
     private String tipoActivoNombre;
     private String marcaNombre;
     private String calle;
@@ -22,14 +22,14 @@ public class ActivoFDDto {
     private Integer porcentajeDepreciacion;
     private BigDecimal valorDepreciacion;
     private BigDecimal valorActual;
-    private Date fechaDepreciacion;
+    private String fechaDepreciacion;
     private String usuario;
     private String mes;
     private String anio;
     //Constructor
     public ActivoFDDto() {
     }
-    public ActivoFDDto(Long id, Long idActivo, String nombre, BigDecimal valor, Date fechaCompra, String descripcion, Date fechaRegistro, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual, Date fechaDepreciacion, String usuario, String mes, String anio) {
+    public ActivoFDDto(Long id, Long idActivo, String nombre, BigDecimal valor, String fechaCompra, String descripcion, String fechaRegistro, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual, String fechaDepreciacion, String usuario, String mes, String anio) {
         this.id = id;
         this.idActivo = idActivo;
         this.nombre = nombre;
@@ -84,10 +84,10 @@ public class ActivoFDDto {
         this.valor = valor;
     }
 
-    public Date getFechaCompra() {
+    public String getFechaCompra() {
         return fechaCompra;
     }
-    public void setFechaCompra(Date fechaCompra) {
+    public void setFechaCompra(String fechaCompra) {
         this.fechaCompra = fechaCompra;
     }
 
@@ -98,10 +98,10 @@ public class ActivoFDDto {
         this.descripcion = descripcion;
     }
 
-    public Date getFechaRegistro() {
+    public String getFechaRegistro() {
         return fechaRegistro;
     }
-    public void setFechaRegistro(Date fechaRegistro) {
+    public void setFechaRegistro(String fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
@@ -189,10 +189,10 @@ public class ActivoFDDto {
         this.valorActual = valorActual;
     }
 
-    public Date getFechaDepreciacion() {
+    public String getFechaDepreciacion() {
         return fechaDepreciacion;
     }
-    public void setFechaDepreciacion(Date fechaDepreciacion) {
+    public void setFechaDepreciacion(String fechaDepreciacion) {
         this.fechaDepreciacion = fechaDepreciacion;
     }
 

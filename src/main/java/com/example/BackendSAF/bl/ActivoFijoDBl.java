@@ -11,6 +11,8 @@ import com.example.BackendSAF.entity.TiempoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +33,9 @@ public class ActivoFijoDBl {
                         acD.getIdActivo(),
                         acD.getNombre(),
                         acD.getValor(),
-                        acD.getFechaCompra(),
+                        convertirFecha(acD.getFechaCompra()),
                         acD.getDescripcion(),
-                        acD.getFechaRegistro(),
+                        convertirFecha(acD.getFechaRegistro()),
                         acD.getTipoActivoNombre(),
                         acD.getMarcaNombre(),
                         acD.getCalle(),
@@ -46,7 +48,7 @@ public class ActivoFijoDBl {
                         acD.getPorcentajeDepreciacion(),
                         acD.getValorDepreciacion(),
                         acD.getValorActual(),
-                        acD.getFechaD(),
+                        convertirFecha(acD.getFechaD()),
                         acD.getUsuario(),
                         mes,
                         anio
@@ -65,4 +67,11 @@ public class ActivoFijoDBl {
                 )).collect(Collectors.toList());
         return listT;
     }
+    // convertir fecha de date a string "dd-MM-yyyy"
+    public String convertirFecha(Date fecha) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String fechaComoCadena = sdf.format(fecha);
+        return fechaComoCadena;
+    }
+
 }
