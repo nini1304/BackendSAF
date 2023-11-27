@@ -75,6 +75,8 @@ public class ActivoFijoDDao {
     private String usuario;
     @Column(name = "id_tiempo")
     private Long idTiempo;
+    @Column(name = "meses_restantes")
+    private Long mesesRestantes;
     @ManyToOne
     @JoinColumn(name = "id_tiempo", insertable = false, updatable = false)
     private TiempoDao tiempo;
@@ -239,5 +241,12 @@ public class ActivoFijoDDao {
     }
     public void setIdTiempo(Long idTiempo) {
         this.idTiempo = idTiempo;
+    }
+
+    public Long getMesesRestantes() {
+        return mesesRestantes;
+    }
+    public void setMesesRestantes(Long mesesRestantes) {
+        this.mesesRestantes = mesesRestantes;
     }
 }

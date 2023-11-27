@@ -39,8 +39,8 @@ public class PDFReportGenerator {
             document.open();
 
             Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
-            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8);
-            Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 7);
+            Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 7);
             Font subtitleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8, new Color(169, 169, 169));
 
             Paragraph title = new Paragraph("Informe de Activos Fijos", titleFont);
@@ -53,19 +53,19 @@ public class PDFReportGenerator {
             subtitle.setAlignment(Element.ALIGN_CENTER);
             document.add(subtitle);
 
-            Paragraph subtitle2 = new Paragraph("Expresado en BOLIVIANO - BOLIVIA", subtitleFont);
+            Paragraph subtitle2 = new Paragraph("Expresado en BOLIVIANOS - BOLIVIA", subtitleFont);
             subtitle2.setAlignment(Element.ALIGN_CENTER);
             document.add(subtitle2);
 
-            PdfPTable table = new PdfPTable(9); // Reducir el número de columnas a 9
+            PdfPTable table = new PdfPTable(11); // Reducir el número de columnas a 9
             table.setWidthPercentage(100);
             table.setSpacingBefore(10f);
             table.setSpacingAfter(10f);
 
             // Encabezados de columna
             String[] headers = {
-                    "ID", "Nombre", "Valor", "Fecha de Compra", "Tipo de Activo","Ciudad",
-                    "Porcentaje Depreciación", "Depreciación","Valor Actual"
+                    "ID", "Nombre", "Valor", "Fecha de Compra", "Tipo de Activo","Ubicacion","Encargado",
+                    "Porcentaje Depreciación", "Depreciación","Valor Actual", "Meses Restantes"
             };
 
             for (String header : headers) {
@@ -84,12 +84,13 @@ public class PDFReportGenerator {
                 table.addCell(createCell(activo.getNombre(), contentFont));
                 table.addCell(createCell(activo.getValor().toString(), contentFont));
                 table.addCell(createCell(activo.getFechaCompra(), contentFont));
-                //table.addCell(createCell(activo.getDescripcion(), contentFont));
                 table.addCell(createCell(activo.getTipoActivoNombre(), contentFont));
-                table.addCell(createCell(activo.getCiudadNombre(), contentFont));
-                table.addCell(createCell(activo.getPorcentajeDepreciacion().toString(), contentFont));
+                table.addCell(createCell((activo.getCalle()+"/"+activo.getBloqueNombre()), contentFont));
+                table.addCell(createCell(activo.getPersonalNombre(), contentFont));
+                table.addCell(createCell(activo.getPorcentajeDepreciacion().toString()+"%", contentFont));
                 table.addCell(createCell(activo.getValorDepreciacion().toString(), contentFont));
                 table.addCell(createCell(activo.getValorActual().toString(),contentFont));
+                table.addCell(createCell(activo.getMesesRestantes().toString(),contentFont));
             }
             totalPages = writer.getPageNumber();
 
@@ -114,9 +115,9 @@ public class PDFReportGenerator {
 
     public static void main(String[] args) {
         List<ActivoFijoList2Dto> data = List.of(
-                new ActivoFijoList2Dto(1L, "Activo 1", new BigDecimal(100), LocalDate.now().toString(), "Descripción 1", "Tipo 1", "Marca 1", "Calle 1", "Avenida 1", "Bloque 1", "Ciudad 1", "Personal 1", "Estado 1", "Condición 1", 0, new BigDecimal(10), new BigDecimal(10)),
-                new ActivoFijoList2Dto(2L, "Activo 2", new BigDecimal(200), LocalDate.now().toString(), "Descripción 2", "Tipo 2", "Marca 2", "Calle 2", "Avenida 2", "Bloque 2", "Ciudad 2", "Personal 2", "Estado 2", "Condición 2",0, new BigDecimal(20), new BigDecimal(20)),
-                new ActivoFijoList2Dto(3L, "Activo 3", new BigDecimal(300), LocalDate.now().toString(), "Descripción 3", "Tipo 3", "Marca 3", "Calle 3", "Avenida 3", "Bloque 3", "Ciudad 3", "Personal 3", "Estado 3", "Condición 3",0, new BigDecimal(30), new BigDecimal(30)));
+                new ActivoFijoList2Dto(1L, "Activo 1", new BigDecimal(100), LocalDate.now().toString(), "Descripción 1", "Tipo 1", "Marca 1", "Calle 1", "Avenida 1", "Bloque 1", "Ciudad 1", "Personal 1", "Estado 1", "Condición 1", 0, new BigDecimal(10), new BigDecimal(10), new BigDecimal(20)),
+                new ActivoFijoList2Dto(2L, "Activo 2", new BigDecimal(200), LocalDate.now().toString(), "Descripción 2", "Tipo 2", "Marca 2", "Calle 2", "Avenida 2", "Bloque 2", "Ciudad 2", "Personal 2", "Estado 2", "Condición 2",0, new BigDecimal(20), new BigDecimal(20), new BigDecimal(20)),
+                new ActivoFijoList2Dto(3L, "Activo 3", new BigDecimal(300), LocalDate.now().toString(), "Descripción 3", "Tipo 3", "Marca 3", "Calle 3", "Avenida 3", "Bloque 3", "Ciudad 3", "Personal 3", "Estado 3", "Condición 3",0, new BigDecimal(30), new BigDecimal(30), new BigDecimal(20)));
                 //generatePDFReport(data, "C:\\Users\\ccama\\OneDrive\\Escritorio\\reporte.pdf");
     }
     // Clase interna para manejar eventos de numeración y fecha de página
@@ -149,16 +150,6 @@ public class PDFReportGenerator {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            // Mostrar el título (ahora en dos líneas)
-            //cb.setColorFill(Color.BLACK); // Restablecer el color a negro
-            //cb.showTextAligned(PdfContentByte.ALIGN_CENTER, "Informe de Activos Fijos", (document.left() + document.right()) / 2, document.top() - 60, 0);
-
-            // Mostrar un texto en gris claro debajo del título
-            //cb.setColorFill(new Color(169, 169, 169)); // Gris claro
-            //cb.showTextAligned(PdfContentByte.ALIGN_CENTER, "Empresa: Google", (document.left() + document.right()) / 2, document.top() - 70, 0);
-
-            // Mostrar "Expresado en BOLIVIANO - BOLIVIA" debajo de "Empresa"
-            //cb.showTextAligned(PdfContentByte.ALIGN_CENTER, "Expresado en BOLIVIANO - BOLIVIA", (document.left() + document.right()) / 2, document.top() - 80, 0);
 
             // Mostrar la fecha en gris claro con el formato "Fecha: dd/MM/yyyy"
             cb.setColorFill(new Color(169, 169, 169)); // Gris claro

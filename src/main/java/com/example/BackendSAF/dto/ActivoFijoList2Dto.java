@@ -23,10 +23,11 @@ public class ActivoFijoList2Dto {
     private Integer porcentajeDepreciacion;
     private BigDecimal valorDepreciacion;
     private BigDecimal valorActual;
+    private BigDecimal mesesRestantes;
 
     public ActivoFijoList2Dto() {
     }
-    public ActivoFijoList2Dto(Long id, String nombre, BigDecimal valor, String fechaCompra, String descripcion, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual) {
+    public ActivoFijoList2Dto(Long id, String nombre, BigDecimal valor, String fechaCompra, String descripcion, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual, BigDecimal mesesRestantes) {
         this.id = id;
         this.nombre = nombre;
         this.valor = valor;
@@ -44,6 +45,7 @@ public class ActivoFijoList2Dto {
         this.porcentajeDepreciacion = porcentajeDepreciacion;
         this.valorDepreciacion = valorDepreciacion;
         this.valorActual = valorActual;
+        this.mesesRestantes = mesesRestantes;
     }
 
 
@@ -151,6 +153,12 @@ public class ActivoFijoList2Dto {
     }
     public void setValorActual(BigDecimal valorActual) {
         this.valorActual = valorActual;
+    }
+    public BigDecimal getMesesRestantes() {
+        return mesesRestantes;
+    }
+    public void setMesesRestantes(BigDecimal mesesRestantes) {
+        this.mesesRestantes = mesesRestantes;
     }
 
 

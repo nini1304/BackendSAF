@@ -165,6 +165,7 @@ public class ActivoFijoBl {
     // getACt te envia la lista de todos los activos fijos
     public List<ActivoFijoList2Dto> getAct(String mesIngresado, Integer añoIngresado,Long idEmpresa) throws Exception {
         BigDecimal aux = BigDecimal.valueOf(1);
+        BigDecimal aux2 = BigDecimal.valueOf(1);
         List<ActivoFijoDao> activoFijo = activofijorepository.findAllByIdEmpresa(idEmpresa);
         List<ActivoFijoList2Dto> listAct = new ArrayList<>();
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
@@ -187,6 +188,7 @@ public class ActivoFijoBl {
                             estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
                             fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
                             tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())),
+                            BigDecimal.valueOf(0),
                             BigDecimal.valueOf(0),
                             BigDecimal.valueOf(0)
                     ));
@@ -211,6 +213,12 @@ public class ActivoFijoBl {
                 else{
                     aux=act.getValor().subtract(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))));
                 }
+                if(tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))<0){
+                    aux2=BigDecimal.valueOf(0);
+                }
+                else{
+                    aux2=BigDecimal.valueOf(tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())));
+                }
                 if (act.getEstado()){
                     listAct.add(new ActivoFijoList2Dto(
                             act.getId(),
@@ -227,10 +235,15 @@ public class ActivoFijoBl {
                             personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())),
                             estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
                             fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
-                            tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())),
+                            Integer.valueOf(String.valueOf(aux2)),
                             calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))),
-                            aux
+                            aux,
+                            calcularMesesHastaCero(act.getValor(), act.getFechaCompra(), mesIngresado, añoIngresado, tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())))
+
                     ));
+                    BigDecimal mesesRestantes = calcularMesesHastaCero(act.getValor(), act.getFechaCompra(), mesIngresado, añoIngresado, tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())));
+                    LOGGER.info("ActivoFijoId:"+act.getId());
+                    LOGGER.info("Meses Restantes: "+ mesesRestantes);
                     ActivoFijoDDao actD = new ActivoFijoDDao();
                     actD.setIdActivo(act.getId());
                     actD.setNombre(act.getNombre());
@@ -247,9 +260,10 @@ public class ActivoFijoBl {
                     actD.setPersonalNombre(personalRepository.getPersonalNombreById(Long.valueOf(act.getPersonalId())));
                     actD.setEstadoNombre(estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())));
                     actD.setCondicionNombre(fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())));
-                    actD.setPorcentajeDepreciacion(tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())));
+                    actD.setPorcentajeDepreciacion(Integer.valueOf(String.valueOf(aux2)));
                     actD.setValorDepreciacion(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))));
                     actD.setValorActual(aux);
+                    actD.setMesesRestantes(mesesRestantes.longValue());
                     actD.setEmpresaId(idEmpresa);
                     actD.setUsuario("User");
                     actD.setFechaD(new Date());
@@ -259,34 +273,53 @@ public class ActivoFijoBl {
                 }
             }
         }
-        //generarExcel(listAct,"C:\\Users\\ccama\\OneDrive\\Escritorio.ActivoFijo.xlsx");
+        //fecha formato, combo boxes con empresa, campo estado
         //PDFReportGenerator.generatePDFReport2(listAct, "reporte.pdf");
         return listAct;
 
     }
+    public BigDecimal calcularMesesHastaCero(BigDecimal valor, Date fechaCompra, String mesIngresado, int añoIngresado, Integer porcentajeDepreciacion) {
+        LocalDate fechaCompraLocal = fechaCompra.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Month mesParametro = Month.valueOf(mesIngresado.toUpperCase());
+        LocalDate fechaIngresada = LocalDate.of(añoIngresado, mesParametro, 1);
+
+        BigDecimal mesesDiferencia = BigDecimal.valueOf(fechaCompraLocal.until(fechaIngresada).toTotalMonths());
+
+        BigDecimal porcentajeDecimal = BigDecimal.valueOf(1 - porcentajeDepreciacion / 100.0);
+
+        // Calcular meses necesarios con fórmula matemática
+        BigDecimal mesesNecesarios = BigDecimal.valueOf(Math.round(Math.log(valor.doubleValue() / 100) / Math.log(porcentajeDecimal.doubleValue())));
+        BigDecimal mesesRestantes= mesesDiferencia.add(mesesNecesarios);
+        if(mesesRestantes.compareTo(BigDecimal.ZERO) <= 0){
+            mesesRestantes=BigDecimal.valueOf(0);
+        }
+        return mesesRestantes;
+    }
+
+
     public BigDecimal calcularDepreciacion(Date fechaCompra, String mesIngresado, int añoIngresado, BigDecimal valorActual, Integer porcentajeDepreciacion) {
 
         // Convertir la fecha de compra (java.util.Date) a LocalDate
         LocalDate fechaCompraLocal = fechaCompra.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LOGGER.info("Fecha de compra: {}", fechaCompraLocal);
+        //LOGGER.info("Fecha de compra: {}", fechaCompraLocal);
         // Obtener el mes ingresado como parámetro (asumiendo que es el nombre del mes)
         Month mesParametro = Month.valueOf(mesIngresado.toUpperCase());
-        LOGGER.info("Mes ingresado: {}", mesParametro);
+        //LOGGER.info("Mes ingresado: {}", mesParametro);
 
         // Crear una fecha con el mes y año ingresados
         LocalDate fechaIngresada = LocalDate.of(añoIngresado, mesParametro, 1);
-        LOGGER.info("Fecha ingresada: {}", fechaIngresada);
+        //LOGGER.info("Fecha ingresada: {}", fechaIngresada);
 
         // Calcular la diferencia en meses entre la fecha de compra y el mes ingresado
         long mesesDiferencia = (fechaCompraLocal.until(fechaIngresada).toTotalMonths()) + 1;
 
-        LOGGER.info("Meses de diferencia: {}", mesesDiferencia);
+        //LOGGER.info("Meses de diferencia: {}", mesesDiferencia);
 
         // Calcular la depreciación
         BigDecimal depreciacion = valorActual.multiply(BigDecimal.valueOf(mesesDiferencia))
                 .multiply(BigDecimal.valueOf(porcentajeDepreciacion))
                 .divide(BigDecimal.valueOf(100 * 12), 2, BigDecimal.ROUND_HALF_UP);
-        LOGGER.info("Depreciacion: {}", depreciacion);
+        //LOGGER.info("Depreciacion: {}", depreciacion);
         return depreciacion;
     }
     public String formatearFecha(LocalDate fecha) {
@@ -339,16 +372,16 @@ public class ActivoFijoBl {
         headerRow.createCell(4).setCellValue("Descripción");
         headerRow.createCell(5).setCellValue("Tipo de activo");
         headerRow.createCell(6).setCellValue("Marca");
-        //headerRow.createCell(7).setCellValue("Calle");
-        //headerRow.createCell(8).setCellValue("Avenida");
-        //headerRow.createCell(9).setCellValue("Bloque");
-        //headerRow.createCell(10).setCellValue("Ciudad");
-        //headerRow.createCell(11).setCellValue("Personal");
+        headerRow.createCell(7).setCellValue("Calle");
+        headerRow.createCell(8).setCellValue("Avenida");
+        headerRow.createCell(9).setCellValue("Bloque");
+        headerRow.createCell(10).setCellValue("Ciudad");
+        headerRow.createCell(11).setCellValue("Personal");
         //headerRow.createCell(12).setCellValue("Estado");
         //headerRow.createCell(13).setCellValue("Condición");
-        headerRow.createCell(7).setCellValue("Porcentaje de depreciación");
-        headerRow.createCell(8).setCellValue("Valor de depreciación");
-        headerRow.createCell(9).setCellValue("Valor actual");
+        headerRow.createCell(12).setCellValue("Porcentaje de depreciación");
+        headerRow.createCell(13).setCellValue("Valor de depreciación");
+        headerRow.createCell(14).setCellValue("Valor actual");
 
         // Agrega más encabezados según tus necesidades
 
@@ -363,16 +396,16 @@ public class ActivoFijoBl {
             row.createCell(4).setCellValue(activoFijo.getDescripcion());
             row.createCell(5).setCellValue(activoFijo.getTipoActivoNombre());
             row.createCell(6).setCellValue(activoFijo.getMarcaNombre());
-            //row.createCell(7).setCellValue(activoFijo.getCalle());
-            //row.createCell(8).setCellValue(activoFijo.getAvenida());
-            //row.createCell(9).setCellValue(activoFijo.getBloqueNombre());
-            //row.createCell(10).setCellValue(activoFijo.getCiudadNombre());
-            //row.createCell(11).setCellValue(activoFijo.getPersonalNombre());
+            row.createCell(7).setCellValue(activoFijo.getCalle());
+            row.createCell(8).setCellValue(activoFijo.getAvenida());
+            row.createCell(9).setCellValue(activoFijo.getBloqueNombre());
+            row.createCell(10).setCellValue(activoFijo.getCiudadNombre());
+            row.createCell(11).setCellValue(activoFijo.getPersonalNombre());
             //row.createCell(12).setCellValue(activoFijo.getEstadoNombre());
             //row.createCell(13).setCellValue(activoFijo.getCondicionNombre());
-            row.createCell(7).setCellValue(activoFijo.getPorcentajeDepreciacion());
-            row.createCell(8).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
-            row.createCell(9).setCellValue(activoFijo.getValorActual().doubleValue());
+            row.createCell(12).setCellValue(activoFijo.getPorcentajeDepreciacion());
+            row.createCell(13).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
+            row.createCell(14).setCellValue(activoFijo.getValorActual().doubleValue());
             // Agrega más celdas según tus necesidades
         }
 
@@ -583,7 +616,7 @@ public class ActivoFijoBl {
         actH.setCondicionId(activoExistente.getCondicionId());
         actH.setEstado(activoExistente.getEstado());
         actH.setEmpresaId(activoExistente.getEmpresaId());
-        actH.setEvento("Actualizacion Estado A False");
+        actH.setEvento("Borrado logico");
         actH.setUsuario("User");
         LOGGER.info("Activo Fijo historico registrado: {}", actH);
         activoFijoHRepository.save(actH);

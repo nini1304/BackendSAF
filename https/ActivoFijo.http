@@ -13,6 +13,13 @@ Content-Type: application/json
     "fechaCompra": "2023-10-26",
     "descripcion": "Descripción 1",
     "tipoActivoNombre": "Tipo 1",
+    "personalNombre": "Personal 1",
+    "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
     "marcaNombre": "Marca 1",
     "porcentajeDepreciacion": 10,
     "valorDepreciacion": 10.0,
@@ -25,6 +32,13 @@ Content-Type: application/json
     "fechaCompra": "2023-10-26",
     "descripcion": "Descripción 2",
     "tipoActivoNombre": "Tipo 2",
+    "personalNombre": "Personal 1",
+    "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
     "marcaNombre": "Marca 2",
     "porcentajeDepreciacion": 15,
     "valorDepreciacion": 30.0,
@@ -44,10 +58,18 @@ Content-Type: application/json
     "fechaCompra": "2023-10-26",
     "descripcion": "Descripción 1",
     "tipoActivoNombre": "Tipo 1",
+    "personalNombre": "Personal 1",
     "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
+    "marcaNombre": "Marca 1",
     "porcentajeDepreciacion": 10,
     "valorDepreciacion": 10.0,
-    "valorActual": 90.0
+    "valorActual": 90.0,
+    "mesesRestantes": 48
   },
   {
     "id": 2,
@@ -56,17 +78,25 @@ Content-Type: application/json
     "fechaCompra": "2023-10-26",
     "descripcion": "Descripción 2",
     "tipoActivoNombre": "Tipo 2",
-    "ciudadNombre": "Santa Cruz",
+    "personalNombre": "Personal 1",
+    "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
+    "marcaNombre": "Marca 2",
     "porcentajeDepreciacion": 15,
     "valorDepreciacion": 30.0,
-    "valorActual": 170.0
+    "valorActual": 170.0,
+    "mesesRestantes": 32
   }
 ]
 ###
 ###
 GET http://localhost:1234/api/v1/activos-fijos/list
 ###
-GET http://localhost:1234/api/v1/activos-fijos/actF?mes=FEBRUARY&anio=2026&idEmp=1
+GET http://localhost:1234/api/v1/activos-fijos/actF?mes=JANUARY&anio=2028&idEmp=1
 ###
 GET http://localhost:1234/api/v1/activos-fijos/actF2?idEmp=1
 ###
