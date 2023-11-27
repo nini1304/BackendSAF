@@ -27,11 +27,11 @@ public class PDFReportGenerator {
         Document document = new Document();
         PdfWriter writer = null;
         // Color personalizado en formato RGB (FFC436)
-        Color customColor = new Color(255, 196, 54);
+        Color customColor = Color.decode("#FFD384");
         try {
-            imageUrl = "https://rotulosmatesanz.com/wp-content/uploads/2017/09/2000px-Google_G_Logo.svg_.png";
-            username = "Carlos Camargo";
-            empresa = "Google";
+            //imageUrl = "https://rotulosmatesanz.com/wp-content/uploads/2017/09/2000px-Google_G_Logo.svg_.png";
+            //username = "Carlos Camargo";
+            //empresa = "Google";
             writer = PdfWriter.getInstance(document, new FileOutputStream(fileName));
 
             writer.setPageEvent(new PageNumberDateImageEventHandler(imageUrl,username)); // Usar el nuevo manejador de eventos
