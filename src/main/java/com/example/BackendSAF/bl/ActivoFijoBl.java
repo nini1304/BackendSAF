@@ -119,7 +119,7 @@ public class ActivoFijoBl {
 
     }
 
-    public ActivoFijoDto registrar(String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado, Long idEmpresa) throws ParseException {
+    public ActivoFijoDto registrar(String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado, Long idEmpresa, String username) throws ParseException {
         // Registra la ubicación primero
         UbicacionDto ubicacionDto = registrarUbicacion(calle, avenida, bloqueId, ciudadId);
         Date fechaCompra = convertirADate(fechaCompraString);
@@ -157,7 +157,7 @@ public class ActivoFijoBl {
         actH.setEstado(estado);
         actH.setEmpresaId(idEmpresa);
         actH.setEvento("Registro");
-        actH.setUsuario("User");
+        actH.setUsuario(username);
         activoFijoHRepository.save(actH);
 
         return new ActivoFijoDto(act.getId(),act.getNombre(), act.getValor(), fechaCompra, act.getDescripcion(), act.getTipoActivoId(), act.getMarcaId(), act.getUbicacionId(), act.getPersonalId(), act.getEstadoId(), act.getCondicionId(), act.getEstado());
