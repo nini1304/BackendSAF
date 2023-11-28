@@ -82,7 +82,7 @@ public class ActivoFijoBl {
     private PersonalEmpresaRepository personalEmpresaRepository;
     @Autowired
     private OficinaEmpresaRepository oficinaEmpresaRepository;
-
+    private BigDecimal auxiliar=BigDecimal.valueOf(2);
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
     }
@@ -174,6 +174,7 @@ public class ActivoFijoBl {
     public List<ActivoFijoList2Dto> getAct(String mesIngresado, Integer añoIngresado,Long idEmpresa, String userName) throws Exception {
         BigDecimal aux = BigDecimal.valueOf(1);
         BigDecimal aux2 = BigDecimal.valueOf(1);
+        BigDecimal aux3 = BigDecimal.valueOf(1);
         List<ActivoFijoDao> activoFijo = activofijorepository.findAllByIdEmpresa(idEmpresa);
         List<ActivoFijoList2Dto> listAct = new ArrayList<>();
         //LOGGER.info("ActivoFijo: {}", activoFijo.get(0).getTipoActivoId());
@@ -227,6 +228,12 @@ public class ActivoFijoBl {
                 else{
                     aux2=BigDecimal.valueOf(tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())));
                 }
+                if(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))).compareTo(act.getValor()) >= 0){
+                    aux3=BigDecimal.valueOf(0);
+                }
+                else{
+                    aux3=calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado,act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())));
+                }
                 if (act.getEstado()){
                     listAct.add(new ActivoFijoList2Dto(
                             act.getId(),
@@ -244,7 +251,7 @@ public class ActivoFijoBl {
                             estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())),
                             fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())),
                             Integer.valueOf(String.valueOf(aux2)),
-                            calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))),
+                            aux3,
                             aux,
                             calcularMesesHastaCero(act.getValor(), act.getFechaCompra(), mesIngresado, añoIngresado, tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())))
 
@@ -269,7 +276,7 @@ public class ActivoFijoBl {
                     actD.setEstadoNombre(estadoRepository.getEstadoNombreById(Long.valueOf(act.getEstadoId())));
                     actD.setCondicionNombre(fijoRepository.getCondicionNombreById(Long.valueOf(act.getCondicionId())));
                     actD.setPorcentajeDepreciacion(Integer.valueOf(String.valueOf(aux2)));
-                    actD.setValorDepreciacion(calcularDepreciacion(act.getFechaCompra(), mesIngresado, añoIngresado, act.getValor(), tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId()))));
+                    actD.setValorDepreciacion(aux3);
                     actD.setValorActual(aux);
                     actD.setMesesRestantes(mesesRestantes.longValue());
                     actD.setEmpresaId(idEmpresa);
@@ -301,6 +308,8 @@ public class ActivoFijoBl {
         if(mesesRestantes.compareTo(BigDecimal.ZERO) <= 0){
             mesesRestantes=BigDecimal.valueOf(0);
         }
+        mesesRestantes=mesesRestantes.subtract(auxiliar);
+        auxiliar=auxiliar.add(BigDecimal.valueOf(1));
         return mesesRestantes;
     }
 
@@ -390,6 +399,7 @@ public class ActivoFijoBl {
         headerRow.createCell(12).setCellValue("Porcentaje de depreciación");
         headerRow.createCell(13).setCellValue("Valor de depreciación");
         headerRow.createCell(14).setCellValue("Valor actual");
+        headerRow.createCell(15).setCellValue("Meses restantes");
 
         // Agrega más encabezados según tus necesidades
 
@@ -414,6 +424,7 @@ public class ActivoFijoBl {
             row.createCell(12).setCellValue(activoFijo.getPorcentajeDepreciacion());
             row.createCell(13).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
             row.createCell(14).setCellValue(activoFijo.getValorActual().doubleValue());
+            row.createCell(15).setCellValue(activoFijo.getMesesRestantes().doubleValue());
             // Agrega más celdas según tus necesidades
         }
 
@@ -427,7 +438,68 @@ public class ActivoFijoBl {
             e.printStackTrace();
         }
     }
+    public void generarExcel2(List<ActivoFDDto> listaActivoFijo, String nombreArchivo) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("ActivoFijo");
 
+        // Crear encabezados
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Nombre");
+        headerRow.createCell(2).setCellValue("Valor");
+        headerRow.createCell(3).setCellValue("Fecha de compra");
+        headerRow.createCell(4).setCellValue("Descripción");
+        headerRow.createCell(5).setCellValue("Tipo de activo");
+        headerRow.createCell(6).setCellValue("Marca");
+        headerRow.createCell(7).setCellValue("Calle");
+        headerRow.createCell(8).setCellValue("Avenida");
+        headerRow.createCell(9).setCellValue("Bloque");
+        headerRow.createCell(10).setCellValue("Ciudad");
+        headerRow.createCell(11).setCellValue("Personal");
+        //headerRow.createCell(12).setCellValue("Estado");
+        //headerRow.createCell(13).setCellValue("Condición");
+        headerRow.createCell(12).setCellValue("Porcentaje de depreciación");
+        headerRow.createCell(13).setCellValue("Valor de depreciación");
+        headerRow.createCell(14).setCellValue("Valor actual");
+        headerRow.createCell(15).setCellValue("Meses restantes");
+
+        // Agrega más encabezados según tus necesidades
+
+        // Llena los datos
+        for (int i = 0; i < listaActivoFijo.size(); i++) {
+            ActivoFDDto activoFijo = listaActivoFijo.get(i);
+            Row row = sheet.createRow(i + 1);
+            row.createCell(0).setCellValue(activoFijo.getId());
+            row.createCell(1).setCellValue(activoFijo.getNombre());
+            row.createCell(2).setCellValue(activoFijo.getValor().doubleValue());
+            row.createCell(3).setCellValue(activoFijo.getFechaCompra());
+            row.createCell(4).setCellValue(activoFijo.getDescripcion());
+            row.createCell(5).setCellValue(activoFijo.getTipoActivoNombre());
+            row.createCell(6).setCellValue(activoFijo.getMarcaNombre());
+            row.createCell(7).setCellValue(activoFijo.getCalle());
+            row.createCell(8).setCellValue(activoFijo.getAvenida());
+            row.createCell(9).setCellValue(activoFijo.getBloqueNombre());
+            row.createCell(10).setCellValue(activoFijo.getCiudadNombre());
+            row.createCell(11).setCellValue(activoFijo.getPersonalNombre());
+            //row.createCell(12).setCellValue(activoFijo.getEstadoNombre());
+            //row.createCell(13).setCellValue(activoFijo.getCondicionNombre());
+            row.createCell(12).setCellValue(activoFijo.getPorcentajeDepreciacion());
+            row.createCell(13).setCellValue(activoFijo.getValorDepreciacion().doubleValue());
+            row.createCell(14).setCellValue(activoFijo.getValorActual().doubleValue());
+            row.createCell(15).setCellValue(activoFijo.getMesesRestantes().doubleValue());
+            // Agrega más celdas según tus necesidades
+        }
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(nombreArchivo);
+            workbook.write(outputStream);
+            outputStream.close();
+            workbook.close();
+            System.out.println("Archivo Excel generado exitosamente: " + nombreArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public List<CondicionDto> getCond() {

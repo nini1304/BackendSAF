@@ -156,5 +156,99 @@ GET http://localhost:1234/api/v1/depreciados/actD?idEmp=1&idTie=25
 ###
 GET http://localhost:1234/api/v1/depreciados/tiempo?idEmp=1
 ###
+POST http://localhost:1234/api/v1/depreciados/pdf?nombreArchivo=historialActivosFijos.pdf&imageUrl=logo.png&username=JuanPerez&empresa=EmpresaSRL
+Content-Type: application/json
+
+[
+  {
+    "id": 1,
+    "nombre": "Activo 1",
+    "valor": 100.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 1",
+    "tipoActivoNombre": "Tipo 1",
+    "personalNombre": "Personal 1",
+    "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
+    "marcaNombre": "Marca 1",
+    "porcentajeDepreciacion": 10,
+    "valorDepreciacion": 10.0,
+    "valorActual": 90.0,
+    "mesesRestantes": 48
+  },
+  {
+    "id": 2,
+    "nombre": "Activo 2",
+    "valor": 200.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 2",
+    "tipoActivoNombre": "Tipo 2",
+    "personalNombre": "Personal 1",
+    "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
+    "marcaNombre": "Marca 2",
+    "porcentajeDepreciacion": 15,
+    "valorDepreciacion": 30.0,
+    "valorActual": 170.0,
+    "mesesRestantes": 32
+  }
+]
+###
+###
+POST http://localhost:1234/api/v1/depreciados/excel?nombreArchivo=historialActivosFijos.xlsx
+Content-Type: application/json
+
+[
+  {
+    "id": 1,
+    "nombre": "Activo 1",
+    "valor": 100.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 1",
+    "tipoActivoNombre": "Tipo 1",
+    "personalNombre": "Personal 1",
+    "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
+    "marcaNombre": "Marca 1",
+    "porcentajeDepreciacion": 10,
+    "valorDepreciacion": 10.0,
+    "valorActual": 90.0,
+    "mesesRestantes": 48
+  },
+  {
+    "id": 2,
+    "nombre": "Activo 2",
+    "valor": 200.0,
+    "fechaCompra": "2023-10-26",
+    "descripcion": "Descripción 2",
+    "tipoActivoNombre": "Tipo 2",
+    "personalNombre": "Personal 1",
+    "ciudadNombre": "La Paz",
+    "bloqueNombre": "Bloque 1",
+    "avenida": "Avenida 1",
+    "calle": "Calle 1",
+    "condicionNombre": "Condición 1",
+    "estadoNombre": "Estado 1",
+    "marcaNombre": "Marca 2",
+    "porcentajeDepreciacion": 15,
+    "valorDepreciacion": 30.0,
+    "valorActual": 170.0,
+    "mesesRestantes": 32
+  }
+]
+###
+###
 
 
