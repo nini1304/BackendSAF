@@ -110,11 +110,11 @@ GET http://localhost:1234/api/v1/activos-fijos/marca
 ###
 GET http://localhost:1234/api/v1/activos-fijos/tipo
 ###
-GET http://localhost:1234/api/v1/activos-fijos/personal?idEmp=1
+GET http://localhost:1234/api/v1/activos-fijos/personal?idEmp=1//
 ###
-GET http://localhost:1234/api/v1/activos-fijos/bloque?idEmp=3
+GET http://localhost:1234/api/v1/activos-fijos/bloque?idEmp=3//
 ###
-GET http://localhost:1234/api/v1/activos-fijos/ciudad?idEmp=3
+GET http://localhost:1234/api/v1/activos-fijos/ciudad?idEmp=3//
 ###
 GET http://localhost:1234/api/v1/activos-fijos/empresas
 ###
@@ -122,9 +122,9 @@ DELETE http://localhost:1234/api/v1/activos-fijos/eliminar/1
 ###
 GET http://localhost:1234/api/v1/activos-fijos/obtener/1
 ###
-PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo5%20Actualizado3&valor=6900&fechaCompra=Wed%20Oct%2027%202023&descripcion=Descripción%20Actualizada3&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true&username=juan.perez
+PUT http://localhost:1234/api/v1/activos-fijos/actualizar/35?nombre=Activo5%20Actualizado3&valor=6900&fechaCompra=Wed%20Oct%2027%202023&descripcion=Descripción%20Actualizada3&tipoActivoId=2&marcaId=3&calle=Calle%20Nueva&avenida=Avenida%20Nueva&bloqueId=4&ciudadId=5&personalId=3&estadoId=3&condicionId=3&estado=true&username=juan.perez//
 ###
-PUT http://localhost:1234/api/v1/activos-fijos/disable?id=10&username=juan.perez
+PUT http://localhost:1234/api/v1/activos-fijos/disable?id=10&username=juan.perez//
 ###
                         Activo fijo Historico
 ###

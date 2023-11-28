@@ -11,6 +11,7 @@ import com.example.BackendSAF.entity.TiempoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +52,8 @@ public class ActivoFijoDBl {
                         convertirFecha(acD.getFechaD()),
                         acD.getUsuario(),
                         mes,
-                        anio
+                        anio,
+                        BigDecimal.valueOf(acD.getMesesRestantes())
 
                 )).collect(Collectors.toList());
 

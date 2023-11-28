@@ -26,10 +26,11 @@ public class ActivoFDDto {
     private String usuario;
     private String mes;
     private String anio;
+    private BigDecimal mesesRestantes;
     //Constructor
     public ActivoFDDto() {
     }
-    public ActivoFDDto(Long id, Long idActivo, String nombre, BigDecimal valor, String fechaCompra, String descripcion, String fechaRegistro, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual, String fechaDepreciacion, String usuario, String mes, String anio) {
+    public ActivoFDDto(Long id, Long idActivo, String nombre, BigDecimal valor, String fechaCompra, String descripcion, String fechaRegistro, String tipoActivoNombre, String marcaNombre, String calle, String avenida, String bloqueNombre, String ciudadNombre, String personalNombre, String estadoNombre, String condicionNombre, Integer porcentajeDepreciacion, BigDecimal valorDepreciacion, BigDecimal valorActual, String fechaDepreciacion, String usuario, String mes, String anio, BigDecimal mesesRestantes) {
         this.id = id;
         this.idActivo = idActivo;
         this.nombre = nombre;
@@ -53,6 +54,7 @@ public class ActivoFDDto {
         this.usuario = usuario;
         this.mes = mes;
         this.anio = anio;
+        this.mesesRestantes = mesesRestantes;
     }
 
     // Agrega getters y setters para cada atributo
@@ -215,6 +217,13 @@ public class ActivoFDDto {
     }
     public void setAnio(String anio) {
         this.anio = anio;
+    }
+
+    public BigDecimal getMesesRestantes() {
+        return mesesRestantes;
+    }
+    public void setMesesRestantes(BigDecimal mesesRestantes) {
+        this.mesesRestantes = mesesRestantes;
     }
 
 }
