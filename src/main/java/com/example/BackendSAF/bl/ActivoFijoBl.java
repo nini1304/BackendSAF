@@ -169,7 +169,7 @@ public class ActivoFijoBl {
     }
     // Esto son los get para todas las listas de componentes
     // getACt te envia la lista de todos los activos fijos
-    public List<ActivoFijoList2Dto> getAct(String mesIngresado, Integer añoIngresado,Long idEmpresa) throws Exception {
+    public List<ActivoFijoList2Dto> getAct(String mesIngresado, Integer añoIngresado,Long idEmpresa, String userName) throws Exception {
         BigDecimal aux = BigDecimal.valueOf(1);
         BigDecimal aux2 = BigDecimal.valueOf(1);
         List<ActivoFijoDao> activoFijo = activofijorepository.findAllByIdEmpresa(idEmpresa);
@@ -271,7 +271,7 @@ public class ActivoFijoBl {
                     actD.setValorActual(aux);
                     actD.setMesesRestantes(mesesRestantes.longValue());
                     actD.setEmpresaId(idEmpresa);
-                    actD.setUsuario("User");
+                    actD.setUsuario(userName);
                     actD.setFechaD(new Date());
                     actD.setIdTiempo(tiempo.getId());
                     activofijodrepository.save(actD);
@@ -506,7 +506,7 @@ public class ActivoFijoBl {
 
         return listCiud;
     }
-    public ActivoFijoDto actualizarActivoFijo(Long activoFijoId, String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado) throws ParseException {
+    public ActivoFijoDto actualizarActivoFijo(Long activoFijoId, String nombre, Integer valor, String fechaCompraString, String descripcion, Integer tipoActivoId, Integer marcaId, String calle, String avenida, Long bloqueId, Long ciudadId, Integer personalId, Integer estadoId, Integer condicionId, Boolean estado, String userName) throws ParseException {
         // Busca el activo fijo existente por su ID
         ActivoFijoDao activoExistente = activofijorepository.findById(activoFijoId).orElse(null);
 
@@ -546,7 +546,7 @@ public class ActivoFijoBl {
         actH.setEstado(estado);
         actH.setEmpresaId(activoExistente.getEmpresaId());
         actH.setEvento("Actualizacion");
-        actH.setUsuario("User");
+        actH.setUsuario(userName);
         activoFijoHRepository.save(actH);
 
         // Guarda los cambios en el activo fijo
@@ -597,7 +597,7 @@ public class ActivoFijoBl {
                 HttpStatus.ACCEPTED);
     }
 
-    public ActivoFijoDto actualizarActivoFijoEstado(Long id) throws ParseException {
+    public ActivoFijoDto actualizarActivoFijoEstado(Long id, String userName) throws ParseException {
         // Busca el activo fijo existente por su ID
         ActivoFijoDao activoExistente = activofijorepository.findById(id).orElse(null);
         if (activoExistente == null) {
@@ -624,7 +624,7 @@ public class ActivoFijoBl {
         actH.setEstado(activoExistente.getEstado());
         actH.setEmpresaId(activoExistente.getEmpresaId());
         actH.setEvento("Borrado logico");
-        actH.setUsuario("User");
+        actH.setUsuario(userName);
         LOGGER.info("Activo Fijo historico registrado: {}", actH);
         activoFijoHRepository.save(actH);
 

@@ -60,8 +60,8 @@ public class ActivoFijoApi {
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/actF")
-    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio,@RequestParam(name="idEmp")Long idEmp) throws Exception {
-        return  activoFijoBl.getAct(mesIngresado,anio,idEmp);
+    public List<ActivoFijoList2Dto> obtenerListaActivosFijos(@RequestParam(name = "mes")String mesIngresado, @RequestParam(name = "anio")int anio,@RequestParam(name="idEmp")Long idEmp, @RequestParam(name="username") String username) throws Exception {
+        return  activoFijoBl.getAct(mesIngresado,anio,idEmp,username);
     }
     @GetMapping("/actF2")
     public List<ActivoFijoListDto> obtenerListaActivosFijosUser(@RequestParam(name="idEmp")Long idEmp) throws ParseException {
@@ -121,9 +121,10 @@ public class ActivoFijoApi {
             @RequestParam(name = "personalId") Integer personalId,
             @RequestParam(name = "estadoId") Integer estadoId,
             @RequestParam(name = "condicionId") Integer condicionId,
-            @RequestParam(name = "estado") Boolean estado
+            @RequestParam(name = "estado") Boolean estado,
+            @RequestParam (name = "username")String username
     )throws ParseException {
-        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijo(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado);
+        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijo(id, nombre, valor, fechaCompra, descripcion, tipoActivoId, marcaId, calle, avenida, bloqueId, ciudadId, personalId, estadoId, condicionId, estado, username);
         return ResponseEntity.ok(activoFijoDto);
     }
     @GetMapping("/listar/{id}")
@@ -141,9 +142,9 @@ public class ActivoFijoApi {
     //actualizar pero solo para el estado
     @PutMapping("/disable")
     public ResponseEntity<ActivoFijoDto> actualizarActivoFijoEstado(
-            @RequestParam Long id
+            @RequestParam Long id, @RequestParam String username
     )throws ParseException {
-        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijoEstado(id);
+        ActivoFijoDto activoFijoDto = activoFijoBl.actualizarActivoFijoEstado(id, username);
         return ResponseEntity.ok(activoFijoDto);
     }
 
