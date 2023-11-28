@@ -15,7 +15,7 @@ public class BloqueEmpresaDao {
     private Long empresaId;
     @ManyToOne
     @JoinColumn(name = "bloque_id")
-    private PersonalDao bloque;
+    private BloqueDao bloque;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
@@ -41,10 +41,10 @@ public class BloqueEmpresaDao {
     public void setBloqueId(Long id) {
         this.bloqueId = id;
     }
-    public PersonalDao getBloque() {
+    public BloqueDao getBloque() {
         return bloque;
     }
-    public void setBloque(PersonalDao bloque) {
+    public void setBloque(BloqueDao bloque) {
         this.bloque = bloque;
     }
     public EmpresaDao getEmpresa() {
