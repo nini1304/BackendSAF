@@ -92,17 +92,17 @@ public class ActivoFijoApi {
         return activoFijoBl.getMar();
     }
     @GetMapping("/personal")
-    public List<PersonalDto> obtenerListaDePersonalDto() {
-        return activoFijoBl.getPer();
+    public List<PersonalDto> obtenerListaDePersonalDto(@RequestParam(name="idEmp")Long idEmp) {
+        return activoFijoBl.getPer(idEmp);
     }
     @GetMapping("/tipo")
     public List<TipoActivoDto> obtenerListaDeTipoActivoDto() {
         return activoFijoBl.getTip();
     }
     @GetMapping("/ciudad")
-    public List<CiudadDto> obtenerListaDeCiudadDto() {return activoFijoBl.getCiud();}
+    public List<CiudadDto> obtenerListaDeCiudadDto(@RequestParam(name="idEmp")Long idEmp) {return activoFijoBl.getCiud(idEmp);}
     @GetMapping("/bloque")
-    public List<BloqueDto> obtenerListaDeBloqueDto() {return activoFijoBl.getBloq();}
+    public List<BloqueDto> obtenerListaDeBloqueDto(@RequestParam(name="idEmp")Long idEmp) {return activoFijoBl.getBloq(idEmp);}
     @GetMapping("/empresas")
     public List<EmpresaDto> obtenerListaDeEmpresaDto() {return activoFijoBl.getEmp();}
     @PutMapping("/actualizar/{id}")

@@ -74,6 +74,12 @@ public class ActivoFijoBl {
     private ActivoFijoDRepository activofijodrepository;
     @Autowired
     private TiempoRepository tiemporepository;
+    @Autowired
+    private CiudadEmpresaRepository ciudadEmpresaRepository;
+    @Autowired
+    private BloqueEmpresaRepository bloqueEmpresaRepository;
+    @Autowired
+    private PersonalEmpresaRepository personalEmpresaRepository;
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
@@ -451,11 +457,11 @@ public class ActivoFijoBl {
         return listMar;
     }
 
-    public List<PersonalDto> getPer() {
-        List<PersonalDao> personal = personalRepository.findAll();
+    public List<PersonalDto> getPer(Long EmpresaId) {
+        List<Long> personal = personalEmpresaRepository.findPersonalIdByEmpresaId(EmpresaId);
 
         List<PersonalDto> listPer = personal.stream()
-                .map(per -> new PersonalDto(per.getId(), per.getNombre()))
+                .map(per -> new PersonalDto(per, personalRepository.getPersonalNombreById(per)))
                 .collect(Collectors.toList());
 
         return listPer;
@@ -480,22 +486,23 @@ public class ActivoFijoBl {
         return listEmp;
     }
 
-    public List<BloqueDto> getBloq() {
-        List<BloqueDao> bloque = bloqueRepository.findAll();
+    public List<BloqueDto> getBloq(Long EmpresaId) {
+        List<Long> bloque = bloqueEmpresaRepository.findBloquesByEmpresaId(EmpresaId);
 
         List<BloqueDto> listBloc = bloque.stream()
-                .map(blo -> new BloqueDto(blo.getId(), blo.getNombre()))
+                .map(blo -> new BloqueDto(blo, bloqueRepository.getBloqueNombreById(blo)))
                 .collect(Collectors.toList());
 
         return listBloc;
     }
 
-    public List<CiudadDto> getCiud() {
-        List<CiudadDao> ciudad = ciudadRepository.findAll();
+    public List<CiudadDto> getCiud(Long EmpresaId) {
+        List<Long> ciudad = ciudadEmpresaRepository.findCiudadesByEmpresaId(EmpresaId);
 
         List<CiudadDto> listCiud = ciudad.stream()
-                .map(ciu -> new CiudadDto(ciu.getId(), ciu.getNombre()))
+                .map(ciu -> new CiudadDto(ciu, ciudadRepository.getCiudadNombreById(ciu)))
                 .collect(Collectors.toList());
+
 
         return listCiud;
     }
@@ -627,4 +634,5 @@ public class ActivoFijoBl {
                 activoExistente.getEstadoId(), activoExistente.getCondicionId(), activoExistente.getEstado());
 
     }
+
 }
