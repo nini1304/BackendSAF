@@ -80,6 +80,8 @@ public class ActivoFijoBl {
     private BloqueEmpresaRepository bloqueEmpresaRepository;
     @Autowired
     private PersonalEmpresaRepository personalEmpresaRepository;
+    @Autowired
+    private OficinaEmpresaRepository oficinaEmpresaRepository;
 
     public Object list(int page, int size) {
         return activofijorepository.findAll(PageRequest.of(page, size));
@@ -437,11 +439,11 @@ public class ActivoFijoBl {
         return listConds;
     }
 
-    public List<EstadoDto> getEst() {
-        List<EstadoDao> estado = estadoRepository.findAll();
+    public List<EstadoDto> getEst(Long EmpresaId) {
+        List<Long> estado = oficinaEmpresaRepository.findOficinasByEmpresaId(EmpresaId);
 
         List<EstadoDto> listEst = estado.stream()
-                .map(est -> new EstadoDto(est.getId(), est.getNombre()))
+                .map(est -> new EstadoDto(est, estadoRepository.getEstadoNombreById(est)))
                 .collect(Collectors.toList());
 
         return listEst;

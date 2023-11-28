@@ -85,8 +85,8 @@ public class ActivoFijoApi {
         return activoFijoBl.getCond();
     }
     @GetMapping("estado")
-    public List<EstadoDto> obtenerListaDeEstadoDto() {
-        return activoFijoBl.getEst();
+    public List<EstadoDto> obtenerListaDeEstadoDto(@RequestParam(name="idEmp")Long idEmp) {
+        return activoFijoBl.getEst(idEmp);
     }
     @GetMapping("/marca")
     public List<MarcaDto> obtenerListaDeMarcaDto() {

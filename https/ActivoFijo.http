@@ -102,7 +102,7 @@ GET http://localhost:1234/api/v1/activos-fijos/actF2?idEmp=1
 ###
 GET http://localhost:1234/api/v1/activos-fijos/cond
 ###
-GET http://localhost:1234/api/v1/activos-fijos/estado
+GET http://localhost:1234/api/v1/activos-fijos/estado?idEmp=2
 ###
 GET http://localhost:1234/api/v1/activos-fijos/ubicacion
 ###
@@ -110,11 +110,11 @@ GET http://localhost:1234/api/v1/activos-fijos/marca
 ###
 GET http://localhost:1234/api/v1/activos-fijos/tipo
 ###
-GET http://localhost:1234/api/v1/activos-fijos/personal?idEmp=1//
+GET http://localhost:1234/api/v1/activos-fijos/personal?idEmp=1
 ###
-GET http://localhost:1234/api/v1/activos-fijos/bloque?idEmp=3//
+GET http://localhost:1234/api/v1/activos-fijos/bloque?idEmp=3
 ###
-GET http://localhost:1234/api/v1/activos-fijos/ciudad?idEmp=3//
+GET http://localhost:1234/api/v1/activos-fijos/ciudad?idEmp=3
 ###
 GET http://localhost:1234/api/v1/activos-fijos/empresas
 ###
