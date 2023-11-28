@@ -15,6 +15,8 @@ public class TipoActivoDao {
 
     @Column(name = "porcentaje_depreciacion")
     private int porcentajeDepreciacion;
+    @Column(name = "vida_util")
+    private int vidaUtil;
 
     @OneToMany(mappedBy = "tipoActivo")
     private List<ActivoFijoDao> activosFijos;
@@ -34,5 +36,12 @@ public class TipoActivoDao {
 
     public void setPorcentajeDepreciacion(int porcentajeDepreciacion) {
         this.porcentajeDepreciacion = porcentajeDepreciacion;
+    }
+
+    public int getVidaUtil() {
+        return vidaUtil;
+    }
+    public void setVidaUtil(int vidaUtil) {
+        this.vidaUtil = vidaUtil;
     }
 }

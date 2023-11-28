@@ -253,10 +253,10 @@ public class ActivoFijoBl {
                             Integer.valueOf(String.valueOf(aux2)),
                             aux3,
                             aux,
-                            calcularMesesHastaCero(act.getValor(), act.getFechaCompra(), mesIngresado, añoIngresado, tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())))
+                            calcularDiferenciaFechas(act.getFechaCompra(), tipoActivoRepository.getVidaUtilById(Long.valueOf(act.getTipoActivoId())), mesIngresado, añoIngresado)
 
                     ));
-                    BigDecimal mesesRestantes = calcularMesesHastaCero(act.getValor(), act.getFechaCompra(), mesIngresado, añoIngresado, tipoActivoRepository.getPorcentajeDepreciacionById(Long.valueOf(act.getTipoActivoId())));
+                    BigDecimal mesesRestantes = calcularDiferenciaFechas(act.getFechaCompra(), tipoActivoRepository.getVidaUtilById(Long.valueOf(act.getTipoActivoId())), mesIngresado, añoIngresado);
                     LOGGER.info("ActivoFijoId:"+act.getId());
                     LOGGER.info("Meses Restantes: "+ mesesRestantes);
                     ActivoFijoDDao actD = new ActivoFijoDDao();
@@ -293,24 +293,20 @@ public class ActivoFijoBl {
         return listAct;
 
     }
-    public BigDecimal calcularMesesHastaCero(BigDecimal valor, Date fechaCompra, String mesIngresado, int añoIngresado, Integer porcentajeDepreciacion) {
+    public BigDecimal calcularDiferenciaFechas(Date fechaCompra, int vidaUtil, String mesIngresado, int añoIngresado) {
         LocalDate fechaCompraLocal = fechaCompra.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // Calcular fecha de fin de vida útil
+        LocalDate fechaFinVidaUtil = fechaCompraLocal.plusYears(vidaUtil);
+
+        // Formar fecha con mesIngresado y añoIngresado
         Month mesParametro = Month.valueOf(mesIngresado.toUpperCase());
         LocalDate fechaIngresada = LocalDate.of(añoIngresado, mesParametro, 1);
 
-        BigDecimal mesesDiferencia = BigDecimal.valueOf(fechaCompraLocal.until(fechaIngresada).toTotalMonths());
+        // Calcular la diferencia en meses entre la fecha ingresada y la fecha de fin de vida útil
+        BigDecimal diferenciaEnMeses = BigDecimal.valueOf(fechaIngresada.until(fechaFinVidaUtil).toTotalMonths());
 
-        BigDecimal porcentajeDecimal = BigDecimal.valueOf(1 - porcentajeDepreciacion / 100.0);
-
-        // Calcular meses necesarios con fórmula matemática
-        BigDecimal mesesNecesarios = BigDecimal.valueOf(Math.round(Math.log(valor.doubleValue() / 100) / Math.log(porcentajeDecimal.doubleValue())));
-        BigDecimal mesesRestantes= mesesDiferencia.add(mesesNecesarios);
-        if(mesesRestantes.compareTo(BigDecimal.ZERO) <= 0){
-            mesesRestantes=BigDecimal.valueOf(0);
-        }
-        mesesRestantes=mesesRestantes.subtract(auxiliar);
-        auxiliar=auxiliar.add(BigDecimal.valueOf(1));
-        return mesesRestantes;
+        return diferenciaEnMeses;
     }
 
 

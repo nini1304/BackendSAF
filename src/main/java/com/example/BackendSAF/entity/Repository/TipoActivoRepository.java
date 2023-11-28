@@ -11,5 +11,7 @@ public interface TipoActivoRepository extends JpaRepository<TipoActivoDao, Long>
         String getTipoActivoNombreById(Long id);
         @Query("SELECT t.porcentajeDepreciacion FROM TipoActivoDao t WHERE t.id = :id")
         int getPorcentajeDepreciacionById(Long id);
+        @Query("SELECT t.vidaUtil FROM TipoActivoDao t WHERE t.id = :id")
+        int getVidaUtilById(Long id);
 
 }
