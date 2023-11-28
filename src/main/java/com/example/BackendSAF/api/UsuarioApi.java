@@ -90,5 +90,12 @@ public class UsuarioApi {
     public List<RolDto> listarRoles() {
         return usuarioBl.getRoles();
     }
+    @PutMapping("/borrar/{id}")
+    public ResponseEntity<UsuarioDto> actualizarStatus(
+            @PathVariable Long id
+    ) throws ParseException {
+        UsuarioDto usuarioDto = usuarioBl.actualizarStatus(id);
+        return ResponseEntity.ok(usuarioDto);
+    }
 }
 

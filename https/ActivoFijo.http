@@ -148,6 +148,8 @@ GET http://localhost:1234/api/v1/usuarios/empresa
 ###
 PUT http://localhost:1234/api/v1/usuarios/actualizar/1?nombre=Juan&username=juan.pablo&password=1234&idRol=1
 ###
+PUT http://localhost:1234/api/v1/usuarios/borrar/6
+###
                          Activo fijo depreciado
 ###
 GET http://localhost:1234/api/v1/depreciados/actD?idEmp=1&idTie=25

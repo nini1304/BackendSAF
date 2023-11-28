@@ -99,15 +99,19 @@ public class UsuarioBl {
 
     public List<UsuarioListDto> getUsuariosEmpresa(Long idEmpresa){
         List<UsuarioEmpresaDao> usuarioEmpresa = usuarioEmpresaRepository.findAllByEmpresaId(idEmpresa);
+
         List<UsuarioListDto> listUsu = new ArrayList<>();
         for (UsuarioEmpresaDao usu : usuarioEmpresa){
-            listUsu.add(new UsuarioListDto(
-                    usu.getUsuario().getIdUsuario(),
-                    usu.getUsuario().getNombre(),
-                    usu.getUsuario().getUsername(),
-                    usu.getUsuario().getPassword(),
-                    usu.getUsuario().getRol().getRol()
-            ));
+            //verificar si el usuario esta activo
+            if(usu.getUsuario().getStatus()){
+                listUsu.add(new UsuarioListDto(
+                        usu.getUsuario().getIdUsuario(),
+                        usu.getUsuario().getNombre(),
+                        usu.getUsuario().getUsername(),
+                        usu.getUsuario().getPassword(),
+                        usu.getUsuario().getRol().getRol()
+                ));
+            }
         }
         return listUsu;
     }
@@ -120,6 +124,15 @@ public class UsuarioBl {
         usuario.setUser(username);
         usuario.setPassword(password);
         usuario.setIdRol(idRol);
+        usuarioRepository.save(usuario);
+        return new UsuarioDto(usuario.getNombre(), usuario.getUsername(), usuario.getPassword(), usuario.getIdRol(), usuario.getIdUsuario());
+    }
+    public UsuarioDto actualizarStatus(Long usuarioId) throws ParseException {
+        UsuarioDao usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null) {
+            throw new ParseException("No se encontro el usuario", 0);
+        }
+        usuario.setStatus(false);
         usuarioRepository.save(usuario);
         return new UsuarioDto(usuario.getNombre(), usuario.getUsername(), usuario.getPassword(), usuario.getIdRol(), usuario.getIdUsuario());
     }

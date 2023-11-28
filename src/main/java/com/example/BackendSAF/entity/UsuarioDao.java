@@ -21,6 +21,8 @@ public class UsuarioDao {
 
     @Column(name = "idRol")
     private Long idRol;
+    @Column(name = "status")
+    private Boolean status=true;
 
     @ManyToOne
     @JoinColumn(name = "idRol", insertable = false, updatable = false)
@@ -70,6 +72,13 @@ public class UsuarioDao {
     }
     public void setRol(RolDao rol) {
         this.rol = rol;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
 
